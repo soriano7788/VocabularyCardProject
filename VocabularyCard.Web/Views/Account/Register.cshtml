@@ -1,0 +1,78 @@
+﻿@model VocabularyCard.Web.Models.RegisterViewModel
+@{
+    ViewBag.Title = "註冊";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>建立新帳戶。</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        </div>
+    </div>
+    @*<div class="form-group">
+        @Html.LabelFor(m => m.DisplayName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.DisplayName, new { @class = "form-control" })
+        </div>
+    </div>*@
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="註冊" />
+        </div>
+    </div>
+}
+<p>
+    <h1>js 測試</h1>
+    <button onclick="sendRequest()">Send Request</button>
+</p>
+
+<script>
+    function sendRequest() {
+        var registerModel = {
+            LoginId: 123,
+            Password: 123,
+            ConfirmPassword: 123,
+            DisplayName: 123
+        };
+
+        //var json = $.toJSON(registerModel);
+        var json = JSON.stringify(registerModel);
+
+        $.ajax({
+            url: 'vregister',
+            type: 'POST',
+            dataType: 'json',
+            data: json,
+            contentType: 'application/json; charset=utf-8',
+            success: function (data) {
+                alert(data.success);
+                // get the result and do some magic with it
+                //var message = data.Message;
+            }
+        });
+    }
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,21 @@
+﻿@{
+    Layout = null;
+}
+@using System.Web.Mvc
+@using VocabularyCard.DTO
+@helper VocabularyCardBlockUI(UrlHelper urlHelper, CardInfo cardInfo)
+{
+    var url = urlHelper.Action("Detail", "Card", new { cardInfo.Id });
+    //var url = urlHelper.HttpRouteUrl("Default", new { controller = "Card", action = "Detail" });
+
+    <div class="vocabulary-card-block">
+        <h1 class="vocabulary">
+            @cardInfo.Vocabulary
+        </h1>
+        <div class="explaination">
+        </div>
+        <div class="url">
+            @url
+        </div>
+    </div>
+}
