@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace VocabularyCard.Test.Repository.EF.Configuration
 {
+    // 參考自 https://dotnetfalcon.com/untitled/
+    // 但在 dbcontext 加入 class table map 設定 測試時似乎還是有型別問題
+    // 有空再確認看看
     public static class EntityTypeConfigurationExtensions
     {
         private static MethodInfo GetAddMethod(Type inputType) =>

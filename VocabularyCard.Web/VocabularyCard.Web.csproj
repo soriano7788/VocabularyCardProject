@@ -435,7 +435,7 @@
     <Content Include="Views\Shared\DisplayTemplates\DateTime.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\CardSet\GetAll.cshtml" />
-    <Content Include="test.config" />
+    <Content Include="appSettings.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

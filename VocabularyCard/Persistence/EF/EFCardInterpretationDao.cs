@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using VocabularyCard.Domain;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
-using System.Linq;
 
 namespace VocabularyCard.Persistence.EF
 {
