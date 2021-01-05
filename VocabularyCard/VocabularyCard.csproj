@@ -213,9 +213,7 @@
     <Compile Include="Validation\EmailAttribute.cs" />
     <Compile Include="Validation\UserNameAttribute.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="AutoMapper\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -57,7 +57,11 @@ namespace VocabularyCard.Services.Impl
         {
             CardSet entity = _cardSetConverter.ToEntity(cardSetDto);
             CardSet newEntity = _cardSetRepository.Create(entity);
-            return _cardSetConverter.ToDataTransferObject(newEntity);
+            CardSetDto newCardSetDto = _cardSetConverter.ToDataTransferObject(newEntity);
+            
+            UnitOfWork.Save();
+
+            return newCardSetDto;
         }
     }
 }
