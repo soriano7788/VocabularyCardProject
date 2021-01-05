@@ -163,6 +163,8 @@
     <Compile Include="Persistence\EF\EFCardSetDao.cs" />
     <Compile Include="Repositories\EF\EFCardRepository.cs" />
     <Compile Include="Repositories\EF\EFCardSetRepository.cs" />
+    <Compile Include="Repositories\EF\Mapping\CardMap.cs" />
+    <Compile Include="Repositories\EF\Mapping\CardSetMap.cs" />
     <Compile Include="Repositories\ICardRepository.cs" />
     <Compile Include="Repositories\ICardSetRepository.cs" />
     <Compile Include="Services\ICardService.cs" />
