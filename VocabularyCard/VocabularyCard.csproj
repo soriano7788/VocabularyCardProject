@@ -111,6 +111,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\VocabularyCard.AccountManager.dll</HintPath>
     </Reference>
+    <Reference Include="VocabularyCard.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\VocabularyCard.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\CardSetState.cs" />
@@ -126,10 +130,14 @@
     <Compile Include="Domain\ApiRefreshToken.cs" />
     <Compile Include="Domain\IEntity.cs" />
     <Compile Include="Domain\VUser.cs" />
+    <Compile Include="DtoConverters\CardConverter.cs" />
+    <Compile Include="DtoConverters\CardSetConverter.cs" />
     <Compile Include="DTOConverter\ApiAccessTokenConverter.cs" />
     <Compile Include="DTOConverter\ApiRefreshTokenConverter.cs" />
     <Compile Include="DTOConverter\CardConverter.cs" />
     <Compile Include="DTOConverter\CardSetConverter.cs" />
+    <Compile Include="Dtos\CardDto.cs" />
+    <Compile Include="Dtos\CardSetDto.cs" />
     <Compile Include="DTO\AccessTokenValidatedResult.cs" />
     <Compile Include="DTO\ApiAccessTokenInfo.cs" />
     <Compile Include="DTO\AuthenticationResult.cs" />
@@ -139,6 +147,11 @@
     <Compile Include="DTO\RefreshTokenValidatedResult.cs" />
     <Compile Include="DTO\TokenValidatedResult.cs" />
     <Compile Include="DTO\VUserInfo.cs" />
+    <Compile Include="Entities\ApiAccessToken.cs" />
+    <Compile Include="Entities\ApiRefreshToken.cs" />
+    <Compile Include="Entities\Card.cs" />
+    <Compile Include="Entities\CardInterpretation.cs" />
+    <Compile Include="Entities\CardSet.cs" />
     <Compile Include="Exceptions\VUnauthorizedException.cs" />
     <Compile Include="Persistence\EF\CardInitializer.cs" />
     <Compile Include="Persistence\EF\CardSetInitializer.cs" />
@@ -148,6 +161,14 @@
     <Compile Include="Persistence\EF\EFCardInterpretationDao.cs" />
     <Compile Include="Persistence\EF\EFCardSetCardEdgeDao.cs" />
     <Compile Include="Persistence\EF\EFCardSetDao.cs" />
+    <Compile Include="Repositories\EF\EFCardRepository.cs" />
+    <Compile Include="Repositories\EF\EFCardSetRepository.cs" />
+    <Compile Include="Repositories\ICardRepository.cs" />
+    <Compile Include="Repositories\ICardSetRepository.cs" />
+    <Compile Include="Services\ICardService.cs" />
+    <Compile Include="Services\ICardSetService.cs" />
+    <Compile Include="Services\Impl\CardService.cs" />
+    <Compile Include="Services\Impl\CardSetService.cs" />
     <Compile Include="Test\Repository\BaseDbContext.cs" />
     <Compile Include="Test\Repository\EF\Configuration\CardConfiguration.cs" />
     <Compile Include="Test\Repository\EF\Configuration\CardSetConfiguration.cs" />
@@ -193,7 +214,7 @@
     <Compile Include="Validation\UserNameAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <Folder Include="AutoMapper\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
