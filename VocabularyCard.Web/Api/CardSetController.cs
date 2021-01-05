@@ -5,9 +5,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using VocabularyCard;
-using VocabularyCard.Service;
+using VocabularyCard.Services;
 using VocabularyCard.Persistence.EF;
-using VocabularyCard.DTO;
+using VocabularyCard.Dtos;
 using VocabularyCard.Util;
 using VocabularyCard.AccountManager.DTO;
 using VocabularyCard.Web.Filters;
@@ -18,30 +18,28 @@ namespace VocabularyCard.Web.Api
     public class CardSetController : ApiController
     {
         private ICardSetService _cardSetService;
-        private VocabularyCard.Test.Service.ICardSetService _testCardSetService;
 
-        public CardSetController(ICardSetService cardSetService, VocabularyCard.Test.Service.ICardSetService testCardSetService)
+        public CardSetController(ICardSetService cardSetService)
         {
             _cardSetService = cardSetService;
-            _testCardSetService = testCardSetService;
         }
 
         //[IgnoreFilter(typeof(ApiResultAttribute))]
         //[AllowAnonymous]
-        public CardSetInfo[] GetAll()
+        public CardSetDto[] GetAll()
         {
-            CardSetInfo[] cardSetInfos = _cardSetService.GetAll();
-            return cardSetInfos;
+            CardSetDto[] cardSetDtos = _cardSetService.GetAll();
+            return cardSetDtos;
         }
 
-        public CardSetInfo[] GetByOwner()
+        public CardSetDto[] GetByOwner()
         {
             UserInfo user = Util.WebUtility.GetCurrentUser();
-            CardSetInfo[] cardSetInfos = _cardSetService.GetByOwner(user);
-            return cardSetInfos;
+            CardSetDto[] cardSetDtos = _cardSetService.GetByOwner(user);
+            return cardSetDtos;
         }
 
-        public CardInfo[] GetCards(int cardSetId)
+        public CardSetDto[] GetCards(int cardSetId)
         {
             throw new NotImplementedException();
         }
@@ -56,7 +54,7 @@ namespace VocabularyCard.Web.Api
             //_cardSetService.TestUnitOfWork();
 
 
-            _testCardSetService.TestUnitOfWork();
+            //_testCardSetService.TestUnitOfWork();
         }
 
 
@@ -69,12 +67,10 @@ namespace VocabularyCard.Web.Api
         // GET api/<controller>/5
         // https://127.0.0.1/VocabularyCard/api/CardSet/get?id=1
         [HttpPost]
-        public CardSetInfo Get(int id)
+        public CardSetDto Get(int id)
         {
-            _cardSetService = new RepositoryFactory().GetCardSetService();
-            CardSetInfo cardSetInfo = _cardSetService.GeyById(id);
-
-            return cardSetInfo;
+            CardSetDto cardSetDto = _cardSetService.GeyById(id);
+            return cardSetDto;
         }
 
         // POST api/<controller>
