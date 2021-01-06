@@ -18,6 +18,7 @@ export default new Vuex.Store({
         token: null,
         userData: null,
         cardSets: [],
+        cards: []
     },
     getters: {
         token: state => {
@@ -34,6 +35,9 @@ export default new Vuex.Store({
         },
         cardSets: state => {
             return state.cardSets;
+        },
+        cards: state => {
+            return state.cards;
         }
     },
     mutations: {
@@ -44,6 +48,9 @@ export default new Vuex.Store({
         },
         setCardSets: (state, payload) => {
             state.cardSets = payload;
+        },
+        setCards: (state, payload) => {
+            state.cards = payload;
         },
         clearToken: state => {
             state.token = null;
@@ -95,18 +102,30 @@ export default new Vuex.Store({
         autoLogin: ({ commit }) => {
             // 先從 localStorage 找找看有無 userData
         },
-        // todo: 因為是 action，是否改為 fetch*** 比較好?
-        getAllCardSets: ({ commit }) => {
-            axios.get("cardset/getbyowner").then(res => {
-                const result = res.data;
-                if (result.statusCode == statusCode.SUCCESS) {
-                    const cardSets = result.data;
-                    commit("setCardSets", cardSets);
-                }
-
-            }).catch(error => {
-                console.log(error);
-            });
+        fetchAllCardSets: ({ commit }) => {
+            axios.get("cardset/getbyowner")
+                .then(res => {
+                    const result = res.data;
+                    if (result.statusCode == statusCode.SUCCESS) {
+                        const cardSets = result.data;
+                        commit("setCardSets", cardSets);
+                    }
+                }).catch(error => {
+                    console.log(error);
+                });
+        },
+        fetchCardSetAllCards: ({ commit }, cardSetId) => {
+            axios.get("cardset/GetCards/" + cardSetId)
+                .then(res => {
+                    const result = res.data;
+                    if (result.statusCode == statusCode.SUCCESS) {
+                        const cards = result.data;
+                        commit("setCards", cards);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     modules: {

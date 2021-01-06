@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 import Register from "./components/Register.vue";
 import Signin from "./components/Signin.vue";
 import Home from "./components/Home.vue";
+import CardSetDashboard from "./components/CardSet/CardSetDashboard.vue";
 import CardSets from "./components/CardSet/CardSets.vue";
 import Cards from "./components/Card/Cards.vue";
 
@@ -13,9 +14,14 @@ export const routes = [
     { path: "/", component: Home },
     {
         path: "/CardSets",
-        component: CardSets,
+        component: CardSetDashboard,
         children: [
-            { path: ":id/Cards", component: Cards },
+            { path: "", component: CardSets },
+            {
+                path: ":cardSetId/Cards", component: Cards, name: "CardSetCards", beforeEnter: (to, from, next) => {
+                    next();
+                }
+            },
             // { path: ":id/edit", component: CardSetEdit },
         ]
     },

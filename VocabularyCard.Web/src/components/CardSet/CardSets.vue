@@ -36,7 +36,7 @@ export default {
     // },
   },
   created: function() {
-    this.$store.dispatch("getAllCardSets");
+    this.$store.dispatch("fetchAllCardSets");
   },
 };
 </script>
