@@ -69,7 +69,7 @@ namespace VocabularyCard.Web.Api
         [HttpPost]
         public CardSetDto Get(int id)
         {
-            CardSetDto cardSetDto = _cardSetService.GeyById(id);
+            CardSetDto cardSetDto = _cardSetService.GetById(id);
             return cardSetDto;
         }
 

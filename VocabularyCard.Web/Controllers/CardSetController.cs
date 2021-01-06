@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -6,8 +6,8 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
-using VocabularyCard.DTO;
-using VocabularyCard.Service;
+using VocabularyCard.Dtos;
+using VocabularyCard.Services;
 using VocabularyCard.Web.Filters;
 
 namespace VocabularyCard.Web.Controllers
@@ -37,7 +37,7 @@ namespace VocabularyCard.Web.Controllers
         [Auth]
         public ActionResult GetAll()
         {
-            CardSetInfo[] cardSetInfos = _cardSetService.GetAll();
+            CardSetDto[] cardSetInfos = _cardSetService.GetAll();
 
             if (Request.IsAjaxRequest())
             {
@@ -77,26 +77,24 @@ namespace VocabularyCard.Web.Controllers
             var logger = NLog.LogManager.GetLogger("TEST");
             logger.Error("123");
 
-
-            _cardService.ShowGuid();
             Global.Log.Debug("List 1");
 
             //ICardSetService zzz = new RepositoryFactory().GetCardSetService();
             //ICardSetService zzz = WebUtility.Repository.GetCardSetService();
             //CardSetInfo[] cardSetInfos = zzz.GetAll();
 
-            CardSetInfo[] cardSetInfos = _cardSetService.GetAll();
-            CardInfo cardInfo = _cardService.GetById(1);
+            CardSetDto[] cardSetDtos = _cardSetService.GetAll();
+            CardDto cardDto = _cardService.GetById(1);
 
             ViewData["testViewDataString"] = "testZZZ";
-            ViewBag.CardSets = cardSetInfos;
+            ViewBag.CardSets = cardSetDtos;
             ViewBag.i18nCard = Resources.VocabularyCard.Card;
 
             //ViewData.Model = cardSetInfos;
             //TempData["test"] = "abc";
 
-            Tuple<CardSetInfo[], CardInfo> tupleModel = Tuple.Create<CardSetInfo[], CardInfo>(cardSetInfos, cardInfo);
-            Tuple<CardSetInfo[], CardInfo> tupleModel2 = new Tuple<CardSetInfo[], CardInfo>(cardSetInfos, cardInfo);
+            Tuple<CardSetDto[], CardDto> tupleModel = Tuple.Create<CardSetDto[], CardDto>(cardSetDtos, cardDto);
+            Tuple<CardSetDto[], CardDto> tupleModel2 = new Tuple<CardSetDto[], CardDto>(cardSetDtos, cardDto);
             ViewData.Model = tupleModel;
 
             Global.Log.Debug("List 2");
@@ -107,7 +105,7 @@ namespace VocabularyCard.Web.Controllers
 
             //StringBuilder sb = new StringBuilder();
             //sb.AppendLine("===========================");
-            CardSetInfo cardSetInfo = _cardSetService.GeyById(1);
+            CardSetDto cardSetDto = _cardSetService.GetById(1);
             //sb.AppendLine(JsonConvert.SerializeObject(cardSetInfo));
             ////Global.Log.Error("cardsetInfo.Cards.Length: " + cardsetInfo.Cards.Length);
             //sb.AppendLine("===========================");
@@ -118,7 +116,7 @@ namespace VocabularyCard.Web.Controllers
             // 假如是 ajax request 就回傳 jaon，否則就回傳一個頁面
             if (Request.IsAjaxRequest())
             {
-                if (cardSetInfos == null)
+                if (cardSetDtos == null)
                 {
                     // 內部沒任何實作，可參考 null object pattern
                     return new EmptyResult();
@@ -126,11 +124,11 @@ namespace VocabularyCard.Web.Controllers
 
 
                 // todo: AllowGet 有資安風險，請參考 Json() 的說明
-                return Json(cardSetInfos, JsonRequestBehavior.DenyGet);
+                return Json(cardSetDtos, JsonRequestBehavior.DenyGet);
             }
             else
             {
-                return View(cardSetInfos);
+                return View(cardSetDtos);
             }
         }
 
@@ -152,7 +150,7 @@ namespace VocabularyCard.Web.Controllers
 
         // Flag, CreatedDateTime, ModifiedDateTime 欄位不要被自動 binding，直接設定在 model 上會比較方便
         [HttpPost]
-        public ActionResult Create([Bind(Exclude = "Flag,CreatedDateTime,ModifiedDateTime")] CardSetInfo cardSetInfo)
+        public ActionResult Create([Bind(Exclude = "Flag,CreatedDateTime,ModifiedDateTime")] CardSetDto cardSetInfo)
         {
             // cardSetInfo 驗證通過的意思
             if (ModelState.IsValid)
@@ -197,12 +195,12 @@ namespace VocabularyCard.Web.Controllers
 
         public ActionResult ResponseJsonResult()
         {
-            CardSetInfo[] cardSetInfos = _cardSetService.GetAll();
+            CardSetDto[] cardSetInfos = _cardSetService.GetAll();
             return Json(cardSetInfos, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        public ActionResult GetCardSetJson(CardSetInfo cardSetInfo)
+        public ActionResult GetCardSetJson(CardSetDto cardSetInfo)
         {
             return Json(cardSetInfo, JsonRequestBehavior.DenyGet);
         }

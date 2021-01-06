@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using VocabularyCard.DTO;
-using VocabularyCard.Service;
+using VocabularyCard.Dtos;
+using VocabularyCard.Services;
 
 namespace VocabularyCard.Web.Controllers
 {
@@ -36,8 +36,8 @@ namespace VocabularyCard.Web.Controllers
             // 所以，假如 method 的回傳型態是 Task<Type>
             // 那此 method 是一個非同步 method????
             //CardInfo cardInfo = await _cardService.GetById(id);
-            CardInfo cardInfo = _cardService.GetById(id);
-            ViewData.Model = cardInfo;
+            CardDto cardDto = _cardService.GetById(id);
+            ViewData.Model = cardDto;
 
             return View();
         }

@@ -11,7 +11,7 @@ namespace VocabularyCard.Services
 {
     public interface ICardSetService : IService
     {
-        CardSetDto GeyById(int id);
+        CardSetDto GetById(int id);
         CardSetDto[] GetAll();
         CardSetDto[] GetByOwner(UserInfo owner);
         CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId);

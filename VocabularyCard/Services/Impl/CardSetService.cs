@@ -26,7 +26,7 @@ namespace VocabularyCard.Services.Impl
             _cardSetConverter = new CardSetConverter();
         }
 
-        public CardSetDto GeyById(int id)
+        public CardSetDto GetById(int id)
         {
             CardSet cardSet = _cardSetRepository.GetByCardSetId(id);
             return _cardSetConverter.ToDataTransferObject(cardSet);

@@ -24,6 +24,12 @@ namespace VocabularyCard.Services.Impl
             _cardConverter = new CardConverter();
         }
 
+        public CardDto GetById(int cardId)
+        {
+            Card card = _cardRepository.GetByCardId(cardId);
+            return _cardConverter.ToDataTransferObject(card);
+        }
+
         public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)
         {
             // todo: 要先檢查 user 是否為 cardSet 的 owner

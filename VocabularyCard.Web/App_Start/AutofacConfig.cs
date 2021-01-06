@@ -30,6 +30,7 @@ using VocabularyCard.Repositories.EF;
 using VocabularyCard.Repositories;
 using VocabularyCard.Services;
 using VocabularyCard.Services.Impl;
+using VocabularyCard.Core;
 using VocabularyCard.Core.EF;
 using VocabularyCard.Core.Repositories;
 using VocabularyCard.Core.Services;
@@ -125,7 +126,7 @@ namespace VocabularyCard.Web
             // EF dbContext
             builder.RegisterType(typeof(Core.EF.BaseDbContext)).As(typeof(DbContext)).InstancePerLifetimeScope();
             // unitOfWork
-            builder.RegisterType(typeof(Core.EF.EFUnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(Core.EF.EFUnitOfWork)).As(typeof(Core.IUnitOfWork)).InstancePerLifetimeScope();
 
             // repository
             builder.RegisterGeneric(typeof(Core.EF.EFBaseRepository<>)).As(typeof(Core.Repositories.IRepository<>)).InstancePerDependency();
