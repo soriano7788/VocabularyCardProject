@@ -1,9 +1,8 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
-import localStorageHelper from "./localStorageHelper.js";
+import localStorageUtil from "./localStorageUtil.js";
 import * as statusCode from "./consts/statusCode.js";
-import * as localStorage from "./consts/localStorage.js";
 import router from "../routes.js";
 
 Vue.use(Vuex);
@@ -75,7 +74,8 @@ export default new Vuex.Store({
                         // state 儲存 token 資訊
                         commit("setTokenData", tokenData);
                         // localStorage 儲存 token 資訊
-                        dispatch(localStorage.SET_TOKEN_DATA, tokenData);
+                        localStorageUtil.setTokenData(tokenData);
+
                         // 登入成功，到首頁
                         router.push("/");
                     } else {
@@ -88,8 +88,8 @@ export default new Vuex.Store({
         logout: ({ commit, dispatch }) => {
             commit("clearToken");
             commit("clearUserData");
-            dispatch(localStorage.CLEAR_TOKEN_DATA);
-            dispatch(localStorage.CLEAR_USER_DATA);
+            localStorageUtil.clearTokenData();
+            localStorageUtil.clearUserData();
             router.push("/SignIn");
         },
         autoLogin: ({ commit }) => {
@@ -107,12 +107,8 @@ export default new Vuex.Store({
             }).catch(error => {
                 console.log(error);
             });
-        },
-        setLocalStorage: () => {
-            alert("hello");
         }
     },
     modules: {
-        localStorageHelper: localStorageHelper
     }
 });

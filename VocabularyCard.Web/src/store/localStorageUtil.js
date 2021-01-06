@@ -1,13 +1,11 @@
-import * as types from "./consts/localStorage.js";
-
-const actions = {
-    [types.SET_TOKEN_DATA]: (context, tokenData) => {
+export default {
+    setTokenData: (tokenData) => {
         localStorage.setItem("refreshToken", tokenData.refreshToken);
         localStorage.setItem("accessToken", tokenData.accessToken);
         localStorage.setItem("refreshTokenExpirationDate", tokenData.refreshTokenExpirationDate);
         localStorage.setItem("accessTokenExpirationDate", tokenData.accessTokenExpirationDate);
     },
-    [types.GET_TOKEN_DATA]: () => {
+    getTokenData: () => {
         const tokenData = {
             refreshToken: localStorage.getItem("refreshToken"),
             accessToken: localStorage.getItem("accessToken"),
@@ -16,17 +14,13 @@ const actions = {
         };
         return tokenData;
     },
-    [types.CLEAR_TOKEN_DATA]: () => {
+    clearTokenData: () => {
         localStorage.removeItem("refreshToken");
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshTokenExpirationDate");
         localStorage.removeItem("accessTokenExpirationDate");
     },
-    [types.CLEAR_USER_DATA]: () => {
+    clearUserData: () => {
 
     }
-}
-
-export default {
-    actions: actions
 }
