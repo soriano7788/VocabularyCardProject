@@ -10,6 +10,7 @@ using VocabularyCard.Dtos;
 using VocabularyCard.DtoConverters;
 using VocabularyCard.Repositories;
 using VocabularyCard.Entities;
+using VocabularyCard.Util;
 
 namespace VocabularyCard.Services.Impl
 {
@@ -47,9 +48,18 @@ namespace VocabularyCard.Services.Impl
             // 以高內聚的設計準則來思考，_cardRepository 大概也只有這個 method 會用到
             // 移到 cardService 應該比較適合
 
-            // todo: 先檢查 user 是否為此 cardSet 的 owner
+            CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
+            if(cardSet == null)
+            {
+                throw new ArgumentException("cardSetId not exist", "cardSetId");
+            }
 
-            IList<Card> cards = _cardRepository.GetByCardSetId(cardSetId);
+            if(cardSet.Owner != userInfo.UserId)
+            {
+                throw new ArgumentException("user not cardSet owner", "userInfo");
+            }
+
+            ICollection<Card> cards = cardSet.Cards;
             return new CardConverter().ToDataTransferObjects(cards.ToArray());
         }
 

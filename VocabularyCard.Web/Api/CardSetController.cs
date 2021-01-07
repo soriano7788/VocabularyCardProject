@@ -39,9 +39,14 @@ namespace VocabularyCard.Web.Api
             return cardSetDtos;
         }
 
-        public CardSetDto[] GetCards(int cardSetId)
+        [Route("api/cardset/GetCards/{cardSetId}")]
+        [HttpGet]
+        public CardDto[] GetCards(int cardSetId)
         {
-            throw new NotImplementedException();
+            //UserInfo user = Util.WebUtility.GetCurrentUser();
+            UserInfo user = new UserInfo { UserId = "4d2fbfbe-73e6-483c-be33-893e6668e66b" };
+            CardDto[] cardDtos = _cardSetService.GetCardsByCardSetId(user, cardSetId);
+            return cardDtos;
         }
 
         [AllowAnonymous]

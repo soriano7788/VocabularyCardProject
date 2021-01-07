@@ -34,12 +34,14 @@ namespace VocabularyCard.Repositories.EF.Mapping
             this
                 .HasMany(c => c.CardSets)
                 .WithMany(cs => cs.Cards)
-                .Map(m =>
-                {
-                    m.ToTable("CARD_SET_CARD_EDGE");
-                    m.MapLeftKey("CARD_SET_ID");
-                    m.MapRightKey("CARD_ID");
-                });
+                .Map(
+                    m =>
+                    {
+                        m.ToTable("CARD_SET_CARD_EDGE");
+                        m.MapLeftKey("CARD_SET_ID");
+                        m.MapRightKey("CARD_ID");
+                    }
+                );
         }
     }
 }
