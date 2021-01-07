@@ -1,7 +1,9 @@
 <template>
-  <div id="app">
+  <div id="app" class="container-fluid">
     <app-header></app-header>
-    <router-view></router-view>
+    <div class="row">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 

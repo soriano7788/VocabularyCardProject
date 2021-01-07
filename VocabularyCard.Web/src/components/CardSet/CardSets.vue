@@ -2,11 +2,15 @@
   <div class="row">
     <!-- 這是 單字集 清單 -->
     <h1>CardSets List</h1>
-    <card-set
-      v-for="cardSet in cardSets"
-      v-bind:key="cardSet.Id"
-      v-bind:cardSet="cardSet"
-    ></card-set>
+    <div class="row row-cols-1 row-cols-md-3">
+      <card-set
+        v-for="cardSet in cardSets"
+        v-bind:key="cardSet.Id"
+        v-bind:cardSet="cardSet"
+      ></card-set>
+    </div>
+
+    <!-- 這個要用 slot 才行 -->
     <!-- <div v-for="cardSet in cardSets" :key="cardSet.Id">
       <h1>display name: {{ cardSet.DisplayName }}</h1>
     </div> -->
@@ -37,6 +41,10 @@ export default {
   },
   created: function() {
     this.$store.dispatch("fetchAllCardSets");
+  },
+  destroyed: function() {
+    //clear cardSets
+    this.$store.dispatch("clearCardSets");
   },
 };
 </script>

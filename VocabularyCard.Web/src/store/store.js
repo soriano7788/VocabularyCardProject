@@ -126,6 +126,12 @@ export default new Vuex.Store({
                 .catch(error => {
                     console.log(error);
                 });
+        },
+        clearCardSets: ({ commit }) => {
+            commit("setCardSets", []);
+        },
+        clearCards: ({ commit }) => {
+            commit("setCards", []);
         }
     },
     modules: {
