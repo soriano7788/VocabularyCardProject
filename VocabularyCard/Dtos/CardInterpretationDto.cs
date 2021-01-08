@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VocabularyCard.Core.Entities;
 
-namespace VocabularyCard.Entities
+namespace VocabularyCard.Dtos
 {
-    public class CardInterpretation : BaseEntity
+    public class CardInterpretationDto
     {
         public int Id { get; set; }
 
@@ -34,8 +33,6 @@ namespace VocabularyCard.Entities
 
         public string ExampleSentenceExplanation { get; set; }
 
-        public int CardId { get; set; }
-
-        public Card Card { get; set; }
+        public CardDto Card { get; set; }
     }
 }

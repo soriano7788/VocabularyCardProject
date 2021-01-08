@@ -42,6 +42,10 @@ namespace VocabularyCard.Repositories.EF.Mapping
                         m.MapRightKey("CARD_ID");
                     }
                 );
+
+            //this.HasMany<CardInterpretation>(c => c.Interpretations)
+            //    .WithRequired(ci => ci.Card)
+            //    .HasForeignKey<int>(ci => ci.CardId);
         }
     }
 }

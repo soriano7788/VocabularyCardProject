@@ -13,20 +13,8 @@ using Autofac;
 using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
-using Microsoft.Extensions.Configuration;
-using VocabularyCard.Domain;
-using VocabularyCard.Persistence;
-using VocabularyCard.Persistence.EF;
-using VocabularyCard.Persistence.EF.Mapping;
-using VocabularyCard.Service;
-using VocabularyCard.Service.Impl;
-using VocabularyCard.Test.Repository;
-using VocabularyCard.Test.Repository.EF;
-using VocabularyCard.Test.Repository.EF.Configuration;
-using VocabularyCard.Test.Service;
-using VocabularyCard.Test.Service.Impl;
-using VocabularyCard.Repositories.EF.Mapping;
 using VocabularyCard.Repositories.EF;
+using VocabularyCard.Repositories.EF.Mapping;
 using VocabularyCard.Repositories;
 using VocabularyCard.Services;
 using VocabularyCard.Services.Impl;
@@ -120,44 +108,50 @@ namespace VocabularyCard.Web
             #region 新的設計方式註冊
 
             // orm mapping
-            builder.RegisterType<Repositories.EF.Mapping.CardMap>().As<Core.EF.IEntityTypeConfiguration>().SingleInstance();
-            builder.RegisterType<Repositories.EF.Mapping.CardSetMap>().As<Core.EF.IEntityTypeConfiguration>().SingleInstance();
+            builder.RegisterType<CardMap>().As<IEntityTypeConfiguration>().SingleInstance();
+            builder.RegisterType<CardSetMap>().As<IEntityTypeConfiguration>().SingleInstance();
+            builder.RegisterType<CardInterpretationMap>().As<IEntityTypeConfiguration>().SingleInstance();
 
             // EF dbContext
-            builder.RegisterType(typeof(Core.EF.BaseDbContext)).As(typeof(DbContext)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(BaseDbContext)).As(typeof(DbContext)).InstancePerLifetimeScope();
             // unitOfWork
-            builder.RegisterType(typeof(Core.EF.EFUnitOfWork)).As(typeof(Core.IUnitOfWork)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(EFUnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();
 
             // repository
-            builder.RegisterGeneric(typeof(Core.EF.EFBaseRepository<>)).As(typeof(Core.Repositories.IRepository<>)).InstancePerDependency();
-            builder.RegisterType(typeof(Repositories.EF.EFCardSetRepository)).As(typeof(Repositories.ICardSetRepository)).InstancePerLifetimeScope();
-            builder.RegisterType(typeof(Repositories.EF.EFCardRepository)).As(typeof(Repositories.ICardRepository)).InstancePerLifetimeScope();
+            builder.RegisterGeneric(typeof(EFBaseRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
+            builder.RegisterType(typeof(EFCardSetRepository)).As(typeof(ICardSetRepository)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(EFCardRepository)).As(typeof(ICardRepository)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(EFCardInterpretationRepository)).As(typeof(ICardInterpretationRepository)).InstancePerLifetimeScope();
 
 
 
             // service
-            builder.RegisterType(typeof(Core.Services.BaseService)).As(typeof(IService)).InstancePerDependency();
+            builder.RegisterType(typeof(BaseService)).As(typeof(IService)).InstancePerDependency();
 
-            builder.RegisterType<Services.Impl.CardService>()
-                .As<Services.ICardService>()
+            builder.RegisterType<CardService>()
+                .As<ICardService>()
                 //.InstancePerLifetimeScope();
                 .SingleInstance();
-            builder.RegisterType<Services.Impl.CardSetService>()
-                .As<Services.ICardSetService>()
+            builder.RegisterType<CardSetService>()
+                .As<ICardSetService>()
+                //.InstancePerLifetimeScope();
+                .SingleInstance();
+            builder.RegisterType<CardInterpretationService>()
+                .As<ICardInterpretationService>()
                 //.InstancePerLifetimeScope();
                 .SingleInstance();
 
 
             // authentication 相關
-            builder.RegisterType<Repositories.EF.Mapping.ApiRefreshTokenMap>().As<Core.EF.IEntityTypeConfiguration>().SingleInstance();
-            builder.RegisterType<Repositories.EF.Mapping.ApiAccessTokenMap>().As<Core.EF.IEntityTypeConfiguration>().SingleInstance();
+            builder.RegisterType<ApiRefreshTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();
+            builder.RegisterType<ApiAccessTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();
 
             builder.RegisterGeneric(typeof(EFBaseApiTokenRepository<>)).As(typeof(IBaseApiTokenRepository<>)).InstancePerDependency();
             builder.RegisterType(typeof(EFApiRefreshTokenRepository)).As(typeof(IApiRefreshTokenRepository)).InstancePerLifetimeScope();
             builder.RegisterType(typeof(EFApiAccessTokenRepository)).As(typeof(IApiAccessTokenRepository)).InstancePerLifetimeScope();
 
-            builder.RegisterType<Services.Impl.AuthenticationService>()
-                .As<Services.IAuthenticationService>()
+            builder.RegisterType<AuthenticationService>()
+                .As<IAuthenticationService>()
                 //.InstancePerLifetimeScope();
                 .SingleInstance()
                 .WithProperty("RefreshTokenLifeTime", 3600)  // 單位秒
@@ -197,11 +191,6 @@ namespace VocabularyCard.Web
             //// 功能就是被繼承，還有留一個 public unitOfWork 屬性，給子類別使用
             //builder.RegisterType(typeof(BaseService)).As(typeof(BaseService)).InstancePerDependency();
 
-            // service
-            builder.RegisterType<VocabularyCard.Test.Service.Impl.CardSetService>()
-                .As<VocabularyCard.Test.Service.ICardSetService>()
-                //.InstancePerLifetimeScope();
-                .SingleInstance();
 
 
 

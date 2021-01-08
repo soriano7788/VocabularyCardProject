@@ -12,6 +12,9 @@ namespace VocabularyCard.Services
     public interface ICardService : IService
     {
         CardDto GetById(int cardId);
+        CardDto GetById(int cardId, bool containDetail);
+        CardInterpretationDto[] GetCardInterpretations(int cardId);
+
         CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId);
     }
 }

@@ -10,25 +10,58 @@ using VocabularyCard.Dtos;
 using VocabularyCard.DtoConverters;
 using VocabularyCard.Repositories;
 using VocabularyCard.Entities;
+using VocabularyCard.Util;
 
 namespace VocabularyCard.Services.Impl
 {
     public class CardService : BaseService, ICardService
     {
         private ICardRepository _cardRepository;
+        private ICardInterpretationRepository _cardInterpretationRepository;
         private CardConverter _cardConverter;
+        private CardInterpretationConverter _cardInterpretationConverter;
 
-        public CardService(IUnitOfWork unitOfWork, ICardRepository cardRepository) : base(unitOfWork)
+        public CardService(
+            IUnitOfWork unitOfWork, 
+            ICardRepository cardRepository, 
+            ICardInterpretationRepository cardInterpretationRepository) : base(unitOfWork)
         {
             _cardRepository = cardRepository;
+            _cardInterpretationRepository = cardInterpretationRepository;
             _cardConverter = new CardConverter();
+            _cardInterpretationConverter = new CardInterpretationConverter();
         }
 
         public CardDto GetById(int cardId)
         {
-            Card card = _cardRepository.GetByCardId(cardId);
-            return _cardConverter.ToDataTransferObject(card);
+            return GetById(cardId, false);
         }
+        public CardDto GetById(int cardId, bool containDetail)
+        {
+            Card card = _cardRepository.GetByCardId(cardId);
+            CardDto cardDto = _cardConverter.ToDataTransferObject(card);
+
+            if (containDetail)
+            {
+                ICollection<CardInterpretation> interpretations = card.Interpretations;
+                if(interpretations != null)
+                {
+                    cardDto.Interpretations = _cardInterpretationConverter.ToDataTransferObjects(interpretations.ToArray());
+                }
+                else
+                {
+                    LogUtility.DebugLog("interpretations 為 null");
+                }
+            }
+
+            return cardDto;
+        }
+        public CardInterpretationDto[] GetCardInterpretations(int cardId)
+        {
+            IList<CardInterpretation> interpretations = _cardInterpretationRepository.GetByCardId(cardId);
+            return _cardInterpretationConverter.ToDataTransferObjects(interpretations.ToArray());
+        }
+
 
         public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)
         {

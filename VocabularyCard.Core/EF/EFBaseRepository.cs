@@ -29,7 +29,7 @@ namespace VocabularyCard.Core.EF
 
         public IList<TEntity> GetAll()
         {
-            throw new NotImplementedException();
+            return _entitySet.ToList();
         }
 
         /// <summary>

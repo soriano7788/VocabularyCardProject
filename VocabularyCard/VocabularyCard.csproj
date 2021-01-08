@@ -132,6 +132,7 @@
     <Compile Include="Domain\VUser.cs" />
     <Compile Include="DtoConverters\ApiTokenConverter.cs" />
     <Compile Include="DtoConverters\CardConverter.cs" />
+    <Compile Include="DtoConverters\CardInterpretationConverter.cs" />
     <Compile Include="DtoConverters\CardSetConverter.cs" />
     <Compile Include="DTOConverter\ApiAccessTokenConverter.cs" />
     <Compile Include="DTOConverter\ApiRefreshTokenConverter.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Dtos\AuthenticationResult.cs" />
     <Compile Include="Dtos\BaseApiTokenDto.cs" />
     <Compile Include="Dtos\CardDto.cs" />
+    <Compile Include="Dtos\CardInterpretationDto.cs" />
     <Compile Include="Dtos\CardSetDto.cs" />
     <Compile Include="Dtos\RefreshTokenValidatedResult.cs" />
     <Compile Include="Dtos\TokenValidatedResult.cs" />
@@ -170,6 +172,7 @@
     <Compile Include="Persistence\EF\EFCardInterpretationDao.cs" />
     <Compile Include="Persistence\EF\EFCardSetCardEdgeDao.cs" />
     <Compile Include="Persistence\EF\EFCardSetDao.cs" />
+    <Compile Include="Repositories\EF\EFCardInterpretationRepository.cs" />
     <Compile Include="Repositories\EF\EFApiAccessTokenRepository.cs" />
     <Compile Include="Repositories\EF\EFApiRefreshTokenRepository.cs" />
     <Compile Include="Repositories\EF\EFBaseApiTokenRepository.cs" />
@@ -177,17 +180,21 @@
     <Compile Include="Repositories\EF\EFCardSetRepository.cs" />
     <Compile Include="Repositories\EF\Mapping\ApiAccessTokenMap.cs" />
     <Compile Include="Repositories\EF\Mapping\ApiRefreshTokenMap.cs" />
+    <Compile Include="Repositories\EF\Mapping\CardInterpretationMap.cs" />
     <Compile Include="Repositories\EF\Mapping\CardMap.cs" />
     <Compile Include="Repositories\EF\Mapping\CardSetMap.cs" />
     <Compile Include="Repositories\IApiAccessTokenRepository.cs" />
     <Compile Include="Repositories\IApiRefreshTokenRepository.cs" />
     <Compile Include="Repositories\IBaseApiTokenRepository.cs" />
+    <Compile Include="Repositories\ICardInterpretationRepository.cs" />
     <Compile Include="Repositories\ICardRepository.cs" />
     <Compile Include="Repositories\ICardSetRepository.cs" />
     <Compile Include="Services\IAuthenticationService.cs" />
+    <Compile Include="Services\ICardInterpretationService.cs" />
     <Compile Include="Services\ICardService.cs" />
     <Compile Include="Services\ICardSetService.cs" />
     <Compile Include="Services\Impl\AuthenticationService.cs" />
+    <Compile Include="Services\Impl\CardInterpretationService.cs" />
     <Compile Include="Services\Impl\CardService.cs" />
     <Compile Include="Services\Impl\CardSetService.cs" />
     <Compile Include="Test\Repository\BaseDbContext.cs" />

@@ -25,7 +25,6 @@ namespace VocabularyCard.Web.Api
         }
 
         //[IgnoreFilter(typeof(ApiResultAttribute))]
-        //[AllowAnonymous]
         public CardSetDto[] GetAll()
         {
             CardSetDto[] cardSetDtos = _cardSetService.GetAll();

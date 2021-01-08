@@ -21,6 +21,7 @@ namespace VocabularyCard.Repositories.EF
         public Card GetByCardId(int cardId)
         {
             return _cards.Find(cardId);
+            //return _cards.Where(c => c.CardId == cardId).Include(c => c.Interpretations).First();
         }
         public IList<Card> GetByCardSetId(int cardSetId)
         {

@@ -23,5 +23,8 @@ namespace VocabularyCard.Dtos
         public CardState State { get; set; }
 
         public CardSetDto[] CardSets { get; set; }
+
+        public CardInterpretationDto[] Interpretations { get; set; }
+
     }
 }

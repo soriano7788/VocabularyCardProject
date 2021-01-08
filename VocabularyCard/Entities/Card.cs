@@ -16,7 +16,7 @@ namespace VocabularyCard.Entities
         public string Creator { get; set; }
         public string Modifier { get; set; }
         public CardState State { get; set; }
-        public ICollection<CardInterpretation> Interpretations { get; set; }
-        public virtual ICollection<CardSet> CardSets { get; set; }
+        public virtual ICollection<CardInterpretation> Interpretations { get; set; }
+        public ICollection<CardSet> CardSets { get; set; }
     }
 }
