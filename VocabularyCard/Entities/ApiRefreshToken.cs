@@ -7,16 +7,7 @@ using VocabularyCard.Core.Entities;
 
 namespace VocabularyCard.Entities
 {
-    public class ApiRefreshToken : BaseEntity
+    public class ApiRefreshToken : BaseApiToken
     {
-        public int Vuid { get; set; }
-
-        public string Token { get; set; }
-
-        public string UserId { get; set; }
-
-        public DateTime CreatedDateTime { get; set; }
-
-        public DateTime ExpiredDateTime { get; set; }
     }
 }

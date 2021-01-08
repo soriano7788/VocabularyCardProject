@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using VocabularyCard.Web.Models;
-using VocabularyCard.DTO;
-using VocabularyCard.Service;
+//using VocabularyCard.DTO;
+//using VocabularyCard.Service;
 using VocabularyCard.AccountManager;
 using VocabularyCard.AccountManager.DTO;
 using System.Web.Security;
+using VocabularyCard.Services;
+using VocabularyCard.Dtos;
 
 namespace VocabularyCard.Web.Authentications
 {

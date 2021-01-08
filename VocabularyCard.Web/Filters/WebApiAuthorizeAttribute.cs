@@ -15,8 +15,8 @@ using VocabularyCard.Web.Models;
 using System.Threading;
 using System.Security.Principal;
 using System.Diagnostics.Contracts;
-using VocabularyCard.DTO;
 using VocabularyCard.AccountManager.DTO;
+using VocabularyCard.Dtos;
 
 namespace VocabularyCard.Web.Filters
 {

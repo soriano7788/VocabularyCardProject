@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VocabularyCard.Service;
+using VocabularyCard.Services;
 using Autofac.Integration.Mvc;
 
 namespace VocabularyCard

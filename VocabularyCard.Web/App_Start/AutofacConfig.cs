@@ -147,6 +147,24 @@ namespace VocabularyCard.Web
                 //.InstancePerLifetimeScope();
                 .SingleInstance();
 
+
+            // authentication 相關
+            builder.RegisterType<Repositories.EF.Mapping.ApiRefreshTokenMap>().As<Core.EF.IEntityTypeConfiguration>().SingleInstance();
+            builder.RegisterType<Repositories.EF.Mapping.ApiAccessTokenMap>().As<Core.EF.IEntityTypeConfiguration>().SingleInstance();
+
+            builder.RegisterGeneric(typeof(EFBaseApiTokenRepository<>)).As(typeof(IBaseApiTokenRepository<>)).InstancePerDependency();
+            builder.RegisterType(typeof(EFApiRefreshTokenRepository)).As(typeof(IApiRefreshTokenRepository)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(EFApiAccessTokenRepository)).As(typeof(IApiAccessTokenRepository)).InstancePerLifetimeScope();
+
+            builder.RegisterType<Services.Impl.AuthenticationService>()
+                .As<Services.IAuthenticationService>()
+                //.InstancePerLifetimeScope();
+                .SingleInstance()
+                .WithProperty("RefreshTokenLifeTime", 3600)  // 單位秒
+                .WithProperty("AccessTokenLifeTime", 1800);  // 單位秒
+
+
+
             #endregion
 
 

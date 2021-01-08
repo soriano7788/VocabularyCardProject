@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VocabularyCard.Core.Entities;
 
-namespace VocabularyCard.Entities
+namespace VocabularyCard.Dtos
 {
-    public class ApiAccessToken : BaseApiToken
+    public class RefreshTokenValidatedResult : TokenValidatedResult
     {
     }
 }

@@ -6,8 +6,10 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using VocabularyCard.AccountManager;
-using VocabularyCard.DTO;
-using VocabularyCard.Service;
+using VocabularyCard.Dtos;
+using VocabularyCard.Services;
+//using VocabularyCard.DTO;
+//using VocabularyCard.Service;
 using VocabularyCard.Web.Extensions;
 using VocabularyCard.Web.Models;
 

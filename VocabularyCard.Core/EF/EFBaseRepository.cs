@@ -24,7 +24,7 @@ namespace VocabularyCard.Core.EF
 
         public TEntity Create(TEntity entity)
         {
-            throw new NotImplementedException();
+            return _entitySet.Add(entity);
         }
 
         public IList<TEntity> GetAll()
