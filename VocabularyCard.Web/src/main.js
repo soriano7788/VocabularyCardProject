@@ -39,9 +39,8 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
     // 2. access_token 無效 (過期 或 不存在)
     // 3. refresh_token 無效 (過期 或 不存在)
 
-
     alert("Unauthorized");
-    router.push("/SignIn");
+    store.dispatch("logout");
   }
 });
 
