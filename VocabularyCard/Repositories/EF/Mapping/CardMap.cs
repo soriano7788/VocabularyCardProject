@@ -43,9 +43,9 @@ namespace VocabularyCard.Repositories.EF.Mapping
                     }
                 );
 
-            //this.HasMany<CardInterpretation>(c => c.Interpretations)
-            //    .WithRequired(ci => ci.Card)
-            //    .HasForeignKey<int>(ci => ci.CardId);
+            this.HasMany<CardInterpretation>(c => c.Interpretations)
+                .WithRequired(ci => ci.Card)
+                .HasForeignKey<int>(ci => ci.CardId);
         }
     }
 }

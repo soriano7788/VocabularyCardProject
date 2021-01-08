@@ -20,11 +20,16 @@ namespace VocabularyCard.Repositories.EF
         }
         public Card GetByCardId(int cardId)
         {
-            return _cards.Find(cardId);
-            //return _cards.Where(c => c.CardId == cardId).Include(c => c.Interpretations).First();
+            //return _cards.Find(cardId);
+
+            // 使用 Include 的話，就會變成 eager loading
+            // 參考 https://www.entityframeworktutorial.net/eager-loading-in-entity-framework.aspx
+            return _cards.Where(c => c.CardId == cardId).Include(c => c.Interpretations).First();
         }
+
         public IList<Card> GetByCardSetId(int cardSetId)
         {
+            // many to many 關係，還不確定語法如何寫
             throw new NotImplementedException();
         }
     }

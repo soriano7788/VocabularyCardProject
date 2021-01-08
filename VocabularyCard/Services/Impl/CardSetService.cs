@@ -53,7 +53,6 @@ namespace VocabularyCard.Services.Impl
             {
                 throw new ArgumentException("cardSetId not exist", "cardSetId");
             }
-
             if(cardSet.Owner != userInfo.UserId)
             {
                 throw new ArgumentException("user not cardSet owner", "userInfo");
