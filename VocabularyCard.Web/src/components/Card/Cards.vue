@@ -1,7 +1,9 @@
 <template>
   <div class="row">
     <h1>This is cards list</h1>
-    <div class="row row-cols-1 row-cols-md-2 g-3">
+    <div
+      class="row row-cols-1 row-cols-md-2 g-3 gx-5 px-5 justify-content-center"
+    >
       <card
         v-for="card in cards"
         v-bind:key="card.Id"

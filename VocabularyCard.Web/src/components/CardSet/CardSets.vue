@@ -2,7 +2,19 @@
   <div class="row">
     <!-- 這是 單字集 清單 -->
     <h1>CardSets List</h1>
-    <div class="row row-cols-1 row-cols-md-3">
+    <div class="d-grid gap-2 d-md-block">
+      <button
+        type="button"
+        class="btn btn-success btn-lg"
+        @click="showCreatedForm = !showCreatedForm"
+      >
+        新增單字集
+      </button>
+    </div>
+    <div class="col-md-6 justify-content-center">
+      <createCardSet v-if="showCreatedForm"></createCardSet>
+    </div>
+    <div class="row row-cols-1 row-cols-md-3 g-3 px-4">
       <card-set
         v-for="cardSet in cardSets"
         v-bind:key="cardSet.Id"
@@ -19,16 +31,18 @@
 
 <script>
 import CardSet from "./CardSet.vue";
+import CreateCardSet from "./CreateCardSet.vue";
 
 export default {
   components: {
     cardSet: CardSet,
+    createCardSet: CreateCardSet,
   },
-  // data: function() {
-  //   return {
-  //     cardSets: [],
-  //   };
-  // },
+  data: function() {
+    return {
+      showCreatedForm: false,
+    };
+  },
   computed: {
     cardSets: function() {
       return this.$store.getters.cardSets;
