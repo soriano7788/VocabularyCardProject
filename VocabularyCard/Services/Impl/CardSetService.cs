@@ -11,11 +11,14 @@ using VocabularyCard.DtoConverters;
 using VocabularyCard.Repositories;
 using VocabularyCard.Entities;
 using VocabularyCard.Util;
+using System.Collections.Concurrent;
 
 namespace VocabularyCard.Services.Impl
 {
     public class CardSetService : BaseService, ICardSetService
     {
+        private ConcurrentDictionary<int, string> _cacheCardSetName = new ConcurrentDictionary<int, string>();
+
         private ICardSetRepository _cardSetRepository;
         private ICardRepository _cardRepository;
         private CardSetConverter _cardSetConverter;
@@ -27,9 +30,18 @@ namespace VocabularyCard.Services.Impl
             _cardSetConverter = new CardSetConverter();
         }
 
-        public CardSetDto GetById(int id)
+        /// <summary>
+        /// cardSet 不存在，或是 cardSet於刪除狀態，皆會 throw exception
+        /// 目前沒額外獨立權限判定的 method 或 class 設計
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public CardSetDto GetById(UserInfo user, int id)
         {
+            CheckIsCardSetOwnerAndIsExist(user, id);
             CardSet cardSet = _cardSetRepository.GetByCardSetId(id);
+
             return _cardSetConverter.ToDataTransferObject(cardSet);
         }
         public CardSetDto[] GetAll()
@@ -42,30 +54,30 @@ namespace VocabularyCard.Services.Impl
             IList<CardSet> cardSets = _cardSetRepository.GetByOwner(owner.UserId);
             return _cardSetConverter.ToDataTransferObjects(cardSets.ToArray());
         }
-        public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)
+        public CardDto[] GetCardsByCardSetId(UserInfo user, int cardSetId)
         {
-            // todo: 這個 method 或是放在 cardService 會比較恰當?
-            // 以高內聚的設計準則來思考，_cardRepository 大概也只有這個 method 會用到
-            // 移到 cardService 應該比較適合
+            CheckIsCardSetOwnerAndIsExist(user, cardSetId);
+            ICollection<Card> cards = _cardRepository.GetByCardSetId(cardSetId);
+
+            return new CardConverter().ToDataTransferObjects(cards.ToArray());
+        }
+
+        public string GetCardSetNameById(int cardSetId)
+        {
+            if(_cacheCardSetName.ContainsKey(cardSetId))
+            {
+                return _cacheCardSetName[cardSetId];
+            }
 
             CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
             if(cardSet == null)
             {
-                throw new ArgumentException("cardSetId not exist", "cardSetId");
-            }
-            if(cardSet.Owner != userInfo.UserId)
-            {
-                throw new ArgumentException("user not cardSet owner", "userInfo");
+                throw new Exception("card set not found");
             }
 
-            ICollection<Card> cards = _cardRepository.GetByCardSetId(cardSetId);
+            _cacheCardSetName.TryAdd(cardSetId, cardSet.DisplayName);
 
-            //// todo: 這邊沒把 interpretation 轉換出來
-            //foreach(Card card in cards)
-            //{ 
-            //}
-
-            return new CardConverter().ToDataTransferObjects(cards.ToArray());
+            return cardSet.DisplayName;
         }
 
         public CardSetDto Create(UserInfo user, CardSetDto cardSetDto)
@@ -85,5 +97,29 @@ namespace VocabularyCard.Services.Impl
 
             return newCardSetDto;
         }
+
+        public void DeleteById(UserInfo user, int cardSetId)
+        {
+            CheckIsCardSetOwnerAndIsExist(user, cardSetId);
+            CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
+            cardSet.State = CardSetState.Removed;
+            _cardSetRepository.Update(cardSet);
+            UnitOfWork.Save();
+        }
+
+        // todo: 此為暫時性 method，之後直接設計一個權限控管
+        private void CheckIsCardSetOwnerAndIsExist(UserInfo user, int cardSetId)
+        {
+            CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
+            if (cardSet == null)
+            {
+                throw new ArgumentException("cardSetId not exist", "cardSetId");
+            }
+            if (cardSet.Owner != user.UserId)
+            {
+                throw new ArgumentException("user not cardSet owner", "userInfo");
+            }
+        }
+
     }
 }

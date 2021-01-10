@@ -77,11 +77,29 @@ namespace VocabularyCard.Web.Api
 
         // GET api/<controller>/5
         // https://127.0.0.1/VocabularyCard/api/CardSet/get?id=1
-        [HttpPost]
+        [HttpGet]
         public CardSetDto Get(int id)
         {
-            CardSetDto cardSetDto = _cardSetService.GetById(id);
+            var user = Util.WebUtility.GetCurrentUser();
+            CardSetDto cardSetDto = _cardSetService.GetById(user, id);
             return cardSetDto;
+        }
+
+        [Route("api/CardSet/GetName/{cardSetId}")]
+        [HttpGet]
+        public string GetName(int cardSetId)
+        {
+            string cardSetName = _cardSetService.GetCardSetNameById(cardSetId);
+            return cardSetName;
+        }
+
+        // DELETE api/<controller>/5
+        [Route("api/CardSet/Delete/{cardSetId}")]
+        [HttpDelete]
+        public void Delete(int cardSetId)
+        {
+            UserInfo user = Util.WebUtility.GetCurrentUser();
+            _cardSetService.DeleteById(user, cardSetId);
         }
 
         // POST api/<controller>
@@ -94,9 +112,6 @@ namespace VocabularyCard.Web.Api
         {
         }
 
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
+
     }
 }

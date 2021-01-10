@@ -1,6 +1,11 @@
 <template>
   <div class="row">
-    <h1>This is cards list</h1>
+    <div class="d-grid gap-2 d-md-block">
+      <span>{{ cardSetName }}</span>
+      <button class="btn btn-danger btn-sm" @click="removeCardSet">
+        刪除單字集
+      </button>
+    </div>
     <div
       class="row row-cols-1 row-cols-md-2 g-3 gx-5 px-5 justify-content-center"
     >
@@ -17,7 +22,7 @@
 import Card from "./Card.vue";
 
 export default {
-  //   props: ["cards", "cardSetId"],
+  props: ["cardSet"],
   components: {
     card: Card,
   },
@@ -30,9 +35,23 @@ export default {
     cards: function() {
       return this.$store.getters.cards;
     },
+    currentCardSetId: function() {
+      return this.$route.params.cardSetId;
+    },
+    cardSetName: function() {
+      return this.$store.getters.currentCardSetName;
+    },
+  },
+  methods: {
+    removeCardSet: function() {
+      if (confirm("確定刪除?")) {
+        this.$store.dispatch("removeCardSet", this.currentCardSetId);
+      }
+    },
   },
   created: function() {
     this.$store.dispatch("fetchCardSetAllCards", this.$route.params.cardSetId);
+    this.$store.dispatch("fetchCardSetName", this.$route.params.cardSetId);
   },
   destroyed: function() {
     //clear cards

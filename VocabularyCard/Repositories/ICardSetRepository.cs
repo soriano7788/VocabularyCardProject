@@ -12,5 +12,6 @@ namespace VocabularyCard.Repositories
     {
         CardSet GetByCardSetId(int cardSetId);
         IList<CardSet> GetByOwner(string ownerId);
+        CardSet Update(CardSet cardSet);
     }
 }

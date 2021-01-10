@@ -1,6 +1,6 @@
 <template>
   <div class="col-md-4">
-    <div class="card text-center border-success">
+    <div class="card text-center border-success" style="cursor:pointer;">
       <div class="card-body">
         <h1 class="card-title display-3">{{ card.Vocabulary }}</h1>
         <h6 class="card-subtitle">

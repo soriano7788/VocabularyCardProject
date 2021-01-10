@@ -105,7 +105,7 @@ namespace VocabularyCard.Web.Controllers
 
             //StringBuilder sb = new StringBuilder();
             //sb.AppendLine("===========================");
-            CardSetDto cardSetDto = _cardSetService.GetById(1);
+            CardSetDto cardSetDto = _cardSetService.GetById(null, 1);
             //sb.AppendLine(JsonConvert.SerializeObject(cardSetInfo));
             ////Global.Log.Error("cardsetInfo.Cards.Length: " + cardsetInfo.Cards.Length);
             //sb.AppendLine("===========================");

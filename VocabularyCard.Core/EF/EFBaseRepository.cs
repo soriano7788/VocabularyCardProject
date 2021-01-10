@@ -17,7 +17,6 @@ namespace VocabularyCard.Core.EF
 
         public EFBaseRepository(DbContext context)
         {
-            // context 實際上是 EFCardSetDao 之類的 instance
             _context = context;
             _entitySet = _context.Set<TEntity>();
         }
@@ -42,7 +41,7 @@ namespace VocabularyCard.Core.EF
             return _context.Set<TEntity>().Where(predicate).FirstOrDefault();
         }
 
-        public TEntity Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
             throw new NotImplementedException();
         }
