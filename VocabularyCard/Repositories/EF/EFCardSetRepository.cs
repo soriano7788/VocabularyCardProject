@@ -19,11 +19,11 @@ namespace VocabularyCard.Repositories.EF
         }
         public CardSet GetByCardSetId(int cardSetId)
         {
-            return _cardSets.Find(cardSetId);
+            return _cardSets.Where(cs => cs.CardSetId == cardSetId && cs.State == CardSetState.Active).First();
         }
         public IList<CardSet> GetByOwner(string ownerId)
         {
-            IQueryable<CardSet> cardSets = _cardSets.Where(cs => cs.Owner == ownerId);
+            IQueryable<CardSet> cardSets = _cardSets.Where(cs => cs.Owner == ownerId && cs.State == CardSetState.Active);
             return cardSets.ToList();
         }
     }
