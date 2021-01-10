@@ -315,9 +315,6 @@
       <DependentUpon>VocabularyCard.en.resx</DependentUpon>
     </Compile>
     <Compile Include="App_Start\AutofacModule\AccountManagerModule.cs" />
-    <Compile Include="App_Start\AutofacModule\DaoModule.cs" />
-    <Compile Include="App_Start\AutofacModule\MapModule.cs" />
-    <Compile Include="App_Start\AutofacModule\ServiceModule.cs" />
     <Compile Include="Authentications\VAuthenticator.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Filters\WebApiExceptionAttribute.cs" />

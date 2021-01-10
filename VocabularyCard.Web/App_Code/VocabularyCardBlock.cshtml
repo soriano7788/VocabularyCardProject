@@ -1,16 +1,16 @@
-﻿@{
+@{
     Layout = null;
 }
 @using System.Web.Mvc
-@using VocabularyCard.DTO
-@helper VocabularyCardBlockUI(UrlHelper urlHelper, CardInfo cardInfo)
+@using VocabularyCard.Dtos
+@helper VocabularyCardBlockUI(UrlHelper urlHelper, CardDto cardDto)
 {
-    var url = urlHelper.Action("Detail", "Card", new { cardInfo.Id });
-    //var url = urlHelper.HttpRouteUrl("Default", new { controller = "Card", action = "Detail" });
+var url = urlHelper.Action("Detail", "Card", new { cardDto.Id });
+//var url = urlHelper.HttpRouteUrl("Default", new { controller = "Card", action = "Detail" });
 
     <div class="vocabulary-card-block">
         <h1 class="vocabulary">
-            @cardInfo.Vocabulary
+            @cardDto.Vocabulary
         </h1>
         <div class="explaination">
         </div>

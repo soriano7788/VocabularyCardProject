@@ -21,6 +21,11 @@ namespace VocabularyCard.DtoConverters
             card.ModifiedDateTime = dto.ModifiedDateTime;
             card.State = dto.State;
 
+            if(dto.Interpretations != null)
+            {
+                card.Interpretations = new CardInterpretationConverter().ToEntities(dto.Interpretations);
+            }
+
             return card;
         }
         public Card[] ToEntities(CardDto[] dtos)
@@ -44,6 +49,11 @@ namespace VocabularyCard.DtoConverters
             cardDto.CreatedDateTime = card.CreatedDateTime;
             cardDto.ModifiedDateTime = card.ModifiedDateTime;
             cardDto.State = card.State;
+
+            if (card.Interpretations != null)
+            {
+                cardDto.Interpretations = new CardInterpretationConverter().ToDataTransferObjects(card.Interpretations.ToArray());
+            }
 
             return cardDto;
         }

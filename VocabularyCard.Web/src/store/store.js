@@ -5,6 +5,8 @@ import localStorageUtil from "./localStorageUtil.js";
 import * as statusCode from "./consts/statusCode.js";
 import router from "../routes.js";
 
+import CardSet from "./modules/cardSet.js";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -17,7 +19,6 @@ export default new Vuex.Store({
         // },
         token: null,
         userData: null,
-        cardSets: [],
         cards: []
     },
     getters: {
@@ -33,9 +34,6 @@ export default new Vuex.Store({
             const inRegisterPage = curFullPath === "/Register".toLowerCase();
             return (inSignInPage || inRegisterPage);
         },
-        cardSets: state => {
-            return state.cardSets;
-        },
         cards: state => {
             return state.cards;
         }
@@ -45,9 +43,6 @@ export default new Vuex.Store({
         },
         setTokenData: (state, payload) => {
             state.token = payload;
-        },
-        setCardSets: (state, payload) => {
-            state.cardSets = payload;
         },
         setCards: (state, payload) => {
             state.cards = payload;
@@ -102,18 +97,6 @@ export default new Vuex.Store({
         autoLogin: ({ commit }) => {
             // 先從 localStorage 找找看有無 userData
         },
-        fetchAllCardSets: ({ commit }) => {
-            axios.get("cardset/getbyowner")
-                .then(res => {
-                    const result = res.data;
-                    if (result.statusCode == statusCode.SUCCESS) {
-                        const cardSets = result.data;
-                        commit("setCardSets", cardSets);
-                    }
-                }).catch(error => {
-                    console.log(error);
-                });
-        },
         fetchCardSetAllCards: ({ commit }, cardSetId) => {
             axios.get("cardset/GetCards/" + cardSetId)
                 .then(res => {
@@ -127,13 +110,11 @@ export default new Vuex.Store({
                     console.log(error);
                 });
         },
-        clearCardSets: ({ commit }) => {
-            commit("setCardSets", []);
-        },
         clearCards: ({ commit }) => {
             commit("setCards", []);
         }
     },
     modules: {
+        CardSet
     }
 });

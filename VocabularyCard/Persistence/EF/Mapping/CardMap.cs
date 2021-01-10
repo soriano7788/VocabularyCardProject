@@ -31,15 +31,15 @@ namespace VocabularyCard.Persistence.EF.Mapping
             // https://stackoverflow.com/questions/50297148/entity-framework-core-2-0-mapping-enum-to-tinyint-in-sql-server-throws-exception
             this.Property(c => c.State).IsRequired().HasColumnName("STATE").HasColumnType("tinyint");
 
-            this
-                .HasMany(c => c.CardSets)
-                .WithMany(cs => cs.Cards)
-                .Map(m =>
-                {
-                    m.ToTable("CARD_SET_CARD_EDGE");
-                    m.MapLeftKey("CARD_SET_ID");
-                    m.MapRightKey("CARD_ID");
-                });
+            //this
+            //    .HasMany(c => c.CardSets)
+            //    .WithMany(cs => cs.Cards)
+            //    .Map(m =>
+            //    {
+            //        m.ToTable("CARD_SET_CARD_EDGE");
+            //        m.MapLeftKey("CARD_SET_ID");
+            //        m.MapRightKey("CARD_ID");
+            //    });
         }
     }
 }

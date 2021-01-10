@@ -10,8 +10,6 @@ namespace VocabularyCard.Dtos
     {
         public int Id { get; set; }
 
-        public int Flag { get; set; }
-
         public string DisplayName { get; set; }
 
         public string Description { get; set; }

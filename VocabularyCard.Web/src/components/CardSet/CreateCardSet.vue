@@ -1,6 +1,12 @@
 <template>
-  <div class="row  g-3">
+  <div class="row text-start g-3 border rounded shadow-sm pt-4 bg-light">
     <!-- <div class="col-md-5 "> -->
+    <div class="row mb-3">
+      <div class="col-11"></div>
+      <div class="col-1">
+        <button type="button" class="btn-close" @click="closePanel"></button>
+      </div>
+    </div>
     <div class="row mb-3">
       <label for="card-set-name" class="col-form-label col-md-4"
         >單字集名稱</label
@@ -21,10 +27,18 @@
       <div class="col-md-8">
         <textarea
           id="card-set-description"
-          cols="30"
+          cols="20"
           rows="10"
           class="form-control"
         ></textarea>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col-md-4"></div>
+      <div class="col-md-8">
+        <button type="button" class="btn btn-success" @click="submitNewCardSet">
+          送出
+        </button>
       </div>
     </div>
     <!-- </div> -->
@@ -46,6 +60,10 @@ export default {
         description: this.description,
       };
       this.$store.dispatch("createCardSet", cardSet);
+      this.closePanel();
+    },
+    closePanel: function() {
+      this.$emit("closePanel");
     },
   },
 };

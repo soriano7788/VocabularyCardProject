@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row justify-content-center">
     <!-- 這是 單字集 清單 -->
     <h1>CardSets List</h1>
     <div class="d-grid gap-2 d-md-block">
@@ -11,9 +11,7 @@
         新增單字集
       </button>
     </div>
-    <div class="col-md-6 justify-content-center">
-      <createCardSet v-if="showCreatedForm"></createCardSet>
-    </div>
+
     <div class="row row-cols-1 row-cols-md-3 g-3 px-4">
       <card-set
         v-for="cardSet in cardSets"
@@ -22,6 +20,9 @@
       ></card-set>
     </div>
 
+    <div class="col-md-5 position-fixed" v-if="showCreatedForm">
+      <createCardSet @closePanel="showCreatedForm = false"></createCardSet>
+    </div>
     <!-- 這個要用 slot 才行 -->
     <!-- <div v-for="cardSet in cardSets" :key="cardSet.Id">
       <h1>display name: {{ cardSet.DisplayName }}</h1>

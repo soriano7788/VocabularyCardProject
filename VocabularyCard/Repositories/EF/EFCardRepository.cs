@@ -30,7 +30,19 @@ namespace VocabularyCard.Repositories.EF
         public IList<Card> GetByCardSetId(int cardSetId)
         {
             // many to many 關係，還不確定語法如何寫
-            throw new NotImplementedException();
+
+            // todo: 或許我該考慮把 lazy loading 機制先關掉，
+            // 避免利用存取運算子來 lazy loading 關聯資料
+            // 而是需要 eager loading 時，查詢語法再加上 Include
+            // 參考 http://vito-note.blogspot.com/2016/02/ef-loading.html
+
+            // todo: 假如我想要同時，把 Card 的 Interpretation 抓出來，這樣的查詢夠嗎?
+            // 是否應該讓 Card 和 CardInterpretation 永遠綁一起較好???
+            IQueryable<Card> query = from c in _cards.Include(c => c.Interpretations)
+                                     where c.CardSets.Any(cs => cs.CardSetId == cardSetId)
+                                     select c;
+
+            return query.ToList();
         }
     }
 }

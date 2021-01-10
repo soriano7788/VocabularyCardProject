@@ -16,6 +16,6 @@ namespace VocabularyCard.Services
         CardSetDto[] GetByOwner(UserInfo owner);
         CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId);
 
-        CardSetDto Create(CardSetDto cardSetInfo);
+        CardSetDto Create(UserInfo user, CardSetDto cardSetInfo);
     }
 }

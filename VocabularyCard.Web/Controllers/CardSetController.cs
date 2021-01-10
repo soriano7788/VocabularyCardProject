@@ -162,7 +162,7 @@ namespace VocabularyCard.Web.Controllers
                     return View(cardSetInfo);
                 }
 
-                _cardSetService.Create(cardSetInfo);
+                //_cardSetService.Create(cardSetInfo);
 
                 return RedirectToAction("List");
             }

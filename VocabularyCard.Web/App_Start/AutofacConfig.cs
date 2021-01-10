@@ -93,12 +93,13 @@ namespace VocabularyCard.Web
             // 參考說明
             // https://dotblogs.com.tw/Jamis/2015/12/23/163505
 
-            // service
-            builder.RegisterModule(new ServiceModule());
-            //dao
-            builder.RegisterModule(new DaoModule());
-            // map
-            builder.RegisterModule(new MapModule());
+            //// service
+            //builder.RegisterModule(new ServiceModule());
+            ////dao
+            //builder.RegisterModule(new DaoModule());
+            //// map
+            //builder.RegisterModule(new MapModule());
+
             // account manager
             builder.RegisterModule(new AccountManagerModule());
 
@@ -122,7 +123,6 @@ namespace VocabularyCard.Web
             builder.RegisterType(typeof(EFCardSetRepository)).As(typeof(ICardSetRepository)).InstancePerLifetimeScope();
             builder.RegisterType(typeof(EFCardRepository)).As(typeof(ICardRepository)).InstancePerLifetimeScope();
             builder.RegisterType(typeof(EFCardInterpretationRepository)).As(typeof(ICardInterpretationRepository)).InstancePerLifetimeScope();
-
 
 
             // service

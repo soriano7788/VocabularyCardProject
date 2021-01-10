@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Web.Http;
 using VocabularyCard;
 using VocabularyCard.Services;
-using VocabularyCard.Persistence.EF;
 using VocabularyCard.Dtos;
 using VocabularyCard.Util;
 using VocabularyCard.AccountManager.DTO;
@@ -46,6 +45,14 @@ namespace VocabularyCard.Web.Api
             UserInfo user = new UserInfo { UserId = "4d2fbfbe-73e6-483c-be33-893e6668e66b" };
             CardDto[] cardDtos = _cardSetService.GetCardsByCardSetId(user, cardSetId);
             return cardDtos;
+        }
+
+        [Route("api/CardSet/Create")]
+        [HttpPost]
+        public CardSetDto Create([FromBody] CardSetDto cardSet)
+        {
+            UserInfo user = Util.WebUtility.GetCurrentUser();
+            return _cardSetService.Create(user, cardSet);
         }
 
         [AllowAnonymous]

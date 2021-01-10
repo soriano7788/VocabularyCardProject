@@ -13,6 +13,7 @@ namespace VocabularyCard.Core.EF
         public BaseDbContext(IEnumerable<IEntityTypeConfiguration> mapConfigurations) : base(BuildConnectionString())
         {
             _mapConfigurations = mapConfigurations;
+            Configuration.LazyLoadingEnabled = false;
         }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

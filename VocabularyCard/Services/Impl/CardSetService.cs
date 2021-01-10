@@ -58,12 +58,25 @@ namespace VocabularyCard.Services.Impl
                 throw new ArgumentException("user not cardSet owner", "userInfo");
             }
 
-            ICollection<Card> cards = cardSet.Cards;
+            ICollection<Card> cards = _cardRepository.GetByCardSetId(cardSetId);
+
+            //// todo: 這邊沒把 interpretation 轉換出來
+            //foreach(Card card in cards)
+            //{ 
+            //}
+
             return new CardConverter().ToDataTransferObjects(cards.ToArray());
         }
 
-        public CardSetDto Create(CardSetDto cardSetDto)
+        public CardSetDto Create(UserInfo user, CardSetDto cardSetDto)
         {
+            cardSetDto.Creator = user.UserId;
+            cardSetDto.Modifier = user.UserId;
+            cardSetDto.Owner = user.UserId;
+            cardSetDto.CreatedDateTime = DateTime.UtcNow;
+            cardSetDto.ModifiedDateTime = DateTime.UtcNow;
+            cardSetDto.State = CardSetState.Active;
+
             CardSet entity = _cardSetConverter.ToEntity(cardSetDto);
             CardSet newEntity = _cardSetRepository.Create(entity);
             CardSetDto newCardSetDto = _cardSetConverter.ToDataTransferObject(newEntity);

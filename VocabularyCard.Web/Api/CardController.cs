@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using VocabularyCard.Services;
 using VocabularyCard.Dtos;
+using VocabularyCard.AccountManager.DTO;
 
 namespace VocabularyCard.Web.Api
 {
@@ -17,13 +18,15 @@ namespace VocabularyCard.Web.Api
             _cardService = cardService;
         }
 
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        [Route("api/card/GetByCardSetId/{cardSetId}")]
+        [HttpGet]
+        [AllowAnonymous]
+        public CardDto[] GetCardsByCardSetId(int cardSetId)
         {
-            return new string[] { "value1", "value2" };
+            UserInfo user = new UserInfo { UserId = "4d2fbfbe-73e6-483c-be33-893e6668e66b" };
+            return _cardService.GetCardsByCardSetId(user, cardSetId);
         }
 
-        // GET api/<controller>/5
         [Route("api/card/{cardId}/{containDetail?}")]
         [HttpGet]
         [AllowAnonymous]
@@ -39,6 +42,8 @@ namespace VocabularyCard.Web.Api
         {
             return _cardService.GetCardInterpretations(cardId);
         }
+
+
 
         // POST api/<controller>
         public void Post([FromBody] string value)

@@ -1,81 +1,81 @@
-{
-  "defaultAssembly": "VocabularyCard.Web",
-  "components": [
-    {
-      "type": "VocabularyCard.Web.Controllers.CardSetController, VocabularyCard.Web.Controllers",
-      "services": [
-        {
-          "type": "System.Web.Mvc.Controller, System.Web.Mvc"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true,
-      "parameters": {
-        "cardSetService": "",
-        "carService": ""
-      }
-    },
-    {
-      "type": "VocabularyCard.Service.Impl.CardSetService, VocabularyCard.Service.Impl",
-      "services": [
-        {
-          "type": "VocabularyCard.Service.CardSetService, VocabularyCard.Service"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true
-    },
-    {
-      "type": "VocabularyCard.Service.Impl.CardService, VocabularyCard.Service.Impl",
-      "services": [
-        {
-          "type": "VocabularyCard.Service.CardService, VocabularyCard.Service"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true
-    },
-    {
-      "type": "VocabularyCard.Persistence.EF.EFCardSetDao, VocabularyCard.Persistence.EF",
-      "services": [
-        {
-          "type": "VocabularyCard.Persistence.ICardSetDao, VocabularyCard.Persistence"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true
-    },
-    {
-      "type": "VocabularyCard.Persistence.EF.EFCardDao, VocabularyCard.Persistence.EF",
-      "services": [
-        {
-          "type": "VocabularyCard.Persistence.ICardDao, VocabularyCard.Persistence"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true
-    },
-    {
-      "type": "VocabularyCard.Persistence.EF.Mapping.CardSetMap, VocabularyCard.Persistence.EF.Mapping",
-      "services": [
-        {
-          "type": "VocabularyCard.Persistence.EF.Mapping.CardSetMap, VocabularyCard.Persistence.EF.Mapping"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true,
-      "instanceScope": "single-instance"
-    },
-    {
-      "type": "VocabularyCard.Persistence.EF.Mapping.CardMap, VocabularyCard.Persistence.EF.Mapping",
-      "services": [
-        {
-          "type": "VocabularyCard.Persistence.EF.Mapping.CardMap, VocabularyCard.Persistence.EF.Mapping"
-        }
-      ],
-      "autoActivate": true,
-      "injectProperties": true,
-      "instanceScope": "single-instance"
-    }
-  ]
-}
+//{
+//  "defaultAssembly": "VocabularyCard.Web",
+//  "components": [
+//    {
+//      "type": "VocabularyCard.Web.Controllers.CardSetController, VocabularyCard.Web.Controllers",
+//      "services": [
+//        {
+//          "type": "System.Web.Mvc.Controller, System.Web.Mvc"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true,
+//      "parameters": {
+//        "cardSetService": "",
+//        "carService": ""
+//      }
+//    },
+//    {
+//      "type": "VocabularyCard.Service.Impl.CardSetService, VocabularyCard.Service.Impl",
+//      "services": [
+//        {
+//          "type": "VocabularyCard.Service.CardSetService, VocabularyCard.Service"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true
+//    },
+//    {
+//      "type": "VocabularyCard.Service.Impl.CardService, VocabularyCard.Service.Impl",
+//      "services": [
+//        {
+//          "type": "VocabularyCard.Service.CardService, VocabularyCard.Service"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true
+//    },
+//    {
+//      "type": "VocabularyCard.Persistence.EF.EFCardSetDao, VocabularyCard.Persistence.EF",
+//      "services": [
+//        {
+//          "type": "VocabularyCard.Persistence.ICardSetDao, VocabularyCard.Persistence"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true
+//    },
+//    {
+//      "type": "VocabularyCard.Persistence.EF.EFCardDao, VocabularyCard.Persistence.EF",
+//      "services": [
+//        {
+//          "type": "VocabularyCard.Persistence.ICardDao, VocabularyCard.Persistence"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true
+//    },
+//    {
+//      "type": "VocabularyCard.Persistence.EF.Mapping.CardSetMap, VocabularyCard.Persistence.EF.Mapping",
+//      "services": [
+//        {
+//          "type": "VocabularyCard.Persistence.EF.Mapping.CardSetMap, VocabularyCard.Persistence.EF.Mapping"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true,
+//      "instanceScope": "single-instance"
+//    },
+//    {
+//      "type": "VocabularyCard.Persistence.EF.Mapping.CardMap, VocabularyCard.Persistence.EF.Mapping",
+//      "services": [
+//        {
+//          "type": "VocabularyCard.Persistence.EF.Mapping.CardMap, VocabularyCard.Persistence.EF.Mapping"
+//        }
+//      ],
+//      "autoActivate": true,
+//      "injectProperties": true,
+//      "instanceScope": "single-instance"
+//    }
+//  ]
+//}

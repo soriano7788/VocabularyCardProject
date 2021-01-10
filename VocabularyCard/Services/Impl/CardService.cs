@@ -82,10 +82,25 @@ namespace VocabularyCard.Services.Impl
                 throw new ArgumentException("user not cardSet owner", "userInfo");
             }
 
-
-
             IList<Card> cards = _cardRepository.GetByCardSetId(cardSetId);
-            return _cardConverter.ToDataTransferObjects(cards.ToArray());
+
+            // todo: 假如這種 case 很普遍的話，是否應該在另外寫一個 method 來處理這種 case? 
+            // 記得要關掉 lazy loading，不然光是用個 dot 存取運算子就會觸發 lazy loading
+
+            // 手動轉換....
+            List<CardDto> cardDtos = new List<CardDto>();
+            foreach(Card card in cards)
+            {
+                CardDto cardDto = _cardConverter.ToDataTransferObject(card);
+                CardInterpretationDto[] interpretationDtos = _cardInterpretationConverter.ToDataTransferObjects(card.Interpretations.ToArray());
+                cardDto.Interpretations = interpretationDtos;
+                cardDtos.Add(cardDto);
+            }
+
+            return cardDtos.ToArray();
+            //_cardConverter.ToDataTransferObjects(cards.ToArray());
+
+            //return _cardConverter.ToDataTransferObjects(cards.ToArray());
         }
     }
 }
