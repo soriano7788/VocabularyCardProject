@@ -22,6 +22,8 @@ using VocabularyCard.Core;
 using VocabularyCard.Core.EF;
 using VocabularyCard.Core.Repositories;
 using VocabularyCard.Core.Services;
+using VocabularyCard.Core.Interceptors;
+using Autofac.Extras.DynamicProxy;
 
 namespace VocabularyCard.Web
 {
@@ -106,7 +108,21 @@ namespace VocabularyCard.Web
             #endregion
 
 
+            // 註冊類型
+            // SingleInstance: 就是 singleton 啦
+            // InstancePerRequest: 在同一個 request scope 下，會共用的 instance，生命週期也只維持到 request 結束前吧?
+            // InstancePerLifetimeScope:
+            // InstancePerDependency: 每次要用到都 new 一個
+            // 說明: https://toyo0103.github.io/2018/07/12/%E3%80%90Autofac%E3%80%91%E7%94%9F%E5%91%BD%E9%80%B1%E6%9C%9F/
+
+            // Autofac 預設使用的生命週期即為 InstancePerDependency
+
+
             #region 新的設計方式註冊
+
+            // 看了一下下面這些設定，像是 RegisterType()、As()、InstancePerLifetimeScope()，
+            // 回傳的都是 IRegistrationBuilder interface，所以可以一直 call 同 interface 的 method，
+            // 這會像 decorator pattern 嗎? 不過跟 decorator pattern 的大部分範例結構又不太像....
 
             // orm mapping
             builder.RegisterType<CardMap>().As<IEntityTypeConfiguration>().SingleInstance();
@@ -115,6 +131,7 @@ namespace VocabularyCard.Web
 
             // EF dbContext
             builder.RegisterType(typeof(BaseDbContext)).As(typeof(DbContext)).InstancePerLifetimeScope();
+
             // unitOfWork
             builder.RegisterType(typeof(EFUnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();
 
@@ -130,17 +147,19 @@ namespace VocabularyCard.Web
 
             builder.RegisterType<CardService>()
                 .As<ICardService>()
-                //.InstancePerLifetimeScope();
-                .SingleInstance();
+                .InstancePerLifetimeScope().EnableInterfaceInterceptors();
+
             builder.RegisterType<CardSetService>()
                 .As<ICardSetService>()
-                //.InstancePerLifetimeScope();
-                .SingleInstance();
+                .InstancePerLifetimeScope().EnableInterfaceInterceptors().InterceptedBy(typeof(TransactionInterceptor));
+
             builder.RegisterType<CardInterpretationService>()
                 .As<ICardInterpretationService>()
-                //.InstancePerLifetimeScope();
-                .SingleInstance();
+                .InstancePerLifetimeScope().EnableInterfaceInterceptors();
 
+            // 註冊 Transaction Interceptor
+            builder.RegisterType(typeof(TransactionInterceptor))
+                .WithProperty("TransactionMethodsPrefix", new string[] { "Create", "Update", "Delete" });
 
             // authentication 相關
             builder.RegisterType<ApiRefreshTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();
@@ -152,56 +171,11 @@ namespace VocabularyCard.Web
 
             builder.RegisterType<AuthenticationService>()
                 .As<IAuthenticationService>()
-                //.InstancePerLifetimeScope();
-                .SingleInstance()
+                .InstancePerLifetimeScope()
                 .WithProperty("RefreshTokenLifeTime", 3600)  // 單位秒
                 .WithProperty("AccessTokenLifeTime", 1800);  // 單位秒
 
-
-
             #endregion
-
-
-
-            #region 測試 unit of work
-
-            // 設定 map 檔，是否能像這樣註冊????為了讓 BaseDbContext 每冊都注入同一批 Map 設定
-            // (不過這樣不確定會不會有其他問題，例如 隨著 BaseDbContext 生命週期結束，Map List 也被釋放掉等等)
-            //builder.RegisterType({ cardSetMap}, { cardMap}).As(typeof(IMap[]))
-
-            //builder.RegisterType<CardSetConfiguration>().As<IEntityTypeConfiguration>().SingleInstance();
-            //builder.RegisterType<CardConfiguration>().As<IEntityTypeConfiguration>().SingleInstance();
-
-            //builder.RegisterType(typeof(BaseDbContext)).As(typeof(DbContext)).InstancePerLifetimeScope();
-
-
-            //builder.RegisterType(typeof(EFUnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();
-
-
-            //builder.RegisterAssemblyTypes(ReferencedAssemblies.Repositories).
-            //    Where(_ => _.Name.EndsWith("Repository")).
-            //    AsImplementedInterfaces().
-            //    InstancePerLifetimeScope();
-
-            //builder.RegisterType(typeof(EFCardSetRepository)).As(typeof(ICardSetRepository)).InstancePerLifetimeScope();
-            //builder.RegisterType(typeof(EFCardRepository)).As(typeof(ICardRepository)).InstancePerLifetimeScope();
-
-            //builder.RegisterGeneric(typeof(EFBaseRepository<>)).As(typeof(IRepository<>)).InstancePerDependency();
-
-            //// 功能就是被繼承，還有留一個 public unitOfWork 屬性，給子類別使用
-            //builder.RegisterType(typeof(BaseService)).As(typeof(BaseService)).InstancePerDependency();
-
-
-
-
-
-
-
-
-            #endregion
-
-
-
 
 
 

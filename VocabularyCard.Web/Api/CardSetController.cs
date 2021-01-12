@@ -41,8 +41,7 @@ namespace VocabularyCard.Web.Api
         [HttpGet]
         public CardDto[] GetCards(int cardSetId)
         {
-            //UserInfo user = Util.WebUtility.GetCurrentUser();
-            UserInfo user = new UserInfo { UserId = "4d2fbfbe-73e6-483c-be33-893e6668e66b" };
+            UserInfo user = Util.WebUtility.GetCurrentUser();
             CardDto[] cardDtos = _cardSetService.GetCardsByCardSetId(user, cardSetId);
             return cardDtos;
         }

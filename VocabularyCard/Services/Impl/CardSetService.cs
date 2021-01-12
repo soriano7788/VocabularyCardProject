@@ -23,6 +23,8 @@ namespace VocabularyCard.Services.Impl
         private ICardRepository _cardRepository;
         private CardSetConverter _cardSetConverter;
 
+        private Guid _guid = Guid.NewGuid();
+
         public CardSetService(IUnitOfWork unitOfWork, ICardSetRepository cardSetRepository, ICardRepository cardRepository) : base(unitOfWork)
         {
             _cardSetRepository = cardSetRepository;
@@ -64,7 +66,7 @@ namespace VocabularyCard.Services.Impl
 
         public string GetCardSetNameById(int cardSetId)
         {
-            if(_cacheCardSetName.ContainsKey(cardSetId))
+            if (_cacheCardSetName.ContainsKey(cardSetId))
             {
                 return _cacheCardSetName[cardSetId];
             }
@@ -93,8 +95,6 @@ namespace VocabularyCard.Services.Impl
             CardSet newEntity = _cardSetRepository.Create(entity);
             CardSetDto newCardSetDto = _cardSetConverter.ToDataTransferObject(newEntity);
             
-            UnitOfWork.Save();
-
             return newCardSetDto;
         }
 
@@ -104,7 +104,6 @@ namespace VocabularyCard.Services.Impl
             CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
             cardSet.State = CardSetState.Removed;
             _cardSetRepository.Update(cardSet);
-            UnitOfWork.Save();
         }
 
         // todo: 此為暫時性 method，之後直接設計一個權限控管
