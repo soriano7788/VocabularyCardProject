@@ -4,6 +4,16 @@
     <div class="row">
       <router-view></router-view>
     </div>
+    <div v-if="showLoading" class="full-screem">
+      <div class="full-screem loading-mask"></div>
+      <div
+        class="spinner-border text-dark"
+        role="status"
+        style="height:5rem; width: 5rem;"
+      >
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -14,6 +24,11 @@ export default {
   name: "app",
   components: {
     appHeader: Header,
+  },
+  computed: {
+    showLoading: function() {
+      return this.$store.getters.showLoadingSpinner;
+    },
   },
   created: function() {
     // todo: check localStorage, try if can switch to has been in login status
@@ -39,4 +54,24 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+.full-screem {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center; /* 垂直置中 */
+  justify-content: center; /* 水平置中 */
+}
+.loading-mask {
+  background-color: black;
+  opacity: 0.25;
+}
+/* .test:before {
+  content: "";
+  height: 100%;
+  display: inline-block;
+  vertical-align: middle;
+} */
 </style>

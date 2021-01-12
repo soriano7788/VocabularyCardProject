@@ -17,11 +17,15 @@ export default new Vuex.Store({
         //     refreshTokenExpiredIn: 0,
         //     accessTokenExpiredIn: 0
         // },
+        showLoadingSpinner: false,
         token: null,
         userData: null,
         cards: []
     },
     getters: {
+        showLoadingSpinner: state => {
+            return state.showLoadingSpinner;
+        },
         token: state => {
             return state.token;
         },
@@ -39,6 +43,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        setLoadingSpinnerVisibility: (state, visible) => {
+            state.showLoadingSpinner = visible;
+        },
         setUserData: (state, userData) => {
         },
         setTokenData: (state, payload) => {
@@ -55,6 +62,9 @@ export default new Vuex.Store({
         }
     },
     actions: {
+        setLoadingSpinnerVisibility: ({ commit }, visible) => {
+            commit("setLoadingSpinnerVisibility", visible);
+        },
         login: ({ commit, dispatch }, loginData) => {
             axios.post("account/SignIn", loginData)
                 .then((res) => {

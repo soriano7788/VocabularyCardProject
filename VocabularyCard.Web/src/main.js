@@ -16,12 +16,14 @@ const reqInterceptor = axios.interceptors.request.use(config => {
     config.headers.common['authorization'] = "bearer " + token.accessToken;
   }
   console.log('Request Interceptor', config)
+  store.dispatch("setLoadingSpinnerVisibility", true);
   return config;
 })
 
 // client side first receive response from server
 const resInterceptor = axios.interceptors.response.use(function (res) {
   console.log("Response Interceptor", res);
+  store.dispatch("setLoadingSpinnerVisibility", false);
 
   // if (res.status == 401) {
   //   alert("Unauthorized");
