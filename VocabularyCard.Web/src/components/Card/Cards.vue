@@ -2,7 +2,18 @@
   <div class="row">
     <div class="d-grid gap-2 d-md-block">
       <span>{{ cardSetName }}</span>
-      <button class="btn btn-danger btn-sm" @click="removeCardSet">
+      <button
+        class="btn btn-primary btn-sm position-fixed"
+        @click="createCard"
+        style="right:10px; top:50%;"
+      >
+        新增單字卡
+      </button>
+      <button
+        class="btn btn-danger btn-sm position-absolute"
+        @click="removeCardSet"
+        style="right:10px;"
+      >
         刪除單字集
       </button>
     </div>
@@ -15,20 +26,28 @@
         v-bind:card="card"
       ></card>
     </div>
+    <div v-if="showCreateCardForm" class="mt-3 row justify-content-center">
+      <div class="col-md-5">
+        <create-card :cardSetId="currentCardSetId"></create-card>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Card from "./Card.vue";
+import CreateCard from "./CreateCard.vue";
 
 export default {
   props: ["cardSet"],
   components: {
     card: Card,
+    createCard: CreateCard,
   },
   data: function() {
     return {
       mode: "card", // card or paper
+      showCreateCardForm: false,
     };
   },
   computed: {
@@ -47,6 +66,9 @@ export default {
       if (confirm("確定刪除?")) {
         this.$store.dispatch("removeCardSet", this.currentCardSetId);
       }
+    },
+    createCard: function() {
+      this.showCreateCardForm = !this.showCreateCardForm;
     },
   },
   created: function() {

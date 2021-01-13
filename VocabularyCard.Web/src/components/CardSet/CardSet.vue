@@ -3,7 +3,7 @@
     <router-link
       v-bind:to="{ name: 'CardSetCards', params: { cardSetId: cardSet.Id } }"
       tag="div"
-      class="cardset card text-center border-success"
+      class="cardset card text-center shadow"
     >
       <!-- <div class="card" style="width: 18rem;"> -->
       <h3 class="card-header">{{ cardSet.DisplayName }}</h3>

@@ -21,7 +21,7 @@
     </div>
 
     <div class="col-md-5 position-fixed" v-if="showCreatedForm">
-      <createCardSet @closePanel="showCreatedForm = false"></createCardSet>
+      <create-card-Set @closePanel="showCreatedForm = false"></create-card-Set>
     </div>
     <!-- 這個要用 slot 才行 -->
     <!-- <div v-for="cardSet in cardSets" :key="cardSet.Id">

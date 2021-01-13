@@ -6,6 +6,7 @@ import * as statusCode from "./consts/statusCode.js";
 import router from "../routes.js";
 
 import CardSet from "./modules/cardSet.js";
+import Card from "./modules/card.js";
 
 Vue.use(Vuex);
 
@@ -20,7 +21,6 @@ export default new Vuex.Store({
         showLoadingSpinner: false,
         token: null,
         userData: null,
-        cards: []
     },
     getters: {
         showLoadingSpinner: state => {
@@ -37,9 +37,6 @@ export default new Vuex.Store({
             const inSignInPage = curFullPath === "/SignIn".toLowerCase();
             const inRegisterPage = curFullPath === "/Register".toLowerCase();
             return (inSignInPage || inRegisterPage);
-        },
-        cards: state => {
-            return state.cards;
         }
     },
     mutations: {
@@ -50,9 +47,6 @@ export default new Vuex.Store({
         },
         setTokenData: (state, payload) => {
             state.token = payload;
-        },
-        setCards: (state, payload) => {
-            state.cards = payload;
         },
         clearToken: state => {
             state.token = null;
@@ -106,25 +100,10 @@ export default new Vuex.Store({
         },
         autoLogin: ({ commit }) => {
             // 先從 localStorage 找找看有無 userData
-        },
-        fetchCardSetAllCards: ({ commit }, cardSetId) => {
-            axios.get("cardset/GetCards/" + cardSetId)
-                .then(res => {
-                    const result = res.data;
-                    if (result.statusCode == statusCode.SUCCESS) {
-                        const cards = result.data;
-                        commit("setCards", cards);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-        },
-        clearCards: ({ commit }) => {
-            commit("setCards", []);
         }
     },
     modules: {
-        CardSet
+        CardSet,
+        Card
     }
 });

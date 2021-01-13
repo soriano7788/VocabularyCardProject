@@ -1,5 +1,5 @@
 <template>
-  <div class="row text-start g-3 border rounded shadow-sm pt-4 bg-light">
+  <div class="row text-start g-2 rounded shadow pt-4 bg-light bg-gradient">
     <!-- <div class="col-md-5 "> -->
     <div class="row mb-3">
       <div class="col-11"></div>
@@ -8,9 +8,9 @@
       </div>
     </div>
     <div class="row mb-3">
-      <label for="card-set-name" class="col-form-label col-md-4"
-        >單字集名稱</label
-      >
+      <label for="card-set-name" class="col-form-label col-md-4">
+        單字集名稱
+      </label>
       <div class="col-md-8">
         <input
           type="text"
@@ -22,8 +22,8 @@
     </div>
     <div class="row mb-3">
       <label for="card-set-description" class="col-form-label col-md-4"
-        >說明</label
-      >
+        >說明
+      </label>
       <div class="col-md-8">
         <textarea
           id="card-set-description"

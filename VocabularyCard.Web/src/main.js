@@ -23,6 +23,7 @@ const reqInterceptor = axios.interceptors.request.use(config => {
 // client side first receive response from server
 const resInterceptor = axios.interceptors.response.use(function (res) {
   console.log("Response Interceptor", res);
+
   store.dispatch("setLoadingSpinnerVisibility", false);
 
   // if (res.status == 401) {
@@ -34,6 +35,8 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
     return res;
   }
 }, function (error) {
+  console.log("Response Interceptor", res);
+
   console.log("Response Interceptor error", error.response);
   if (error.response.status == 401) {
     // 401 可能有三種
