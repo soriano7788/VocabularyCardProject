@@ -16,11 +16,19 @@ namespace VocabularyCard.Core.Interceptors
 
         private IUnitOfWork _unitOfWork;
         private string[] _transactionMethodsPrefix;
+        private string[] _ignoreTransactionMethods;
         public string[] TransactionMethodsPrefix
         {
             set 
             {
                 _transactionMethodsPrefix = value;
+            }
+        }
+        public string[] IgnoreTransactionMethods
+        {
+            set
+            {
+                _ignoreTransactionMethods = value;
             }
         }
 
@@ -46,7 +54,7 @@ namespace VocabularyCard.Core.Interceptors
 
                 Logger.Debug("finish " + type.Name + " " + methodName);
 
-                if(RequireTransaction(methodName))
+                if(RequireTransaction(methodName) && !IsIgnoreTransactionMethod(methodName))
                 {
                     // todo: 假如相近的時間內有兩個 request 進來，且都要 commit，這邊有高機率炸掉
                     // 之前沒過濾 get 相關 methods 時就遇到了，
@@ -78,10 +86,21 @@ namespace VocabularyCard.Core.Interceptors
 
         private bool RequireTransaction(string methodName)
         {
-            methodName = methodName.ToLowerInvariant();
             foreach (string prefix in _transactionMethodsPrefix)
             {
-                if(methodName.StartsWith(prefix.ToLowerInvariant()))
+                if(methodName.StartsWith(prefix))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool IsIgnoreTransactionMethod(string methodName)
+        {
+            foreach (string ignoreName in _ignoreTransactionMethods)
+            {
+                if (methodName == ignoreName)
                 {
                     return true;
                 }

@@ -57,6 +57,7 @@ export default {
         cardSetId: this.cardSetId,
         card: card,
       });
+      this.closePanel();
     },
     wrapCard: function() {
       const interpretations = this.wrapInterpretations();
@@ -80,6 +81,9 @@ export default {
         interpretations.push(interpret);
       }
       return interpretations;
+    },
+    closePanel: function() {
+      this.$emit("closePanel");
     },
   },
   mounted: function() {

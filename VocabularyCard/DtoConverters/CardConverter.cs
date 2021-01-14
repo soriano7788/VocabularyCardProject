@@ -21,7 +21,7 @@ namespace VocabularyCard.DtoConverters
             card.ModifiedDateTime = dto.ModifiedDateTime;
             card.State = dto.State;
 
-            if(dto.Interpretations != null)
+            if (dto.Interpretations != null)
             {
                 card.Interpretations = new CardInterpretationConverter().ToEntities(dto.Interpretations);
             }

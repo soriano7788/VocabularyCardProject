@@ -147,11 +147,15 @@ namespace VocabularyCard.Web
 
             builder.RegisterType<CardService>()
                 .As<ICardService>()
-                .InstancePerLifetimeScope().EnableInterfaceInterceptors();
+                .InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(TransactionInterceptor));
 
             builder.RegisterType<CardSetService>()
                 .As<ICardSetService>()
-                .InstancePerLifetimeScope().EnableInterfaceInterceptors().InterceptedBy(typeof(TransactionInterceptor));
+                .InstancePerLifetimeScope()
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(TransactionInterceptor));
 
             builder.RegisterType<CardInterpretationService>()
                 .As<ICardInterpretationService>()
@@ -159,7 +163,8 @@ namespace VocabularyCard.Web
 
             // 註冊 Transaction Interceptor
             builder.RegisterType(typeof(TransactionInterceptor))
-                .WithProperty("TransactionMethodsPrefix", new string[] { "Create", "Update", "Delete" });
+                .WithProperty("TransactionMethodsPrefix", new string[] { "Create", "Update", "Delete" })
+                .WithProperty("IgnoreTransactionMethods", new string[] { "CreateCard" });
 
             // authentication 相關
             builder.RegisterType<ApiRefreshTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();

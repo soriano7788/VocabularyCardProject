@@ -18,18 +18,24 @@ namespace VocabularyCard.Web.Api
             _cardService = cardService;
         }
 
+        [Route("api/card/create/{cardSetId}")]
+        [HttpPost]
+        public CardDto Create(int cardSetId, [FromBody]CardDto cardDto)
+        {
+            UserInfo user = Util.WebUtility.GetCurrentUser();
+            return _cardService.CreateCard(user, cardSetId, cardDto);
+        }
+
         [Route("api/card/GetByCardSetId/{cardSetId}")]
         [HttpGet]
-        [AllowAnonymous]
         public CardDto[] GetCardsByCardSetId(int cardSetId)
         {
-            UserInfo user = new UserInfo { UserId = "4d2fbfbe-73e6-483c-be33-893e6668e66b" };
+            UserInfo user = Util.WebUtility.GetCurrentUser();
             return _cardService.GetCardsByCardSetId(user, cardSetId);
         }
 
         [Route("api/card/{cardId}/{containDetail?}")]
         [HttpGet]
-        [AllowAnonymous]
         public CardDto Get(int cardId, bool containDetail = false)
         {
             return _cardService.GetById(cardId, containDetail);
@@ -37,13 +43,10 @@ namespace VocabularyCard.Web.Api
 
         [Route("api/card/interpretations/{cardId}")]
         [HttpGet]
-        [AllowAnonymous]
         public CardInterpretationDto[] GetInterpretations(int cardId)
         {
             return _cardService.GetCardInterpretations(cardId);
         }
-
-
 
         // POST api/<controller>
         public void Post([FromBody] string value)

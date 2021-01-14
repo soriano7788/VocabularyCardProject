@@ -16,6 +16,9 @@ const mutations = {
     setCards: (state, payload) => {
         state.cards = payload;
     },
+    appendNewCard: (state, card) => {
+        state.cards.push(card);
+    }
 };
 
 const actions = {

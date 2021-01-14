@@ -28,7 +28,10 @@
     </div>
     <div v-if="showCreateCardForm" class="mt-3 row justify-content-center">
       <div class="col-md-5">
-        <create-card :cardSetId="currentCardSetId"></create-card>
+        <create-card
+          :cardSetId="currentCardSetId"
+          @closePanel="showCreateCardForm = false"
+        ></create-card>
       </div>
     </div>
   </div>

@@ -65,6 +65,27 @@ namespace VocabularyCard.Services.Impl
             return _cardInterpretationConverter.ToDataTransferObjects(interpretations.ToArray());
         }
 
+        public CardDto CreateCard(UserInfo user,int cardSetId, CardDto cardDto)
+        {
+            cardDto.Creator = user.UserId;
+            cardDto.Modifier = user.UserId;
+            cardDto.CreatedDateTime = DateTime.UtcNow;
+            cardDto.ModifiedDateTime = DateTime.UtcNow;
+            cardDto.State = CardState.Active;
+            Card card = _cardConverter.ToEntity(cardDto);
+
+            // 加入所屬的 CardSet
+            card.CardSets = new List<CardSet>();
+            CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
+            card.CardSets.Add(cardSet);
+
+            Card newCard = _cardRepository.Create(card);
+            UnitOfWork.Save();
+
+            LogUtility.ErrorLog("newCard.CardId: " + newCard.CardId);
+
+            return _cardConverter.ToDataTransferObject(newCard);
+        }
 
         public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)
         {
