@@ -45,8 +45,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="VocabularyCard">
+      <HintPath>..\lib\VocabularyCard.dll</HintPath>
+    </Reference>
+    <Reference Include="VocabularyCard.AccountManager">
+      <HintPath>..\lib\VocabularyCard.AccountManager.dll</HintPath>
+    </Reference>
+    <Reference Include="VocabularyCard.Core">
+      <HintPath>..\lib\VocabularyCard.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mock\CardSetRepositoryMock.cs" />
     <Compile Include="TestCardSetService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -13,7 +13,7 @@ namespace VocabularyCard.Repositories.EF
     public class EFCardInterpretationRepository : EFBaseRepository<CardInterpretation>, ICardInterpretationRepository
     {
         private IDbSet<CardInterpretation> _interpretations;
-        public EFCardInterpretationRepository(DbContext context) : base(context)
+        public EFCardInterpretationRepository(IDbContext context) : base(context)
         {
             _interpretations = context.Set<CardInterpretation>();
         }

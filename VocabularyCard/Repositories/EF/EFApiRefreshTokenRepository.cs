@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabularyCard.Core.EF;
+using VocabularyCard.Core.Repositories;
 using VocabularyCard.Entities;
 
 namespace VocabularyCard.Repositories.EF
@@ -13,7 +14,7 @@ namespace VocabularyCard.Repositories.EF
     {
         private IDbSet<ApiRefreshToken> _refreshTokens;
 
-        public EFApiRefreshTokenRepository(DbContext context) : base(context)
+        public EFApiRefreshTokenRepository(IDbContext context) : base(context)
         {
             _refreshTokens = context.Set<ApiRefreshToken>();
         }

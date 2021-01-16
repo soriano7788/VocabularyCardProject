@@ -9,11 +9,11 @@ namespace VocabularyCard.Core.EF
     // todo: 雖然有實作 Dispose，但是好像也沒用到?? 使用上沒有使用 using，也沒有主動呼叫 Dispose
     public class EFUnitOfWork : IUnitOfWork
     {
-        private readonly DbContext _context;
+        private readonly IDbContext _context;
         private Hashtable _repositories;
         private bool _disposed;
 
-        public EFUnitOfWork(DbContext context)
+        public EFUnitOfWork(IDbContext context)
         {
             _context = context;
         }

@@ -14,7 +14,7 @@ namespace VocabularyCard.Repositories.EF
     {
         private IDbSet<Card> _cards;
 
-        public EFCardRepository(DbContext context) : base(context)
+        public EFCardRepository(IDbContext context) : base(context)
         {
             _cards = context.Set<Card>();
         }

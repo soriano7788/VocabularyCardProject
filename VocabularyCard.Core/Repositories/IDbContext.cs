@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,18 +13,10 @@ namespace VocabularyCard.Core.Repositories
     {
         IDbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity;
 
-        void SetAsAdded<TEntity>(TEntity entity) where TEntity : BaseEntity;
+        DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
-        void SetAsModified<TEntity>(TEntity entity) where TEntity : BaseEntity;
+        int SaveChanges();
 
-        void SetAsDeleted<TEntity>(TEntity entity) where TEntity : BaseEntity;
-
-        void BeginTransaction();
-
-        long Commit();
-
-        Task<long> CommitAsync();
-
-        void Rollback();
+        Task<int> SaveChangesAsync();
     }
 }

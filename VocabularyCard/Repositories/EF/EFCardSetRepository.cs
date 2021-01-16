@@ -5,16 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabularyCard.Core.EF;
+using VocabularyCard.Core.Repositories;
 using VocabularyCard.Entities;
 
 namespace VocabularyCard.Repositories.EF
 {
     public class EFCardSetRepository : EFBaseRepository<CardSet>, ICardSetRepository
     {
-        private DbContext _context;
+        private IDbContext _context;
         private readonly IDbSet<CardSet> _cardSets;
 
-        public EFCardSetRepository(DbContext context) : base(context)
+        public EFCardSetRepository(IDbContext context) : base(context)
         {
             _context = context;
             _cardSets = context.Set<CardSet>();

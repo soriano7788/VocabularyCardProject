@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using VocabularyCard.Core.Entities;
+using VocabularyCard.Core.Repositories;
 
 namespace VocabularyCard.Core.EF
 {
-    public class BaseDbContext : DbContext
+    public class BaseDbContext : DbContext, IDbContext
     {
         private IEnumerable<IEntityTypeConfiguration> _mapConfigurations;
 
@@ -54,5 +58,26 @@ namespace VocabularyCard.Core.EF
 
             return sb.ToString();
         }
+
+        public new IDbSet<TEntity> Set<TEntity>() where TEntity : BaseEntity
+        {
+            return base.Set<TEntity>();
+        }
+
+        public new DbEntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : BaseEntity
+        {
+            return base.Entry<TEntity>(entity);
+        }
+
+        public override int SaveChanges()
+        {
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync()
+        {
+            return base.SaveChangesAsync();
+        }
+
     }
 }

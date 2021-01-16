@@ -130,7 +130,7 @@ namespace VocabularyCard.Web
             builder.RegisterType<CardInterpretationMap>().As<IEntityTypeConfiguration>().SingleInstance();
 
             // EF dbContext
-            builder.RegisterType(typeof(BaseDbContext)).As(typeof(DbContext)).InstancePerLifetimeScope();
+            builder.RegisterType(typeof(BaseDbContext)).As(typeof(IDbContext)).InstancePerLifetimeScope();
 
             // unitOfWork
             builder.RegisterType(typeof(EFUnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();

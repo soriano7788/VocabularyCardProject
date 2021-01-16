@@ -12,10 +12,10 @@ namespace VocabularyCard.Core.EF
 {
     public class EFBaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
     {
-        private DbContext _context;
+        private IDbContext _context;
         private IDbSet<TEntity> _entitySet;
 
-        public EFBaseRepository(DbContext context)
+        public EFBaseRepository(IDbContext context)
         {
             _context = context;
             _entitySet = _context.Set<TEntity>();
