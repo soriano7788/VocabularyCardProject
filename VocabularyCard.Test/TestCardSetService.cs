@@ -12,6 +12,8 @@ using VocabularyCard.Repositories.EF;
 using VocabularyCard.Services;
 using VocabularyCard.Services.Impl;
 using VocabularyCard.AccountManager.DTO;
+using NSubstitute;
+using VocabularyCard.Entities;
 
 namespace VocabularyCard.Test
 {
@@ -27,6 +29,14 @@ namespace VocabularyCard.Test
         [OneTimeSetUp]
         public void TestCaseInit()
         {
+            // 這邊應該要忽略 DbContext，因為 DbContext 是 Repository、UnitOfWork 依賴的 instance
+            // 這邊目標是測試 CardSetService，只關注 CardSetService 和其 methods，
+            // 連 Repository、UnitOfWork 用 mock 了
+            _cardSetRepository = Substitute.For<ICardSetRepository>();
+            _cardRepository = Substitute.For<ICardRepository>();
+            _unitOfWork = Substitute.For<IUnitOfWork>();
+
+            _cardSetService = new CardSetService(_unitOfWork, _cardSetRepository, _cardRepository);
             //DbContext context = new BaseDbContext();
             //_unitOfWork = new EFUnitOfWork(context);
             //_cardSetRepository = new EFCardSetRepository(context);
@@ -35,14 +45,15 @@ namespace VocabularyCard.Test
         }
 
         [Test]
-        public void Test_000_GetById(UserInfo user, int id)
+        public void Test_000_Get_CardSet_By_Id_1_return_1()
         {
             //Arrange
             UserInfo testUser = new UserInfo { UserId = "admin" };
             int inputId = 1;
+            _cardSetRepository.GetByCardSetId(inputId).Returns(new CardSet { CardSetId = inputId, Owner = "admin" });
 
             //Act
-            CardSetDto dto =  _cardSetService.GetById(testUser, inputId);
+            CardSetDto dto = _cardSetService.GetById(testUser, inputId);
             int actual = dto.Id;
 
             //Assert
