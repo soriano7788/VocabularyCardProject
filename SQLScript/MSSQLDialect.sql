@@ -1,6 +1,5 @@
 create table CARD_SET (
 	CARD_SET_ID int identity not null,
-	FLAG int not null,
 	DISPLAYNAME nvarchar(255) not null,
 	DESCRIPTION nvarchar(max) null,
 	CREATED_DATETIME datetime not null,
