@@ -230,6 +230,12 @@
     <Reference Include="VocabularyCard.AccountManager.Impl.Simple">
       <HintPath>..\lib\VocabularyCard.AccountManager.Impl.Simple.dll</HintPath>
     </Reference>
+    <Reference Include="VocabularyCard.CacheProvider">
+      <HintPath>..\lib\VocabularyCard.CacheProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="VocabularyCard.CacheProvider.Impl.MemoryCache">
+      <HintPath>..\lib\VocabularyCard.CacheProvider.Impl.MemoryCache.dll</HintPath>
+    </Reference>
     <Reference Include="VocabularyCard.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\VocabularyCard.Core.dll</HintPath>

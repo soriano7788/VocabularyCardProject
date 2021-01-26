@@ -62,6 +62,9 @@
     <Reference Include="VocabularyCard.AccountManager">
       <HintPath>..\lib\VocabularyCard.AccountManager.dll</HintPath>
     </Reference>
+    <Reference Include="VocabularyCard.CacheProvider">
+      <HintPath>..\lib\VocabularyCard.CacheProvider.dll</HintPath>
+    </Reference>
     <Reference Include="VocabularyCard.Core">
       <HintPath>..\lib\VocabularyCard.Core.dll</HintPath>
     </Reference>

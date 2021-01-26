@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VocabularyCard.AccountManager.DTO;
+using VocabularyCard.CacheProvider;
 using VocabularyCard.Core;
 using VocabularyCard.Core.Services;
 using VocabularyCard.Dtos;
@@ -12,23 +13,32 @@ using VocabularyCard.Repositories;
 using VocabularyCard.Entities;
 using VocabularyCard.Util;
 using System.Collections.Concurrent;
+using System.Runtime.Caching;
 
 namespace VocabularyCard.Services.Impl
 {
     public class CardSetService : BaseService, ICardSetService
     {
-        private ConcurrentDictionary<int, string> _cacheCardSetName = new ConcurrentDictionary<int, string>();
-
+        private ICacheProvider _cache;
         private ICardSetRepository _cardSetRepository;
         private ICardRepository _cardRepository;
         private CardSetConverter _cardSetConverter;
 
-        private Guid _guid = Guid.NewGuid();
+        private int _nameCacheMinutes = 20;
+        public int NameCacheMinutes
+        {
+            set { _nameCacheMinutes = value; }
+        }
 
-        public CardSetService(IUnitOfWork unitOfWork, ICardSetRepository cardSetRepository, ICardRepository cardRepository) : base(unitOfWork)
+        public CardSetService(
+            IUnitOfWork unitOfWork, 
+            ICardSetRepository cardSetRepository, 
+            ICardRepository cardRepository, 
+            ICacheProvider cache) : base(unitOfWork)
         {
             _cardSetRepository = cardSetRepository;
             _cardRepository = cardRepository;
+            _cache = cache;
             _cardSetConverter = new CardSetConverter();
         }
 
@@ -66,20 +76,19 @@ namespace VocabularyCard.Services.Impl
 
         public string GetCardSetNameById(int cardSetId)
         {
-            if (_cacheCardSetName.ContainsKey(cardSetId))
+            string key = GenerateCardSetNameCacheKey(cardSetId);
+            string cardSetName = _cache.Get<string>(key);
+            if(string.IsNullOrEmpty(cardSetName))
             {
-                return _cacheCardSetName[cardSetId];
+                CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
+                if (cardSet == null)
+                {
+                    throw new Exception("card set not found");
+                }
+                _cache.Set(key, cardSet.DisplayName, _nameCacheMinutes);
             }
 
-            CardSet cardSet = _cardSetRepository.GetByCardSetId(cardSetId);
-            if(cardSet == null)
-            {
-                throw new Exception("card set not found");
-            }
-
-            _cacheCardSetName.TryAdd(cardSetId, cardSet.DisplayName);
-
-            return cardSet.DisplayName;
+            return cardSetName;
         }
 
         public CardSetDto Create(UserInfo user, CardSetDto cardSetDto)
@@ -118,6 +127,11 @@ namespace VocabularyCard.Services.Impl
             {
                 throw new ArgumentException("user not cardSet owner", "userInfo");
             }
+        }
+
+        private string GenerateCardSetNameCacheKey(int cardSetId)
+        {
+            return string.Format("{0}_{1}_{2}", "cardset", "name", cardSetId);
         }
 
     }

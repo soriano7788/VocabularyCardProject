@@ -18,6 +18,8 @@ using VocabularyCard.Repositories.EF.Mapping;
 using VocabularyCard.Repositories;
 using VocabularyCard.Services;
 using VocabularyCard.Services.Impl;
+using VocabularyCard.CacheProvider;
+using VocabularyCard.CacheProvider.Impl.InMemoryCache;
 using VocabularyCard.Core;
 using VocabularyCard.Core.EF;
 using VocabularyCard.Core.Repositories;
@@ -43,8 +45,6 @@ namespace VocabularyCard.Web
 
             #endregion
 
-
-
             // 這邊可以動態載入設定檔，所以我想下面那團 DI 是否可再獨立出去
             // 還有 controller 的 建構式參數 DI，是否能夠自己手動設定?
             // 現在只有註冊各 class，其餘都自動偵測去注入，總感覺不踏實...
@@ -52,7 +52,6 @@ namespace VocabularyCard.Web
             ContainerBuilder builder = new ContainerBuilder();
 
             /// import json 的話，到這邊結束 ///
-
 
             #region (X)Assembly 抓錯，應該抓 VocabularyCard.dll 的
             // 這邊直接 Assembly.GetExecutingAssembly() 會抓到這個 MVC 專案的 dll
@@ -141,6 +140,10 @@ namespace VocabularyCard.Web
             builder.RegisterType(typeof(EFCardRepository)).As(typeof(ICardRepository)).InstancePerLifetimeScope();
             builder.RegisterType(typeof(EFCardInterpretationRepository)).As(typeof(ICardInterpretationRepository)).InstancePerLifetimeScope();
 
+            // cacheProvider
+            builder.RegisterType<MemoryCacheProvider>()
+                .As<ICacheProvider>()
+                .SingleInstance();
 
             // service
             builder.RegisterType(typeof(BaseService)).As(typeof(IService)).InstancePerDependency();
@@ -148,6 +151,7 @@ namespace VocabularyCard.Web
             builder.RegisterType<CardService>()
                 .As<ICardService>()
                 .InstancePerLifetimeScope()
+                .WithProperty("NameCacheMinutes", 20)
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(TransactionInterceptor));
 

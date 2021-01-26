@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using VocabularyCard.CacheProvider;
 using VocabularyCard.Core;
 using VocabularyCard.Core.EF;
 using VocabularyCard.Dtos;
@@ -20,6 +21,7 @@ namespace VocabularyCard.Test
     [TestFixture]
     public class TestCardSetService
     {
+        private ICacheProvider _cacheProvider;
         private ICardSetService _cardSetService;
         private ICardSetRepository _cardSetRepository;
         private ICardRepository _cardRepository;
@@ -32,11 +34,12 @@ namespace VocabularyCard.Test
             // 這邊應該要忽略 DbContext，因為 DbContext 是 Repository、UnitOfWork 依賴的 instance
             // 這邊目標是測試 CardSetService，只關注 CardSetService 和其 methods，
             // 連 Repository、UnitOfWork 用 mock 了
+            _cacheProvider = Substitute.For<ICacheProvider>();
             _cardSetRepository = Substitute.For<ICardSetRepository>();
             _cardRepository = Substitute.For<ICardRepository>();
             _unitOfWork = Substitute.For<IUnitOfWork>();
 
-            _cardSetService = new CardSetService(_unitOfWork, _cardSetRepository, _cardRepository);
+            _cardSetService = new CardSetService(_unitOfWork, _cardSetRepository, _cardRepository, _cacheProvider);
             //DbContext context = new BaseDbContext();
             //_unitOfWork = new EFUnitOfWork(context);
             //_cardSetRepository = new EFCardSetRepository(context);
