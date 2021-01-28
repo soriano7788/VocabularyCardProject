@@ -6,6 +6,19 @@ export default {
         localStorage.setItem("accessTokenExpirationDate", tokenData.accessTokenExpirationDate);
     },
     getTokenData: () => {
+        const refreshToken = localStorage.getItem("refreshToken");
+        const accessTokenExpirationDate = localStorage.getItem("accessTokenExpirationDate");
+
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshTokenExpirationDate = localStorage.getItem("refreshTokenExpirationDate");
+
+        if (refreshToken == null) {
+            return null;
+        }
+        if (accessTokenExpirationDate == null) {
+            return null;
+        }
+
         const tokenData = {
             refreshToken: localStorage.getItem("refreshToken"),
             accessToken: localStorage.getItem("accessToken"),

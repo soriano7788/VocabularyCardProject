@@ -8,6 +8,8 @@ import router from "../routes.js";
 import CardSet from "./modules/cardSet.js";
 import Card from "./modules/card.js";
 
+import axiosAuth from "../axios-auth.js";
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -59,8 +61,8 @@ export default new Vuex.Store({
         setLoadingSpinnerVisibility: ({ commit }, visible) => {
             commit("setLoadingSpinnerVisibility", visible);
         },
-        login: ({ commit, dispatch }, loginData) => {
-            axios.post("account/SignIn", loginData)
+        login: ({ commit }, loginData) => {
+            axiosAuth.post("SignIn", loginData)
                 .then((res) => {
                     const result = res.data;
                     if (result.statusCode == statusCode.SUCCESS && result.data.IsAuthenticated) {
@@ -91,15 +93,72 @@ export default new Vuex.Store({
                 })
                 .catch(error => console.log(error));
         },
-        logout: ({ commit, dispatch }) => {
+        logout: ({ commit }) => {
             commit("clearToken");
             commit("clearUserData");
             localStorageUtil.clearTokenData();
             localStorageUtil.clearUserData();
             router.push("/SignIn");
         },
-        autoLogin: ({ commit }) => {
+        autoLogin: ({ commit, dispatch }) => {
             // 先從 localStorage 找找看有無 userData
+            const tokenData = localStorageUtil.getTokenData();
+
+            if (tokenData == null) {
+                return;
+            }
+
+            // new Date() 會傳回物件
+            // Date() 則是字串
+            const now = new Date();
+
+            const refreshToken = tokenData.refreshToken;
+            const refreshTokenExpirationDate = tokenData.refreshTokenExpirationDate;
+
+            if (refreshToken == null) {
+                return;
+            }
+            if (refreshTokenExpirationDate == null) {
+                return;
+            }
+            if (now > refreshTokenExpirationDate) {
+                // refresh token 過期
+                return;
+            }
+
+            const accessToken = tokenData.accessToken;
+            const accessTokenExpirationDate = tokenData.accessTokenExpirationDate;
+            if (accessToken == null) {
+                return;
+            }
+            if (accessTokenExpirationDate == null) {
+                return;
+            }
+
+            if (now > accessTokenExpirationDate) {
+                // refresh token 過期
+                var promise = dispatch("refreshAccessToken", refreshToken);
+                console.log();
+
+                // return;
+            } else {
+                // 都有效
+                commit("setTokenData", tokenData);
+            }
+        },
+        refreshAccessToken: ({ commit, state }, refreshToken) => {
+            axiosAuth.post("GetAccessToken", refreshToken)
+                .then(res => {
+                    const result = res.data;
+                    // 也需要新的 accessToken 的過期時間
+                    const newAccessToken = result.data;
+                    if (result.statusCode == statusCode.SUCCESS) {
+                        console.log("get success: " + result);
+                    }
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
     },
     modules: {

@@ -31,6 +31,7 @@ export default {
     },
   },
   created: function() {
+    this.$store.dispatch("autoLogin");
     // todo: check localStorage, try if can switch to has been in login status
 
     // 是否驗證通過
@@ -39,6 +40,7 @@ export default {
       if (!this.$store.getters.isInSignInOrRegisterPage) {
         // 因為尚未驗證，且並非在 登入 或 註冊 頁
         this.$router.push("/SignIn");
+        //this.$store.dispatch("logout");
       }
     }
   },
