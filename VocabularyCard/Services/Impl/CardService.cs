@@ -82,8 +82,6 @@ namespace VocabularyCard.Services.Impl
             Card newCard = _cardRepository.Create(card);
             UnitOfWork.Save();
 
-            LogUtility.ErrorLog("newCard.CardId: " + newCard.CardId);
-
             return _cardConverter.ToDataTransferObject(newCard);
         }
 

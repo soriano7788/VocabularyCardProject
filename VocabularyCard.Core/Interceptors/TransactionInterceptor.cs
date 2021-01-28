@@ -16,12 +16,21 @@ namespace VocabularyCard.Core.Interceptors
 
         private IUnitOfWork _unitOfWork;
         private string[] _transactionMethodsPrefix;
+        private string[] _transactionMethods;
         private string[] _ignoreTransactionMethods;
+
         public string[] TransactionMethodsPrefix
         {
             set 
             {
                 _transactionMethodsPrefix = value;
+            }
+        }
+        public string[] TransactionMethods
+        {
+            set
+            {
+                _transactionMethods = value;
             }
         }
         public string[] IgnoreTransactionMethods
@@ -89,6 +98,13 @@ namespace VocabularyCard.Core.Interceptors
             foreach (string prefix in _transactionMethodsPrefix)
             {
                 if(methodName.StartsWith(prefix))
+                {
+                    return true;
+                }
+            }
+            foreach(string method in _transactionMethods)
+            {
+                if(methodName.Equals(method))
                 {
                     return true;
                 }

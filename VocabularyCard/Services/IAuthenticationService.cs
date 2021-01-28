@@ -10,16 +10,13 @@ namespace VocabularyCard.Services
 {
     public interface IAuthenticationService : IService
     {
-        void Regester();
+        void Register();
         AuthenticationResult ValidateUser(string loginId, string password);
         RefreshTokenValidatedResult ValidateRefreshToken(string token);
         AccessTokenValidatedResult ValidateAccessToken(string token);
 
-        ApiRefreshTokenDto GetValidRefreshTokenByUserId(string userId);
         ApiAccessTokenDto GetValidAccessTokenByUserId(string userId);
 
-        ApiRefreshTokenDto CreateNewRefreshToken(string userId);
-
-        ApiAccessTokenDto CreateNewAccessToken(string userId, string refreshToken);
+        ApiAccessTokenDto CreateNewAccessToken(string refreshToken);
     }
 }

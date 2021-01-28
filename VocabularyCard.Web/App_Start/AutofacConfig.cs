@@ -89,7 +89,6 @@ namespace VocabularyCard.Web
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
 
-
             #region 把 DI 註冊再獨立出去 ***Module class 檔
             // 參考說明
             // https://dotblogs.com.tw/Jamis/2015/12/23/163505
@@ -168,6 +167,7 @@ namespace VocabularyCard.Web
             // 註冊 Transaction Interceptor
             builder.RegisterType(typeof(TransactionInterceptor))
                 .WithProperty("TransactionMethodsPrefix", new string[] { "Create", "Update", "Delete" })
+                .WithProperty("TransactionMethods", new string[] { "ValidateUser" })
                 .WithProperty("IgnoreTransactionMethods", new string[] { "CreateCard" });
 
             // authentication 相關
@@ -182,13 +182,11 @@ namespace VocabularyCard.Web
                 .As<IAuthenticationService>()
                 .InstancePerLifetimeScope()
                 .WithProperty("RefreshTokenLifeTime", 3600)  // 單位秒
-                .WithProperty("AccessTokenLifeTime", 1800);  // 單位秒
+                .WithProperty("AccessTokenLifeTime", 1800)  // 單位秒
+                .EnableInterfaceInterceptors()
+                .InterceptedBy(typeof(TransactionInterceptor));
 
             #endregion
-
-
-
-
 
 
             // 建立容器

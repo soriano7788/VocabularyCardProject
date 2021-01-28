@@ -8,8 +8,6 @@ using System.Web.Http.Cors;
 using VocabularyCard.AccountManager;
 using VocabularyCard.Dtos;
 using VocabularyCard.Services;
-//using VocabularyCard.DTO;
-//using VocabularyCard.Service;
 using VocabularyCard.Web.Extensions;
 using VocabularyCard.Web.Models;
 
@@ -33,6 +31,7 @@ namespace VocabularyCard.Web.Api
         }
 
         [AllowAnonymous]
+        [HttpPost]
         public AuthenticationResult SignIn(VLoginViewModel viewModel)
         {
             AuthenticationResult a = _authenticationService.ValidateUser(viewModel.LoginId, viewModel.Password);
@@ -43,11 +42,16 @@ namespace VocabularyCard.Web.Api
         public void SignOut()
         { }
 
+        [AllowAnonymous]
+        [HttpPost]
         /// <summary>
         /// 取得新的 access_token，需先傳入 refresh_token
         /// </summary>
-        public void GetAccessToken()
-        { }
+        public ApiAccessTokenDto GetAccessToken([FromBody] string refreshToken)
+        {
+            Global.Log.Error("GetAccessToken refreshToken: " + refreshToken);
+            return _authenticationService.CreateNewAccessToken(refreshToken);
+        }
 
     }
 }

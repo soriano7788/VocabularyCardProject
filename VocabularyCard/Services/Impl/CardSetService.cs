@@ -86,6 +86,7 @@ namespace VocabularyCard.Services.Impl
                     throw new Exception("card set not found");
                 }
                 _cache.Set(key, cardSet.DisplayName, _nameCacheMinutes);
+                cardSetName = cardSet.DisplayName;
             }
 
             return cardSetName;

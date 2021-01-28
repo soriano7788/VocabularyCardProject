@@ -56,10 +56,8 @@ namespace VocabularyCard.Services.Impl
         }
 
 
-        public ApiAccessTokenDto CreateNewAccessToken(string userId, string refreshToken)
+        public ApiAccessTokenDto CreateNewAccessToken(string refreshToken)
         {
-            UserInfo userInfo = _accountProvider.GetUserByUserId(userId);
-
             // todo: token 放 cache 晚點做
             ApiRefreshToken apiRefreshToken = _refreshTokenRepository.GetByToken(refreshToken);
 
@@ -75,53 +73,20 @@ namespace VocabularyCard.Services.Impl
                 throw new ArgumentException("refreshToken expired");
             }
 
-            if (apiRefreshToken.UserId != userId)
-            {
-                throw new ArgumentException(string.Format("refreshToken not belong to userId: {0}", userId));
-            }
             #endregion
 
-            #region 產生 access_token，參考一下 KM 的 oauth 看看(原來KM還有一個 simple_nonce table 阿，之前都沒仔細看)
-            // 建立 access_token
-            // 1. 先產生一個亂數 {guid}
-            // 2. 取得 {userId}
-            // 3. 取得加密用的 {salt}
-            // 4. 原文組成為 {}|{}|{}
-
-            // nonce: 每次都亂數產生的值，或許會用到?
-
-            string accessToken = GenerateNewToken(userId);
-
-            #endregion
+            // 產生 access_token，參考一下 KM 的 oauth 看看(KM 還有一個 simple_nonce table，只為了記錄 nonce?)
+            string accessToken = GenerateNewToken(apiRefreshToken.UserId);
 
             ApiAccessToken apiAccessToken = new ApiAccessToken
             {
                 Token = accessToken,
-                UserId = userId,
+                UserId = apiRefreshToken.UserId,
                 CreatedDateTime = DateTime.UtcNow,
                 ExpiredDateTime = DateTime.UtcNow.AddSeconds(_accessTokenLifeTime)
             };
             ApiAccessToken result = _accessTokenRepository.Create(apiAccessToken);
             ApiAccessTokenDto dto = _accessTokenConverter.ToDataTransferObject(result);
-            UnitOfWork.Save();
-
-            return dto;
-        }
-
-        public ApiRefreshTokenDto CreateNewRefreshToken(string userId)
-        {
-            string refreshToken = GenerateNewToken(userId);
-
-            ApiRefreshToken apiRefreshToken = new ApiRefreshToken
-            {
-                Token = refreshToken,
-                UserId = userId,
-                CreatedDateTime = DateTime.UtcNow,
-                ExpiredDateTime = DateTime.UtcNow.AddSeconds(_refreshTokenLifeTime)
-            };
-            ApiRefreshToken result = _refreshTokenRepository.Create(apiRefreshToken);
-            ApiRefreshTokenDto dto = _refreshTokenConverter.ToDataTransferObject(result);
-            UnitOfWork.Save();
 
             return dto;
         }
@@ -136,17 +101,7 @@ namespace VocabularyCard.Services.Impl
             return _accessTokenConverter.ToDataTransferObject(accessTokens.Last());
         }
 
-        public ApiRefreshTokenDto GetValidRefreshTokenByUserId(string userId)
-        {
-            IList<ApiRefreshToken> refreshTokens = _refreshTokenRepository.GetAllValidByUserId(userId);
-            if (refreshTokens.Count() == 0)
-            {
-                return null;
-            }
-            return _refreshTokenConverter.ToDataTransferObject(refreshTokens.Last());
-        }
-
-        public void Regester()
+        public void Register()
         {
             // 注意，帳號不可重複
             throw new NotImplementedException();
@@ -172,6 +127,7 @@ namespace VocabularyCard.Services.Impl
             };
         }
 
+        // 使用的情境??
         public RefreshTokenValidatedResult ValidateRefreshToken(string token)
         {
             ApiRefreshToken refreshToken = _refreshTokenRepository.GetByToken(token);
@@ -195,10 +151,6 @@ namespace VocabularyCard.Services.Impl
 
         public AuthenticationResult ValidateUser(string loginId, string password)
         {
-            // 只負責告訴呼叫端驗證成功或失敗
-            // 或是包成 AuthenticationResult 物件，裡面有驗證結果，access_token、refresh_token 之類的?
-
-            //bool isAuthenticated = false;
             UserInfo userInfo = _accountProvider.GetUserByLoginId(loginId);
             if (userInfo == null)
             {
@@ -217,16 +169,30 @@ namespace VocabularyCard.Services.Impl
                 refreshTokenDto = CreateNewRefreshToken(userInfo.UserId);
             }
 
-            // accessToken 因為時效短，就不嘗試找現有有效的，直接建新的
-            ApiAccessTokenDto accessTokenDto = CreateNewAccessToken(userInfo.UserId, refreshTokenDto.Token);
+            #region 建立新的  access token
+            string accessTokenText = GenerateNewToken(userInfo.UserId);
 
-            // refresh_token 剩幾秒過期
-            TimeSpan r = refreshTokenDto.ExpiredDateTime - DateTime.UtcNow;
-            double rSec = r.TotalSeconds;
+            ApiAccessToken apiAccessToken = new ApiAccessToken
+            {
+                Token = accessTokenText,
+                UserId = userInfo.UserId,
+                CreatedDateTime = DateTime.UtcNow,
+                ExpiredDateTime = DateTime.UtcNow.AddSeconds(_accessTokenLifeTime)
+            };
+            ApiAccessToken accessToken = _accessTokenRepository.Create(apiAccessToken);
+            #endregion
 
-            // access_token 剩幾秒過期
-            TimeSpan a = accessTokenDto.ExpiredDateTime - DateTime.UtcNow;
-            double aSec = a.TotalSeconds;
+            #region (X)
+            //// accessToken 因為時效短，就不嘗試找現有有效的，直接建新的
+            //ApiAccessTokenDto accessTokenDto = CreateNewAccessToken(refreshTokenDto.Token);
+
+            //// refresh_token 剩幾秒過期
+            //TimeSpan r = refreshTokenDto.ExpiredDateTime - DateTime.UtcNow;
+            //double rSec = r.TotalSeconds;
+
+            //// access_token 剩幾秒過期
+            //TimeSpan a = accessTokenDto.ExpiredDateTime - DateTime.UtcNow;
+            //double aSec = a.TotalSeconds;
 
 
             //StringBuilder sb = new StringBuilder();
@@ -236,7 +202,7 @@ namespace VocabularyCard.Services.Impl
             //sb.AppendFormat("rSec: {0}{1}", rSec, Environment.NewLine);
             //sb.AppendFormat("aSec: {0}{1}", aSec, Environment.NewLine);
             //LogUtility.ErrorLog(sb.ToString());
-
+            #endregion
 
             return new AuthenticationResult
             {
@@ -244,17 +210,19 @@ namespace VocabularyCard.Services.Impl
                 UserInfo = userInfo,
                 Message = "OK",
                 RefreshToken = refreshTokenDto.Token,
-                RefreshTokenExpiresIn = (int)rSec,
-                AccessToken = accessTokenDto.Token,
-                AccessTokenExpiresIn = (int)aSec
+                RefreshTokenExpiresIn = CalculateExpiredSeconds(DateTime.UtcNow, refreshTokenDto.ExpiredDateTime),
+                AccessToken = accessToken.Token,
+                AccessTokenExpiresIn = CalculateExpiredSeconds(DateTime.UtcNow, accessToken.ExpiredDateTime)
             };
         }
 
 
+
+        #region 這部分 加解密 code 獨立出去比較好
         // sha256 為不可逆 雜湊
-        private string EncodeToSHA256(string input)
+        private string EncodeToSHA256(string input, string salt)
         {
-            input = input + _salt;
+            input = input + salt;
             SHA256 sha256 = new SHA256CryptoServiceProvider();
             byte[] source = Encoding.Default.GetBytes(input);//將字串轉為Byte[]
             byte[] crypto = sha256.ComputeHash(source);//進行SHA256加密
@@ -274,17 +242,61 @@ namespace VocabularyCard.Services.Impl
             string resultDecode = Convert.ToBase64String(bts);
             return resultDecode;
         }
+        #endregion
+
+        private ApiRefreshTokenDto CreateNewRefreshToken(string userId)
+        {
+            string refreshToken = GenerateNewToken(userId);
+
+            ApiRefreshToken apiRefreshToken = new ApiRefreshToken
+            {
+                Token = refreshToken,
+                UserId = userId,
+                CreatedDateTime = DateTime.UtcNow,
+                ExpiredDateTime = DateTime.UtcNow.AddSeconds(_refreshTokenLifeTime)
+            };
+            ApiRefreshToken result = _refreshTokenRepository.Create(apiRefreshToken);
+            ApiRefreshTokenDto dto = _refreshTokenConverter.ToDataTransferObject(result);
+
+            return dto;
+        }
+        private ApiRefreshTokenDto GetValidRefreshTokenByUserId(string userId)
+        {
+            IList<ApiRefreshToken> refreshTokens = _refreshTokenRepository.GetAllValidByUserId(userId);
+            if (refreshTokens.Count() == 0)
+            {
+                return null;
+            }
+            return _refreshTokenConverter.ToDataTransferObject(refreshTokens.Last());
+        }
+
         private string GetNewGuid()
         {
             //return Guid.NewGuid().ToString().Replace("-", string.Empty);
             return Guid.NewGuid().ToString("N");
         }
-
         private string GenerateNewToken(string userId)
         {
+            // 建立 access_token
+            // 1. 先產生一個亂數 {guid}
+            // 2. 取得 {userId}
+            // 3. 取得加密用的 {salt}
+            // 4. 原文組成為 {}|{}|{}
+
+            // nonce: 每次都亂數產生的值，或許會用到?
             string originText = string.Format("{0}|{1}|{2}", GetNewGuid(), userId, _salt);
-            string token = EncodeToSHA256(originText);
+            string token = EncodeToSHA256(originText, _salt);
             return token;
+        }
+        private int CalculateExpiredSeconds(DateTime now, DateTime expiredDateTime)
+        {
+            if (now >= expiredDateTime)
+            {
+                return 0;
+            }
+
+            TimeSpan t = expiredDateTime - now;
+            return (int)t.TotalSeconds;
         }
     }
 }
