@@ -48,7 +48,15 @@ export default new Vuex.Store({
         setUserData: (state, userData) => {
         },
         setTokenData: (state, payload) => {
+            console.log(payload);
             state.token = payload;
+        },
+        setAccessTokenData: (state, accessToken) => {
+
+            const token = state.token;
+            token.accessToken = accessToken.token;
+            token.accessTokenExpiredDateTime = accessToken.expiredDateTime;
+            localStorageUtil.setTokenData(token);
         },
         clearToken: state => {
             state.token = null;
@@ -68,16 +76,11 @@ export default new Vuex.Store({
                     if (result.statusCode == statusCode.SUCCESS && result.data.IsAuthenticated) {
                         const authResult = result.data;
 
-                        // expiresIn 單位是秒，要轉成 millisecond，所以要乘 1000
-                        const now = new Date();
-                        const refreshTokenExpirationDate = new Date(now.getTime() + authResult.RefreshTokenExpiresIn * 1000);
-                        const accessTokenExpirationDate = new Date(now.getTime() + authResult.AccessTokenExpiresIn * 1000);
-
                         const tokenData = {
                             refreshToken: authResult.RefreshToken,
                             accessToken: authResult.AccessToken,
-                            refreshTokenExpirationDate: refreshTokenExpirationDate,
-                            accessTokenExpirationDate: accessTokenExpirationDate
+                            refreshTokenExpiredDateTime: authResult.RefreshTokenExpiredDateTime,
+                            accessTokenExpiredDateTime: authResult.AccessTokenExpiredDateTime
                         };
                         // state 儲存 token 資訊
                         commit("setTokenData", tokenData);
@@ -113,32 +116,31 @@ export default new Vuex.Store({
             const now = new Date();
 
             const refreshToken = tokenData.refreshToken;
-            const refreshTokenExpirationDate = tokenData.refreshTokenExpirationDate;
+            const refreshTokenExpiredDateTime = tokenData.refreshTokenExpiredDateTime;
 
             if (refreshToken == null) {
                 return;
             }
-            if (refreshTokenExpirationDate == null) {
+            if (refreshTokenExpiredDateTime == null) {
                 return;
             }
-            if (now > refreshTokenExpirationDate) {
+            if (now > refreshTokenExpiredDateTime) {
                 // refresh token 過期
                 return;
             }
 
             const accessToken = tokenData.accessToken;
-            const accessTokenExpirationDate = tokenData.accessTokenExpirationDate;
+            const accessTokenExpiredDateTime = tokenData.accessTokenExpiredDateTime;
             if (accessToken == null) {
                 return;
             }
-            if (accessTokenExpirationDate == null) {
+            if (accessTokenExpiredDateTime == null) {
                 return;
             }
 
-            if (now > accessTokenExpirationDate) {
+            if (now > accessTokenExpiredDateTime) {
                 // refresh token 過期
                 var promise = dispatch("refreshAccessToken", refreshToken);
-                console.log();
 
                 // return;
             } else {
@@ -147,18 +149,26 @@ export default new Vuex.Store({
             }
         },
         refreshAccessToken: ({ commit, state }, refreshToken) => {
-            axiosAuth.post("GetAccessToken", refreshToken)
-                .then(res => {
-                    const result = res.data;
-                    // 也需要新的 accessToken 的過期時間
-                    const newAccessToken = result.data;
-                    if (result.statusCode == statusCode.SUCCESS) {
-                        console.log("get success: " + result);
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            return new Promise((resolve, reject) => {
+                axiosAuth.post("GetAccessToken", JSON.stringify(refreshToken), { headers: { "Content-Type": "application/json" } })
+                    .then(res => {
+                        const result = res.data;
+                        // 也需要新的 accessToken 的過期時間
+                        const newAccessToken = result.data;
+                        if (result.statusCode == statusCode.SUCCESS) {
+                            commit("setAccessTokenData", {
+                                token: newAccessToken.Token,
+                                expiredDateTime: newAccessToken.ExpiredDateTime
+                            });
+                        }
+
+                        resolve(newAccessToken.Token);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject(error);
+                    });
+            });
         }
     },
     modules: {

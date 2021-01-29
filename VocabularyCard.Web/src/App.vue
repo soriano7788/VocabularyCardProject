@@ -31,7 +31,7 @@ export default {
     },
   },
   created: function() {
-    this.$store.dispatch("autoLogin");
+    // this.$store.dispatch("autoLogin");
     // todo: check localStorage, try if can switch to has been in login status
 
     // 是否驗證通過
