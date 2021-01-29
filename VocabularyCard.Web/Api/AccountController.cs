@@ -50,7 +50,25 @@ namespace VocabularyCard.Web.Api
         public ApiAccessTokenDto GetAccessToken([FromBody] string refreshToken)
         {
             Global.Log.Error("GetAccessToken refreshToken: " + refreshToken);
-            return _authenticationService.CreateNewAccessToken(refreshToken);
+            ApiAccessTokenDto  accessTokenDto = _authenticationService.CreateNewAccessToken(refreshToken);
+            return accessTokenDto;
+
+            //return new AccessToken
+            //{
+            //    Token = accessTokenDto.Token,
+            //    ExpiresIn = CalculateExpiredSeconds(accessTokenDto.CreatedDateTime, accessTokenDto.ExpiredDateTime)
+            //};
+        }
+
+        private int CalculateExpiredSeconds(DateTime createdDateTime, DateTime expiredDateTime)
+        {
+            if (createdDateTime >= expiredDateTime)
+            {
+                return 0;
+            }
+
+            TimeSpan t = expiredDateTime - createdDateTime;
+            return (int)t.TotalSeconds;
         }
 
     }

@@ -46,18 +46,18 @@ namespace VocabularyCard.Dtos
             set { _accessToken = value; }
         }
 
-        private int _refreshTokenExpiresIn;
-        public int RefreshTokenExpiresIn
+        private DateTime _refreshTokenExpiredDateTime;
+        public DateTime RefreshTokenExpiredDateTime
         {
-            get { return _refreshTokenExpiresIn; }
-            set { _refreshTokenExpiresIn = value; }
+            get { return _refreshTokenExpiredDateTime; }
+            set { _refreshTokenExpiredDateTime = value; }
         }
 
-        private int _accessTokenExpiresIn;
-        public int AccessTokenExpiresIn
+        private DateTime _accessTokenExpiredDateTime;
+        public DateTime AccessTokenExpiredDateTime
         {
-            get { return _accessTokenExpiresIn; }
-            set { _accessTokenExpiresIn = value; }
+            get { return _accessTokenExpiredDateTime; }
+            set { _accessTokenExpiredDateTime = value; }
         }
     }
 }

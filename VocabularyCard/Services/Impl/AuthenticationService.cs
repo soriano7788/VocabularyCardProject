@@ -88,6 +88,12 @@ namespace VocabularyCard.Services.Impl
             ApiAccessToken result = _accessTokenRepository.Create(apiAccessToken);
             ApiAccessTokenDto dto = _accessTokenConverter.ToDataTransferObject(result);
 
+            // todo: 現在的 dto 和 entity 沒啥差異，但是前端要的資訊是 幾秒內過期
+            // 所以格式要轉換一下
+            // 我覺得這段就交給 web 端處理，假如我在 dll 裡面就轉成秒數，假如以後要不同的時間格式，
+            // dll 不就要修正? 當然可以把轉換時間格式這段 獨立出來 class 或 interface，然後透過參數設定要秒、分、時之類的，
+            // 但我覺得就交給 web 端自行處理吧
+
             return dto;
         }
 
@@ -204,15 +210,25 @@ namespace VocabularyCard.Services.Impl
             //LogUtility.ErrorLog(sb.ToString());
             #endregion
 
+            //return new AuthenticationResult
+            //{
+            //    IsAuthenticated = true,
+            //    UserInfo = userInfo,
+            //    Message = "OK",
+            //    RefreshToken = refreshTokenDto.Token,
+            //    RefreshTokenExpiredDateTime = CalculateExpiredSeconds(DateTime.UtcNow, refreshTokenDto.ExpiredDateTime),
+            //    AccessToken = accessToken.Token,
+            //    AccessTokenExpiredDateTime = CalculateExpiredSeconds(DateTime.UtcNow, accessToken.ExpiredDateTime)
+            //};
             return new AuthenticationResult
             {
                 IsAuthenticated = true,
                 UserInfo = userInfo,
                 Message = "OK",
                 RefreshToken = refreshTokenDto.Token,
-                RefreshTokenExpiresIn = CalculateExpiredSeconds(DateTime.UtcNow, refreshTokenDto.ExpiredDateTime),
+                RefreshTokenExpiredDateTime = refreshTokenDto.ExpiredDateTime,
                 AccessToken = accessToken.Token,
-                AccessTokenExpiresIn = CalculateExpiredSeconds(DateTime.UtcNow, accessToken.ExpiredDateTime)
+                AccessTokenExpiredDateTime = accessToken.ExpiredDateTime
             };
         }
 
@@ -257,7 +273,6 @@ namespace VocabularyCard.Services.Impl
             };
             ApiRefreshToken result = _refreshTokenRepository.Create(apiRefreshToken);
             ApiRefreshTokenDto dto = _refreshTokenConverter.ToDataTransferObject(result);
-
             return dto;
         }
         private ApiRefreshTokenDto GetValidRefreshTokenByUserId(string userId)
