@@ -39,12 +39,16 @@ const actions = {
     fetchAllCardSets: ({ commit }) => {
         axios.get("cardset/getbyowner")
             .then(res => {
+                // alert("fetchAllCardSets then: " + res);
+                // console.log("fetchAllCardSets then: " + res);
+
                 const result = res.data;
                 if (result.statusCode == statusCode.SUCCESS) {
                     const cardSets = result.data;
                     commit("setCardSets", cardSets);
                 }
             }).catch(error => {
+                // alert("fetchAllCardSets catch");
                 console.log(error);
             });
     },

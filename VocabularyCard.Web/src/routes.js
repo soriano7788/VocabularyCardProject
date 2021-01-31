@@ -11,7 +11,11 @@ import Cards from "./components/Card/Cards.vue";
 Vue.use(VueRouter);
 
 export const routes = [
-    { path: "/", component: Home },
+    {
+        path: "/", component: Home, beforeEnter: (to, from, next) => {
+            next();
+        }
+    },
     {
         path: "/CardSets",
         component: CardSetDashboard,
@@ -26,7 +30,12 @@ export const routes = [
         ]
     },
     { path: "/Register", component: Register },
-    { path: "/Signin", component: Signin }
+    {
+        path: "/Signin", component: Signin, beforeEnter: (to, from, next) => {
+            // 假如目前是已通過驗證的狀態，那不應該還能到登入頁，除非已登出
+            next();
+        }
+    }
 ];
 
 export default new VueRouter({

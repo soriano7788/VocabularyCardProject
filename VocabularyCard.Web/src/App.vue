@@ -31,18 +31,31 @@ export default {
     },
   },
   created: function() {
-    // this.$store.dispatch("autoLogin");
+    const promise = this.$store.dispatch("autoLogin");
     // todo: check localStorage, try if can switch to has been in login status
 
-    // 是否驗證通過
-    if (!this.$store.getters.isAuthenticated) {
-      // 目前是否 route 到 signin or register page
-      if (!this.$store.getters.isInSignInOrRegisterPage) {
-        // 因為尚未驗證，且並非在 登入 或 註冊 頁
-        this.$router.push("/SignIn");
-        //this.$store.dispatch("logout");
-      }
-    }
+    promise
+      .then(() => {
+        // 是否驗證通過
+        if (!this.$store.getters.isAuthenticated) {
+          // 目前是否 route 到 signin or register page
+          if (!this.$store.getters.isInSignInOrRegisterPage) {
+            // 因為尚未驗證，且並非在 登入 或 註冊 頁
+            this.$router.push("/SignIn");
+            //this.$store.dispatch("logout");
+          }
+        } else {
+          // 假如早就已經在首頁了，這邊就不用特意再 route 一次，
+          // 應該可以寫在 beforeRouteEnter
+          if (!this.$store.getters.isInRootPage) {
+            this.$router.push("/");
+          }
+        }
+      })
+      .catch((error) => {
+        alert("APP.vue catch");
+        alert(error);
+      });
   },
 };
 </script>

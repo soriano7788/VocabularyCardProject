@@ -23,7 +23,14 @@ export default {
         const refreshTokenExpiredDateTime = localStorage.getItem(REFRESH_TOKEN_EXPIRED_DATE);
         const accessTokenExpiredDateTime = localStorage.getItem(ACCESS_TOKEN_EXPIRED_DATE);
 
+        // 缺一就回傳 null
         if (refreshToken == null) {
+            return null;
+        }
+        if (refreshTokenExpiredDateTime == null) {
+            return null;
+        }
+        if (accessToken == null) {
             return null;
         }
         if (accessTokenExpiredDateTime == null) {
