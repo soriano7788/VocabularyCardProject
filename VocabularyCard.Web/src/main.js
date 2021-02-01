@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import App from './App'
 import router from "./routes.js"
 import axios from 'axios';
-// import axiosAuth from './axios-auth.js';
+import axiosAuth from './axios-auth.js';
 import store from "./store/store.js";
 
 
@@ -15,14 +15,6 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 const reqInterceptor = axios.interceptors.request.use(config => {
   const token = store.getters.token;
   // 應該也要檢查 accesstoken 是否過期
-  // alert("before sending request");
-
-  // if (store.getters.isAuthenticated) {
-  // }
-
-  // alert("append access token to request header");
-  // alert(token.accessToken);
-
   // 假如是經過 401 後，重發 request，這邊的 authorization 沒有被換成新的 accessToken
   // 就算有下面設定也一樣....
 
@@ -32,8 +24,8 @@ const reqInterceptor = axios.interceptors.request.use(config => {
   // alert(config.headers.common['authorization']);
   // 上面 alert 看起來有重設，但是 browser 送出去的 request，authorization 還是舊的 access token
 
+  console.log('Request Interceptor', config);
 
-  console.log('Request Interceptor', config)
   store.dispatch("setLoadingSpinnerVisibility", true);
   return config;
 
@@ -49,11 +41,16 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
   }
 }, function (error) {
   store.dispatch("setLoadingSpinnerVisibility", false);
+  console.log("Response Interceptor error", error);
 
-  console.log("Response Interceptor error", error.response);
+  const originalRequest = error.config;
+  if (error.response.status == 401 && !originalRequest._retry) {
+    // todo: 還要先確定 refresh token 是否過期，假如也過期的話，就只能重新輸入帳密登入了
 
-  if (error.response.status == 401) {
-    alert("Unauthorized 401");
+
+
+    originalRequest._retry = true;
+    // alert("Unauthorized 401");
 
     // 401 可能有三種
     // 1. 帳密登入失敗
@@ -61,19 +58,56 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
     // 3. refresh_token 無效 (過期 或 不存在)
 
     const token = store.getters.token;
-    const promise = store.dispatch("refreshAccessToken", token.refreshToken);
-    promise
-      .then(newAccessToken => {
-        const originalRequest = error.config;
+    return axiosAuth.post("GetAccessToken", JSON.stringify(token.refreshToken), { headers: { "Content-Type": "application/json" } })
+      .then(res => {
+        const result = res.data;
 
-        originalRequest.headers['authorization'] = "bearer " + newAccessToken;
-        axios(originalRequest);
+        const newAccessToken = result.data;
+        if (result.statusCode == "000") {
+          store.commit("setAccessTokenData", {
+            token: newAccessToken.Token,
+            expiredDateTime: newAccessToken.ExpiredDateTime
+          });
+
+          originalRequest.headers['authorization'] = "bearer " + newAccessToken.Token;
+          return axios(originalRequest);
+        }
+        // Promise.resolve(newAccessToken.Token);
       })
-      .catch(data => {
+      .catch(error => {
+        console.log(error);
+        Promise.reject(error);
       });
+    // 這樣沒 return promise.reject() 的話，又直接跑到 then 那邊去了...
 
-    return error;
+
+    /////////////////////
+
+    // const token = store.getters.token;
+    // const promise = store.dispatch("refreshAccessToken", token.refreshToken);
+    // promise
+    //   .then(newAccessToken => {
+    //     const originalRequest = error.config;
+
+    //     originalRequest.headers['authorization'] = "bearer " + newAccessToken;
+    //     axios(originalRequest).then(res => {
+    //       return res;
+    //     });
+
+    //   })
+    //   .catch(data => {
+    //   });
+
+    ////////////////////////
+
+
+    // 這邊 return error，會接到原本發出 request 的 then 裡面.....
+    // 什麼都不 return 也會接到原本發出 request 的 then 裡面.....
+    // return error;
+
+    // 目前這樣寫才會接到原本發出 request 的 catch 裡面.....
   }
+  return Promise.reject(error);
 });
 
 

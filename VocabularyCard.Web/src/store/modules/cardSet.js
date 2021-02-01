@@ -65,7 +65,6 @@ const actions = {
     },
     createCardSet: ({ commit }, cardSet) => {
         axios.post("cardset/Create", cardSet).then((res) => {
-
             const result = res.data;
             if (result.statusCode == statusCode.SUCCESS) {
                 const newCardSet = result.data;
