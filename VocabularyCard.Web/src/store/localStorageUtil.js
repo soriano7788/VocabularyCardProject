@@ -10,7 +10,6 @@ const ACCESS_TOKEN_EXPIRED_DATE = "ACCESS_TOKEN_EXPIRED_DATE";
 
 export default {
     setTokenData: (tokenData) => {
-        console.log(tokenData);
         localStorage.setItem(REFRESH_TOKEN, tokenData.refreshToken);
         localStorage.setItem(ACCESS_TOKEN, tokenData.accessToken);
         localStorage.setItem(REFRESH_TOKEN_EXPIRED_DATE, tokenData.refreshTokenExpiredDateTime);

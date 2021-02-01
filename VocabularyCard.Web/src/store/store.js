@@ -146,31 +146,27 @@ export default new Vuex.Store({
 
             });
         },
-        refreshAccessToken: ({ commit, state }, refreshToken) => {
-            //Promise.resolve
-            // return new Promise((resolve, reject) => {
-            // });
+        refreshAccessToken: ({ commit }, refreshToken) => {
+            return new Promise((resolve, reject) => {
+                axiosAuth.post("GetAccessToken", JSON.stringify(refreshToken), { headers: { "Content-Type": "application/json" } })
+                    .then(res => {
+                        const result = res.data;
 
-            return axiosAuth.post("GetAccessToken", JSON.stringify(refreshToken), { headers: { "Content-Type": "application/json" } })
-                .then(res => {
-                    const result = res.data;
-                    // 也需要新的 accessToken 的過期時間
-                    const newAccessToken = result.data;
-                    if (result.statusCode == statusCode.SUCCESS) {
-                        commit("setAccessTokenData", {
-                            token: newAccessToken.Token,
-                            expiredDateTime: newAccessToken.ExpiredDateTime
-                        });
-                    }
+                        const newAccessToken = result.data;
+                        if (result.statusCode == statusCode.SUCCESS) {
+                            commit("setAccessTokenData", {
+                                token: newAccessToken.Token,
+                                expiredDateTime: newAccessToken.ExpiredDateTime
+                            });
+                        }
 
-                    // resolve(newAccessToken.Token);
-                    return Promise.resolve(newAccessToken.Token);
-                })
-                .catch(error => {
-                    console.log(error);
-                    // reject(error);
-                    return Promise.reject(error);
-                });
+                        resolve(newAccessToken.Token);
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        reject(error);
+                    });
+            });
         }
     },
     modules: {

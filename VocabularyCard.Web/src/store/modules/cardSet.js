@@ -39,8 +39,7 @@ const actions = {
     fetchAllCardSets: ({ commit }) => {
         axios.get("cardset/getbyowner")
             .then(res => {
-                // alert("fetchAllCardSets then: " + res);
-                // console.log("fetchAllCardSets then: " + res);
+                console.log("cardset/getbyowner then:", res);
 
                 const result = res.data;
                 if (result.statusCode == statusCode.SUCCESS) {
@@ -48,8 +47,7 @@ const actions = {
                     commit("setCardSets", cardSets);
                 }
             }).catch(error => {
-                // alert("fetchAllCardSets catch");
-                console.log(error);
+                console.log("cardset/getbyowner catch:", error);
             });
     },
     fetchCardSet: ({ commit }, cardSetId) => { },
@@ -67,6 +65,7 @@ const actions = {
     },
     createCardSet: ({ commit }, cardSet) => {
         axios.post("cardset/Create", cardSet).then((res) => {
+
             const result = res.data;
             if (result.statusCode == statusCode.SUCCESS) {
                 const newCardSet = result.data;
