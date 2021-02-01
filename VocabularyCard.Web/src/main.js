@@ -51,6 +51,7 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
   store.dispatch("setLoadingSpinnerVisibility", false);
 
   console.log("Response Interceptor error", error.response);
+
   if (error.response.status == 401) {
     alert("Unauthorized 401");
 
@@ -77,7 +78,7 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
       .catch(data => {
       });
 
-
+    return error;
     /////////////////////
 
 
