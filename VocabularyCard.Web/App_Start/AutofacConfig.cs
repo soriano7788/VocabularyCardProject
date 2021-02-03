@@ -26,6 +26,7 @@ using VocabularyCard.Core.Repositories;
 using VocabularyCard.Core.Services;
 using VocabularyCard.Core.Interceptors;
 using Autofac.Extras.DynamicProxy;
+using VocabularyCard.Core.Utils;
 
 namespace VocabularyCard.Web
 {
@@ -128,7 +129,30 @@ namespace VocabularyCard.Web
             builder.RegisterType<CardInterpretationMap>().As<IEntityTypeConfiguration>().SingleInstance();
 
             // EF dbContext
-            builder.RegisterType(typeof(BaseDbContext)).As(typeof(IDbContext)).InstancePerLifetimeScope();
+            string dbSource = ConfigurationManager.AppSettings["DbSource"];
+            string dbName = ConfigurationManager.AppSettings["DbName"];
+            string userId = ConfigurationManager.AppSettings["UserId"];
+            string pwd = ConfigurationManager.AppSettings["EncryptedPassword"];
+
+            //{ "Data Source", dbSource },
+            //{ "Initial Catalog", dbName },
+            //{ "User Id", userId },
+            //{ "Password", CryptoUtility.Decrypt(pwd) }
+
+            //{ "Server", dbSource },
+            //{ "Database", dbName },
+            //{ "User ID", userId },
+            //{ "Password", CryptoUtility.Decrypt(pwd) }
+
+            Dictionary<string, string> connectionParameters = new Dictionary<string, string>
+            {
+                { "Data Source", dbSource },
+                { "Initial Catalog", dbName },
+                { "User Id", userId },
+                { "Password", CryptoUtility.Decrypt(pwd) }
+            };
+            builder.RegisterType(typeof(BaseDbContext)).As(typeof(IDbContext)).InstancePerLifetimeScope()
+                .WithParameter("connectionParameters", connectionParameters);
 
             // unitOfWork
             builder.RegisterType(typeof(EFUnitOfWork)).As(typeof(IUnitOfWork)).InstancePerLifetimeScope();

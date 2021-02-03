@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using NLog;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
@@ -7,14 +9,18 @@ using System.Text;
 using System.Threading.Tasks;
 using VocabularyCard.Core.Entities;
 using VocabularyCard.Core.Repositories;
+using VocabularyCard.Core.Utils;
 
 namespace VocabularyCard.Core.EF
 {
     public class BaseDbContext : DbContext, IDbContext
     {
+        public static readonly Logger Logger = LogManager.GetLogger("BaseDbContext");
+
         private IEnumerable<IEntityTypeConfiguration> _mapConfigurations;
 
-        public BaseDbContext(IEnumerable<IEntityTypeConfiguration> mapConfigurations) : base(BuildConnectionString())
+        public BaseDbContext(Dictionary<string, string> connectionParameters, IEnumerable<IEntityTypeConfiguration> mapConfigurations)
+            : base(BuildConnectionString(connectionParameters))
         {
             _mapConfigurations = mapConfigurations;
             Configuration.LazyLoadingEnabled = false;
@@ -50,11 +56,28 @@ namespace VocabularyCard.Core.EF
             string pwd = ConfigurationManager.AppSettings["Password"];
 
             // todo: 假如換成 oracle、mariaDB 之類的，連線字串也是長這樣嗎?
-            sb.AppendFormat("Data Source={0}; Initial Catalog={1}; Integrated Security=False;User Id={2};Password={3};MultipleActiveResultSets=True",
+            //sb.AppendFormat("Data Source={0}; Initial Catalog={1}; Integrated Security=False;User Id={2};Password={3};MultipleActiveResultSets=True",
+            //    dbSource,
+            //    dbName,
+            //    userId,
+            //    pwd);
+
+            sb.AppendFormat("Data Source={0}; Initial Catalog={1}; User Id={2}; Password={3};",
                 dbSource,
                 dbName,
                 userId,
                 pwd);
+
+            return sb.ToString();
+        }
+
+        private static string BuildConnectionString(Dictionary<string, string> connectionParameters)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var kvp in connectionParameters)
+            {
+                sb.AppendFormat("{0}={1};", kvp.Key, kvp.Value);
+            }
 
             return sb.ToString();
         }

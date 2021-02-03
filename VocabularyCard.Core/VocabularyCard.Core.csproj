@@ -103,6 +103,8 @@
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\IService.cs" />
+    <Compile Include="Utils\AesHelper.cs" />
+    <Compile Include="Utils\CryptoUtility.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
