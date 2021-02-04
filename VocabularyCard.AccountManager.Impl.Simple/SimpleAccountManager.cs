@@ -7,6 +7,7 @@ using VocabularyCard.AccountManager.DTO;
 using VocabularyCard.AccountManager.Impl.Simple.Domain;
 using VocabularyCard.AccountManager.Impl.Simple.Persistence;
 using VocabularyCard.AccountManager.Impl.Simple.DTOConverter;
+using VocabularyCard.Core.Utils;
 
 namespace VocabularyCard.AccountManager.Impl.Simple
 {
@@ -38,6 +39,7 @@ namespace VocabularyCard.AccountManager.Impl.Simple
             
             simpleUser.UserId = newUserId;
             simpleUser.Flag = 1;
+            simpleUser.Password = HashHelper.ComputeSHA256Hash(string.Concat(simpleUser.Password, _salt));
 
             _simpleUserDao.Create(simpleUser);
         }
@@ -71,7 +73,7 @@ namespace VocabularyCard.AccountManager.Impl.Simple
                 return false;
             }
 
-            return (simpleUser.Password == password);
+            return (simpleUser.Password == HashHelper.ComputeSHA256Hash(string.Concat(password, _salt)));
         }
         public void UpdatePassword(string loginId, string oldPassword, string newPassword) 
         {
