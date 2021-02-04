@@ -105,6 +105,7 @@
     <Compile Include="Services\IService.cs" />
     <Compile Include="Utils\AesHelper.cs" />
     <Compile Include="Utils\CryptoUtility.cs" />
+    <Compile Include="Utils\HashHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

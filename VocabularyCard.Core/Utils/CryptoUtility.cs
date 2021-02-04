@@ -21,15 +21,11 @@ namespace VocabularyCard.Core.Utils
 
         private static byte[] GenerateKey(string input)
         {
-            SHA256CryptoServiceProvider sha256 = new SHA256CryptoServiceProvider();
-            byte[] sha256input = sha256.ComputeHash(Encoding.Unicode.GetBytes(input));
-            return sha256input;
+            return HashHelper.ComputeSHA256Hash(Encoding.Unicode.GetBytes(input));
         }
         private static byte[] GenerateIv(string input)
         {
-            MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
-            byte[] md5input = md5.ComputeHash(Encoding.Unicode.GetBytes(input));
-            return md5input;
+            return HashHelper.ComputeMD5Hash(Encoding.Unicode.GetBytes(input));
         }
     }
 }
