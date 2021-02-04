@@ -10,10 +10,15 @@
         aria-controls="navbarSupportedContent"
         aria-expanded="false"
         aria-label="Toggle navigation"
+        @click.prevent="toggleNavBar"
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div
+        class=" navbar-collapse"
+        id="navbarSupportedContent"
+        v-bind:class="[showNavBar]"
+      >
         <ul class="navbar-nav  mb-2 mb-lg-0">
           <!-- <li class="nav-item" v-if="isAuth">
             <router-link class="nav-link active" tag="a">Home</router-link>
@@ -107,6 +112,11 @@
 
 <script>
 export default {
+  data: function() {
+    return {
+      showNavBar: "collapse",
+    };
+  },
   computed: {
     isAuth: function() {
       return this.$store.getters.isAuthenticated;
@@ -115,6 +125,9 @@ export default {
   methods: {
     signOut: function() {
       this.$store.dispatch("logout");
+    },
+    toggleNavBar() {
+      this.showNavBar = this.showNavBar == "collapse" ? "" : "collapse";
     },
   },
 };
