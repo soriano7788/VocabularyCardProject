@@ -20,7 +20,7 @@ namespace VocabularyCard.Web
             // service
             builder.RegisterType<SimpleAccountManager>().As<IAccountManager>()
                 .InstancePerLifetimeScope()
-                .WithProperty("Salt", "123")
+                .WithProperty("Salt", "abc")
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(TransactionInterceptor));
 
