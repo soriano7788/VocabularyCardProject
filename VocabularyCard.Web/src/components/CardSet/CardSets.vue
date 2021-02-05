@@ -1,18 +1,18 @@
 <template>
   <div class="row justify-content-center">
     <!-- 這是 單字集 清單 -->
-    <h1>CardSets List</h1>
+    <h1 class="text-light">CardSets List</h1>
     <div class="d-grid gap-2 d-md-block">
       <button
         type="button"
-        class="btn btn-success btn-lg"
+        class="btn btn-secondary btn-lg"
         @click="showCreatedForm = !showCreatedForm"
       >
         新增單字集
       </button>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-3 px-4">
+    <div class="row row-cols-1 row-cols-md-2 g-3 px-4">
       <card-set
         v-for="cardSet in cardSets"
         v-bind:key="cardSet.Id"

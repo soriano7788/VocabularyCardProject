@@ -1,17 +1,19 @@
 <template>
-  <div id="app" class="container-fluid">
+  <div id="app" class="container-fluid bg-root">
     <app-header></app-header>
-    <div class="row">
-      <router-view></router-view>
-    </div>
-    <div v-if="showLoading" class="full-screem">
-      <div class="full-screem loading-mask"></div>
-      <div
-        class="spinner-border text-dark"
-        role="status"
-        style="height:5rem; width: 5rem;"
-      >
-        <span class="visually-hidden">Loading...</span>
+    <div class="container-fluid">
+      <div id="content" class="row p-5">
+        <router-view></router-view>
+      </div>
+      <div v-if="showLoading" class="full-screem">
+        <div class="full-screem loading-mask"></div>
+        <div
+          class="spinner-border text-dark"
+          role="status"
+          style="height:5rem; width: 5rem;"
+        >
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
     </div>
   </div>
@@ -47,9 +49,9 @@ export default {
         } else {
           // 假如早就已經在首頁了，這邊就不用特意再 route 一次，
           // 應該可以寫在 beforeRouteEnter
-          if (!this.$store.getters.isInRootPage) {
-            this.$router.push("/");
-          }
+          // if (!this.$store.getters.isInRootPage) {
+          //   this.$router.push("/");
+          // }
         }
       })
       .catch((error) => {
@@ -66,8 +68,16 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: white;
+  /* height: 100vh; */
+  bottom: 0;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 10px;
+}
+#content {
+  /* padding-left: 100px;
+  padding-right: 100px; */
 }
 .full-screem {
   position: absolute;
@@ -82,6 +92,27 @@ export default {
 .loading-mask {
   background-color: black;
   opacity: 0.25;
+}
+.bg-root {
+  background-color: #0e0e0f;
+}
+.bg-main {
+  background-color: #38444f;
+}
+.bg-create-panel {
+  background-color: #4e5a66;
+}
+.z-index-2000 {
+  z-index: 2000;
+}
+.z-index-3000 {
+  z-index: 3000;
+}
+.z-index-4000 {
+  z-index: 4000;
+}
+.z-index-5000 {
+  z-index: 5000;
 }
 /* .test:before {
   content: "";

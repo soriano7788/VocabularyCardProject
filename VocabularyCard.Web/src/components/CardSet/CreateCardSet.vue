@@ -1,10 +1,16 @@
 <template>
-  <div class="row text-start g-2 rounded shadow pt-4 bg-light bg-gradient">
+  <div
+    class="row text-start g-2 rounded shadow pt-4 bg-create-panel bg-gradient"
+  >
     <!-- <div class="col-md-5 "> -->
     <div class="row mb-3">
       <div class="col-11"></div>
       <div class="col-1">
-        <button type="button" class="btn-close" @click="closePanel"></button>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          @click="closePanel"
+        ></button>
       </div>
     </div>
     <div class="row mb-3">
@@ -36,7 +42,11 @@
     <div class="row mb-3">
       <div class="col-md-4"></div>
       <div class="col-md-8">
-        <button type="button" class="btn btn-success" @click="submitNewCardSet">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          @click="submitNewCardSet"
+        >
           送出
         </button>
       </div>

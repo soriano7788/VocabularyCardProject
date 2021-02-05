@@ -58,6 +58,10 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
     // 3. refresh_token 無效 (過期 或 不存在)
 
     const token = store.getters.token;
+
+
+    // 假如要直接使用 action 的 refreshAccessToken，
+    // 要確保最後的 resend request 得到的 response，能回到最開始的 request 的 then 或 catch 裡面
     return axiosAuth.post("GetAccessToken", JSON.stringify(token.refreshToken), { headers: { "Content-Type": "application/json" } })
       .then(res => {
         const result = res.data;

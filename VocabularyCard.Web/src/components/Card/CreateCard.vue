@@ -1,5 +1,5 @@
 <template>
-  <div class="card border p-3 mb-3">
+  <div class="card border p-3 mb-3 create-card-panel">
     <div class="row">
       <label for="card-set-name" class="col-form-label col-md-4">詞彙</label>
       <div class="col-md-8">
@@ -89,7 +89,16 @@ export default {
   mounted: function() {
     this.generateInterpretForm();
     // scroll to bottom
-    window.scrollTo(0, document.body.scrollHeight);
+    // window.scrollTo(0, document.body.scrollHeight);
   },
 };
 </script>
+
+<style scoped>
+.create-card-panel {
+  position: fixed;
+  top: 10%;
+  width: 50%;
+  /* padding: 50px; */
+}
+</style>

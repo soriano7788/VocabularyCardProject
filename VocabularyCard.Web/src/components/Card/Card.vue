@@ -1,6 +1,9 @@
 <template>
-  <div class="col-md-4">
-    <div class="card text-center shadow" style="cursor:pointer;">
+  <div class="">
+    <div
+      class="card text-center shadow bg-card text-white"
+      style="cursor:pointer;"
+    >
       <div class="card-body">
         <h1 class="card-title display-3">{{ card.Vocabulary }}</h1>
         <h6 class="card-subtitle">
@@ -31,3 +34,9 @@ export default {
   created: function() {},
 };
 </script>
+
+<style scoped>
+.bg-card {
+  background-color: #38444f;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <li class="list-group-item">
+  <li class="list-group-item bg-card-interpret">
     <span class="badge bg-success">
       {{ interpretation.PartOfSpeech | partOfSpeechToString }}
     </span>
@@ -37,6 +37,9 @@ export default {
 </script>
 
 <style scoped>
+.bg-card-interpret {
+  background-color: transparent;
+}
 .interpret-block {
   margin-top: 20px;
 }

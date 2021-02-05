@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-dark bg-header navbar-expand-lg">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Logo icon</a>
       <button
@@ -60,15 +60,7 @@
           >
             <a class="nav-link active" aria-current="page" href="#">Sign in</a>
           </router-link>
-          <li class="nav-item" v-if="isAuth">
-            <a
-              @click.prevent="signOut"
-              class="nav-link active"
-              aria-current="page"
-              href="#"
-              >Sign out</a
-            >
-          </li>
+
           <!-- <router-link
             to="/SignOut"
             class="nav-item"
@@ -80,6 +72,15 @@
           </router-link> -->
         </ul>
         <ul class="navbar-nav mb-2 mb-lg-0" v-if="isAuth">
+          <li class="nav-item" v-if="isAuth">
+            <a
+              @click.prevent="signOut"
+              class="nav-link active"
+              aria-current="page"
+              href="#"
+              >Sign out</a
+            >
+          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
@@ -132,3 +133,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bg-header {
+  background-color: #38444f;
+}
+</style>

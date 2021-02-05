@@ -3,7 +3,7 @@
     <router-link
       v-bind:to="{ name: 'CardSetCards', params: { cardSetId: cardSet.Id } }"
       tag="div"
-      class="cardset card text-center shadow"
+      class="cardset card text-center shadow bg-cardset text-white"
     >
       <!-- <div class="card" style="width: 18rem;"> -->
       <h3 class="card-header">{{ cardSet.DisplayName }}</h3>
@@ -11,7 +11,7 @@
         <!-- <h5 class="card-title">{{ cardSet.DisplayName }}</h5> -->
         <p class="card-text">{{ cardSet.Description }}</p>
         <p class="card-text">
-          <small class="text-muted">Last updated 3 mins ago</small>
+          <small class="text-light">Last updated 3 mins ago</small>
         </p>
       </div>
       <!-- </div> -->
@@ -32,6 +32,9 @@ export default {
   cursor: pointer;
 }
 .cardset:hover {
-  border-width: 3px;
+  /* border-width: 3px; */
+}
+.bg-cardset {
+  background-color: #38444f;
 }
 </style>

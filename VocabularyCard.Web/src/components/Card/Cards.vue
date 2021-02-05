@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="d-grid gap-2 d-md-block">
-      <span>{{ cardSetName }}</span>
+      <h1>{{ cardSetName }}</h1>
       <button
         class="btn btn-primary btn-sm position-fixed"
         @click="createCard"
