@@ -24,6 +24,7 @@
         v-for="card in cards"
         v-bind:key="card.Id"
         v-bind:card="card"
+        @showEditCard="editCard($event)"
       ></card>
     </div>
     <div v-if="showCreateCardForm" class="mt-3 row justify-content-center">
@@ -34,23 +35,33 @@
         ></create-card>
       </div>
     </div>
+    <div v-if="showEditCardForm" class="mt-3 row justify-content-center">
+      <edit-card
+        :card="currentEditCard"
+        @closeEditPanel="showEditCardForm = false"
+      ></edit-card>
+    </div>
   </div>
 </template>
 
 <script>
 import Card from "./Card.vue";
 import CreateCard from "./CreateCard.vue";
+import EditCard from "./EditCard.vue";
 
 export default {
   props: ["cardSet"],
   components: {
     card: Card,
     createCard: CreateCard,
+    editCard: EditCard,
   },
   data: function() {
     return {
       mode: "card", // card or paper
       showCreateCardForm: false,
+      showEditCardForm: false,
+      currentEditCard: null,
     };
   },
   computed: {
@@ -63,6 +74,9 @@ export default {
     cardSetName: function() {
       return this.$store.getters.currentCardSetName;
     },
+    editedCard: function() {
+      this.$store.getters.cards.find();
+    },
   },
   methods: {
     removeCardSet: function() {
@@ -72,6 +86,20 @@ export default {
     },
     createCard: function() {
       this.showCreateCardForm = !this.showCreateCardForm;
+    },
+    editCard: function(card) {
+      this.currentEditCard = this.generateCloneCard(card);
+      this.showEditCardForm = true;
+    },
+    generateCloneCard: function(card) {
+      const cloneCard = Object.assign({}, card);
+      const cloneInterprets = [];
+      for (let i = 0; i < cloneCard.Interpretations.length; i++) {
+        const cloneInterpret = Object.assign({}, cloneCard.Interpretations[i]);
+        cloneInterprets.push(cloneInterpret);
+      }
+      cloneCard.Interpretations = cloneInterprets;
+      return cloneCard;
     },
   },
   created: function() {

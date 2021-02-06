@@ -38,7 +38,9 @@ export default {
     };
   },
   methods: {
-    editCard() {},
+    editCard() {
+      this.$emit("showEditCard", this.card);
+    },
     flipCard() {
       this.face = this.face == "front" ? "back" : "front";
     },

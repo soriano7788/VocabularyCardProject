@@ -8,7 +8,7 @@
       <div v-if="showLoading" class="full-screem">
         <div class="full-screem loading-mask"></div>
         <div
-          class="spinner-border text-dark"
+          class="spinner-border text-white"
           role="status"
           style="height:5rem; width: 5rem;"
         >
@@ -69,7 +69,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: white;
-  /* height: 100vh; */
+  height: 100vh;
   bottom: 0;
   padding-left: 0px;
   padding-right: 0px;

@@ -1,8 +1,15 @@
 <template>
-  <div class="bg-dark pt-3 mt-3">
+  <div class="row bg-create-panel pt-3 mt-3 mb-3">
+    <div class="row justify-content-end pb-3">
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        @click="removeInterpret(interpret.Id)"
+      ></button>
+    </div>
     <div class="row mb-3">
-      <label for="part-of-speech" class="col-form-label col-md-4">詞性</label>
-      <div class="col-md-8">
+      <label for="part-of-speech" class="form-label col-sm-2">詞性</label>
+      <div id="part-of-speech" class="col-sm-10">
         <select
           name=""
           id="part-of-speech"
@@ -20,10 +27,9 @@
         </select>
       </div>
     </div>
-
     <div class="row mb-3">
-      <label for="phonetic-symbol" class="col-form-label col-md-4">音標</label>
-      <div class="col-md-8">
+      <label for="phonetic-symbol" class="form-label col-sm-2">音標</label>
+      <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
@@ -32,10 +38,9 @@
         />
       </div>
     </div>
-
     <div class="row mb-3">
-      <label for="interpret" class="col-form-label col-md-4">解釋</label>
-      <div class="col-md-8">
+      <label for="interpret" class="form-label col-sm-2">解釋</label>
+      <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
@@ -44,10 +49,9 @@
         />
       </div>
     </div>
-
     <div class="row mb-3">
-      <label for="example-sentence" class="col-form-label col-md-4">例句</label>
-      <div class="col-md-8">
+      <label for="" class="form-label col-sm-2">例句</label>
+      <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
@@ -56,12 +60,11 @@
         />
       </div>
     </div>
-
     <div class="row mb-3">
-      <label for="example-sentence-explanation" class="col-form-label col-md-4"
+      <label for="example-sentence-explanation" class="col-form-label col-sm-2"
         >例句說明</label
       >
-      <div class="col-md-8">
+      <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
@@ -78,9 +81,17 @@ import PartOfSpeech from "../../constants/PartOfSpeech.js";
 
 export default {
   props: ["interpret"],
+  data() {
+    return {};
+  },
   computed: {
     partOfSpeechList: function() {
       return PartOfSpeech;
+    },
+  },
+  methods: {
+    removeInterpret(interpretId) {
+      this.$emit("removeInterpretById", interpretId);
     },
   },
 };

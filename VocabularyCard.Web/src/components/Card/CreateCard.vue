@@ -1,7 +1,7 @@
 <template>
-  <div class="card border p-3 mb-3 create-card-panel">
+  <div class="card border p-3 mb-3 create-card-panel bg-dark">
     <div class="row">
-      <label for="card-set-name" class="col-form-label col-md-4">詞彙</label>
+      <label for="vocabulary" class="col-form-label col-md-4">詞彙</label>
       <div class="col-md-8">
         <input
           type="text"
@@ -20,7 +20,7 @@
       </create-interpretation>
     </div>
     <div class="row">
-      <button class="btn btn-primary" @click="submitNewCard">送出</button>
+      <button class="btn btn-secondary" @click="submitNewCard">送出</button>
     </div>
   </div>
 </template>
