@@ -84,6 +84,57 @@ namespace VocabularyCard.Services.Impl
 
             return _cardConverter.ToDataTransferObject(newCard);
         }
+        public CardDto UpdateCard(UserInfo user, CardDto modifiedCardDto)
+        {
+            Card originalCard = _cardRepository.GetByCardId(modifiedCardDto.Id);
+            CardDto originalCardDto = _cardConverter.ToDataTransferObject(originalCard);
+
+            //Card modifiedCard = _cardConverter.ToEntity(modifiedCardDto);
+
+            // 比對就以 dto 的狀態來進行吧
+            // CardInterpretaion 也加上 State 來處理 Remove 吧。
+            // 因為誤刪的話很麻煩
+
+
+            // 要加上一次 新增、刪除、修改 多筆 Interpretations 的 sql 操作
+
+
+            // 這裡要手動 unitOfWork Commit
+            // commit 後再轉回 dto return
+            // 就算轉換過程 exception 也還不是大問題
+
+            CardInterpretationDto[] newInterprets = FilterNewInterpretations(modifiedCardDto.Interpretations);
+            CardInterpretationDto[] modifiedInterprets = FilterModifiedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
+            CardInterpretationDto[] removedInterprets = FilterRemovedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(Environment.NewLine);
+            sb.AppendFormat("New{0}", Environment.NewLine);
+            foreach(var i in newInterprets)
+            {
+                sb.AppendFormat("解釋: {0}{1}", i.Interpretation, Environment.NewLine);
+            }
+            sb.Append(Environment.NewLine);
+
+            sb.AppendFormat("Modified{0}", Environment.NewLine);
+            foreach (var i in modifiedInterprets)
+            {
+                sb.AppendFormat("解釋: {0}{1}", i.Interpretation, Environment.NewLine);
+            }
+            sb.Append(Environment.NewLine);
+
+            sb.AppendFormat("Removed{0}", Environment.NewLine);
+            foreach (var i in removedInterprets)
+            {
+                sb.AppendFormat("解釋: {0}{1}", i.Interpretation, Environment.NewLine);
+            }
+            sb.Append(Environment.NewLine);
+
+
+            LogUtility.DebugLog(sb.ToString());
+
+            return modifiedCardDto;
+        }
 
         public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)
         {
@@ -120,6 +171,25 @@ namespace VocabularyCard.Services.Impl
             //_cardConverter.ToDataTransferObjects(cards.ToArray());
 
             //return _cardConverter.ToDataTransferObjects(cards.ToArray());
+        }
+
+
+        private CardInterpretationDto[] FilterNewInterpretations(CardInterpretationDto[] modifiedInterpretations)
+        {
+            // modified id is 0
+            return modifiedInterpretations.Where(i => i.Id == 0).ToArray();
+        }
+        private CardInterpretationDto[] FilterModifiedInterpretations(CardInterpretationDto[] originalInterpretations, CardInterpretationDto[] modifiedInterpretations)
+        {
+            // both origin and modified exist
+            return modifiedInterpretations.Where(m => m.Id != 0 && originalInterpretations.Count(o => o.Id == m.Id) == 1).ToArray();
+        }
+        private CardInterpretationDto[] FilterRemovedInterpretations(CardInterpretationDto[] originalInterpretations, CardInterpretationDto[] modifiedInterpretations)
+        {
+            // origin not exist, but modified exist
+            return originalInterpretations.Where(o => modifiedInterpretations.Count(m => m.Id == o.Id) == 0).ToArray();
+
+            //return modifiedInterpretations.Where(m => m.Id != 0 && originalInterpretations.Count(o => o.Id == m.Id) == 0).ToArray();
         }
     }
 }

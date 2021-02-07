@@ -15,6 +15,7 @@ namespace VocabularyCard.Services
         CardDto GetById(int cardId, bool containDetail);
         CardInterpretationDto[] GetCardInterpretations(int cardId);
         CardDto CreateCard(UserInfo user, int cardSetId, CardDto cardDto);
+        CardDto UpdateCard(UserInfo user, CardDto cardDto);
 
         CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId);
     }

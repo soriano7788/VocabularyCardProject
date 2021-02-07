@@ -26,6 +26,14 @@ namespace VocabularyCard.Web.Api
             return _cardService.CreateCard(user, cardSetId, cardDto);
         }
 
+        [Route("api/card/update/")]
+        [HttpPut]
+        public CardDto Update([FromBody] CardDto cardDto)
+        {
+            UserInfo user = Util.WebUtility.GetCurrentUser();
+            return _cardService.UpdateCard(user, cardDto);
+        }
+
         [Route("api/card/GetByCardSetId/{cardSetId}")]
         [HttpGet]
         public CardDto[] GetCardsByCardSetId(int cardSetId)

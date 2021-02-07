@@ -35,7 +35,9 @@
       </button>
     </div>
     <div class="row">
-      <button class="btn btn-secondary" @click="submitNewCard">送出</button>
+      <button class="btn btn-secondary" @click="submitModifiedCard">
+        送出
+      </button>
     </div>
   </div>
 </template>
@@ -54,7 +56,7 @@ export default {
     },
     addNewInterpret() {
       const interpret = {
-        Id: "t" + Date.now(),
+        Id: -1 * Date.now(),
         PartOfSpeech: 0,
         PhoneticSymbol: "",
         Interpretation: "",
@@ -69,16 +71,35 @@ export default {
       if (index == -1) {
         return;
       }
+      this.card.Interpretations.splice(index, 1);
     },
     getIndexOfInterpretById(interpretId) {
-      for (let i = 0; i < card.Interpretations.length; i++) {
-        if (card.Interpretations[i].Id == interpretId) {
+      for (let i = 0; i < this.card.Interpretations.length; i++) {
+        if (this.card.Interpretations[i].Id == interpretId) {
           return i;
         }
       }
       return -1;
     },
-    submitNewCard() {},
+    submitModifiedCard() {
+      this.markNewInterprets();
+      console.log("submitModifiedCard: ", JSON.stringify(this.card));
+      const promise = this.$store.dispatch("updateCard", this.card);
+      promise
+        .then(() => {
+          this.closePanel();
+        })
+        .catch(() => {
+          alert("update card fail");
+        });
+    },
+    markNewInterprets() {
+      for (let i = 0; i < this.card.Interpretations.length; i++) {
+        if (this.card.Interpretations[i].Id < 0) {
+          this.card.Interpretations[i].Id = 0;
+        }
+      }
+    },
   },
 };
 </script>

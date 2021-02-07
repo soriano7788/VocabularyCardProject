@@ -39,7 +39,6 @@ const actions = {
         commit("setCards", []);
     },
     createCard: ({ commit }, payload) => {
-        console.log(payload);
         axios.post("card/create/" + payload.cardSetId, payload.card)
             .then(res => {
                 const result = res.data;
@@ -50,6 +49,20 @@ const actions = {
             })
             .catch(error => {
                 console.log(error);
+            });
+    },
+    updateCard: ({ commit }, card) => {
+        return axios.put("card/update", card)
+            .then(res => {
+                const result = res.data;
+                if (result.statusCode == statusCode.SUCCESS) {
+                    // 還需要更新目前 state 裡面的 Card 資料
+
+                    Promise.resolve();
+                }
+
+            }).catch(error => {
+                Promise.reject();
             });
     }
 }
