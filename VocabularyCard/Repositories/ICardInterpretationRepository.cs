@@ -11,5 +11,9 @@ namespace VocabularyCard.Repositories
     public interface ICardInterpretationRepository : IRepository<CardInterpretation>
     {
         IList<CardInterpretation> GetByCardId(int cardId);
+
+        void CreateInterpretations(CardInterpretation[] interpretations);
+
+        void UpdateMany(CardInterpretation[] interpretations);
     }
 }

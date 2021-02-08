@@ -34,6 +34,8 @@ namespace VocabularyCard.Entities
 
         public string ExampleSentenceExplanation { get; set; }
 
+        public CardInterpretationState State { get; set; }
+
         public int CardId { get; set; }
 
         public Card Card { get; set; }

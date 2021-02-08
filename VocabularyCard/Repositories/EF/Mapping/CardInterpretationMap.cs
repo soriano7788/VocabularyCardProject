@@ -26,6 +26,7 @@ namespace VocabularyCard.Repositories.EF.Mapping
             this.Property(c => c.Interpretation).IsRequired().HasColumnName("INTERPRETATION").HasMaxLength(255);
             this.Property(c => c.ExampleSentence).IsRequired().HasColumnName("EXAMPLE_SENTENCE");
             this.Property(c => c.ExampleSentenceExplanation).IsRequired().HasColumnName("EXAMPLE_SENTENCE_EXPLANATION");
+            this.Property(c => c.State).IsRequired().HasColumnName("STATE").HasColumnType("tinyint");
             this.Property(c => c.CardId).IsRequired().HasColumnName("CARD_ID");
 
             this.HasRequired<Card>(ci => ci.Card)

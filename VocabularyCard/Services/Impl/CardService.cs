@@ -103,14 +103,43 @@ namespace VocabularyCard.Services.Impl
             // commit 後再轉回 dto return
             // 就算轉換過程 exception 也還不是大問題
 
-            CardInterpretationDto[] newInterprets = FilterNewInterpretations(modifiedCardDto.Interpretations);
-            CardInterpretationDto[] modifiedInterprets = FilterModifiedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
-            CardInterpretationDto[] removedInterprets = FilterRemovedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
+            if(originalCard.Vocabulary.Trim() != originalCardDto.Vocabulary.Trim())
+            {
+                originalCard.Vocabulary = originalCardDto.Vocabulary.Trim();
+                _cardRepository.Update(originalCard);
+            }
 
+
+            #region add interprets
+            CardInterpretationDto[] newInterprets = FilterNewInterpretations(modifiedCardDto.Interpretations);
+            foreach(CardInterpretationDto interpret in newInterprets)
+            {
+                interpret.CardId = originalCard.CardId;
+            }
+            CardInterpretation[] newInterpretEntities = _cardInterpretationConverter.ToEntities(newInterprets);
+            _cardInterpretationRepository.CreateMany(newInterpretEntities);
+            #endregion
+
+            #region modified interprets
+            CardInterpretationDto[] modifiedInterprets = FilterModifiedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
+            foreach (CardInterpretationDto interpret in modifiedInterprets)
+            {
+            }
+            #endregion
+
+            #region remove interprets
+            CardInterpretationDto[] removedInterprets = FilterRemovedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
+            foreach (CardInterpretationDto interpret in removedInterprets)
+            {
+                interpret.State = CardInterpretationState.Removed;
+            }
+            #endregion
+
+            #region [Debug]
             StringBuilder sb = new StringBuilder();
             sb.Append(Environment.NewLine);
             sb.AppendFormat("New{0}", Environment.NewLine);
-            foreach(var i in newInterprets)
+            foreach (var i in newInterprets)
             {
                 sb.AppendFormat("解釋: {0}{1}", i.Interpretation, Environment.NewLine);
             }
@@ -130,8 +159,10 @@ namespace VocabularyCard.Services.Impl
             }
             sb.Append(Environment.NewLine);
 
-
             LogUtility.DebugLog(sb.ToString());
+            #endregion
+
+            //UnitOfWork.Save();
 
             return modifiedCardDto;
         }
@@ -182,7 +213,26 @@ namespace VocabularyCard.Services.Impl
         private CardInterpretationDto[] FilterModifiedInterpretations(CardInterpretationDto[] originalInterpretations, CardInterpretationDto[] modifiedInterpretations)
         {
             // both origin and modified exist
-            return modifiedInterpretations.Where(m => m.Id != 0 && originalInterpretations.Count(o => o.Id == m.Id) == 1).ToArray();
+            // 其實也不用先過濾出同 ID 的
+            //var modifiedSameIds = modifiedInterpretations.Where(m => m.Id != 0 && originalInterpretations.Count(o => o.Id == m.Id) == 1);
+
+            List<CardInterpretationDto> modifiedList = new List<CardInterpretationDto>();
+            // IEnumerable 和 Array、 ArrayList、List 在 Count() 等等 methods 操作上有何差異?
+            foreach(CardInterpretationDto modified in modifiedInterpretations)
+            {
+                foreach(CardInterpretationDto origin in originalInterpretations)
+                {
+                    if(modified.Id == origin.Id)
+                    {
+                        if(IsEqualInterpretation(modified,origin))
+                        {
+                            modifiedList.Add(modified);
+                        }
+                        break;
+                    }
+                }
+            }
+            return modifiedList.ToArray();
         }
         private CardInterpretationDto[] FilterRemovedInterpretations(CardInterpretationDto[] originalInterpretations, CardInterpretationDto[] modifiedInterpretations)
         {
@@ -191,5 +241,39 @@ namespace VocabularyCard.Services.Impl
 
             //return modifiedInterpretations.Where(m => m.Id != 0 && originalInterpretations.Count(o => o.Id == m.Id) == 0).ToArray();
         }
+
+        /// <summary>
+        /// 比對兩個 Interpretation
+        /// </summary>
+        /// <returns></returns>
+        private bool IsEqualInterpretation(CardInterpretationDto a , CardInterpretationDto b)
+        {
+            // 只比對以下 5 項
+            // PartOfSpeech
+            // PhoneticSymbol
+            // Interpretation
+            // ExampleSentence
+            // ExampleSentenceExplanation
+
+            if (a.PartOfSpeech != b.PartOfSpeech)
+                return false;
+
+            if (a.PhoneticSymbol != b.PhoneticSymbol)
+                return false;
+
+            if (a.Interpretation != b.Interpretation)
+                return false;
+
+            if (a.ExampleSentence != b.ExampleSentence)
+                return false;
+
+            if (a.ExampleSentenceExplanation != b.ExampleSentenceExplanation)
+                return false;
+
+            return true;
+        }
+
+
+
     }
 }

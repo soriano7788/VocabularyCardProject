@@ -33,6 +33,10 @@ namespace VocabularyCard.Dtos
 
         public string ExampleSentenceExplanation { get; set; }
 
+        public CardInterpretationState State { get; set; }
+
+        public int CardId { get; set; }
+
         public CardDto Card { get; set; }
     }
 }

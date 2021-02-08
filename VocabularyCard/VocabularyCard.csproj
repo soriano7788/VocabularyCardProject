@@ -122,6 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\CardInterpretationState.cs" />
     <Compile Include="Constants\CardSetState.cs" />
     <Compile Include="Constants\CardState.cs" />
     <Compile Include="Constants\PartOfSpeech.cs" />

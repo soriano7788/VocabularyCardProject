@@ -24,7 +24,28 @@ namespace VocabularyCard.Repositories.EF
 
             // 使用 Include 的話，就會變成 eager loading
             // 參考 https://www.entityframeworktutorial.net/eager-loading-in-entity-framework.aspx
-            return _cards.Where(c => c.CardId == cardId && c.State == CardState.Active).Include(c => c.Interpretations).First();
+            //return _cards.Where(c => c.CardId == cardId && c.State == CardState.Active)
+            //    .Include(c => c.Interpretations).First();
+
+            //return _cards.Where(c => c.CardId == cardId && c.State == CardState.Active)
+            //    .Where(c => c.Interpretations.Any(interpret => interpret.State == CardInterpretationState.Active))
+            //    .Select(c => new Card
+            //    {
+            //        Interpretations = c.Interpretations.Where(interpret => interpret.State == CardInterpretationState.Active).ToList()
+            //    }).First();
+
+            return _cards.Where(c => c.CardId == cardId && c.State == CardState.Active)
+                .Select(c => new
+                {
+                    c,
+                    Interprtations = c.Interpretations.Where(interpret => interpret.State == CardInterpretationState.Active)
+                })
+                .AsEnumerable()
+                .Select(x => x.c)
+                .First();
+
+            //return _cards.Where(c => c.CardId == cardId && c.State == CardState.Active)
+            //    .Include(c => c.Interpretations).First();
         }
 
         public IList<Card> GetByCardSetId(int cardSetId)
@@ -38,11 +59,27 @@ namespace VocabularyCard.Repositories.EF
 
             // todo: 假如我想要同時，把 Card 的 Interpretation 抓出來，這樣的查詢夠嗎?
             // 是否應該讓 Card 和 CardInterpretation 永遠綁一起較好???
-            IQueryable<Card> query = from c in _cards.Include(c => c.Interpretations)
-                                     where c.CardSets.Any(cs => cs.CardSetId == cardSetId && cs.State == CardSetState.Active)
-                                     select c;
 
-            return query.ToList();
+            //IQueryable<Card> query = from c in _cards.Include(c => c.Interpretations)
+            //                         where c.CardSets.Any(cs => cs.CardSetId == cardSetId && cs.State == CardSetState.Active) 
+            //                         && c.Interpretations.Any(i => i.State == CardInterpretationState.Active)
+            //                         select c;
+
+            //IQueryable<Card> query = from c in _cards.Include(c => c.Interpretations)
+            //                         where c.CardSets.Any(cs => cs.CardSetId == cardSetId && cs.State == CardSetState.Active)
+            //                         select c;
+
+            return _cards.Where(c => c.CardSets.Any(cs => cs.CardSetId == cardSetId) && c.State == CardState.Active)
+                .Select(c => new
+                {
+                    c,
+                    Interprtations = c.Interpretations.Where(interpret => interpret.State == CardInterpretationState.Active)
+                })
+                .AsEnumerable()
+                .Select(x => x.c).ToList();
+
+
+            //return query.ToList();
         }
     }
 }

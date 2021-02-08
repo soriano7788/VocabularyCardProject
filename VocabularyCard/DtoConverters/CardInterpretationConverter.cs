@@ -19,6 +19,8 @@ namespace VocabularyCard.DtoConverters
             entity.Interpretation = dto.Interpretation;
             entity.ExampleSentence = dto.ExampleSentence;
             entity.ExampleSentenceExplanation = dto.ExampleSentenceExplanation;
+            entity.State = dto.State;
+            entity.CardId = dto.CardId;
 
             return entity;
         }
@@ -31,6 +33,8 @@ namespace VocabularyCard.DtoConverters
             dto.Interpretation = entity.Interpretation;
             dto.ExampleSentence = entity.ExampleSentence;
             dto.ExampleSentenceExplanation = entity.ExampleSentenceExplanation;
+            dto.State = entity.State;
+            dto.CardId = entity.CardId;
 
             return dto;
         }

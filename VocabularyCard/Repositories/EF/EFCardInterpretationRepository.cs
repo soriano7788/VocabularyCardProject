@@ -23,5 +23,15 @@ namespace VocabularyCard.Repositories.EF
             return _interpretations.Where(ci => ci.CardId == cardId).ToList();
         }
 
+        public void CreateInterpretations(CardInterpretation[] interpretations)
+        {
+            (_interpretations as DbSet<CardInterpretation>).AddRange(interpretations);
+        }
+
+        public void UpdateMany(CardInterpretation[] interpretations)
+        {
+            //_interpretations.
+        }
+
     }
 }

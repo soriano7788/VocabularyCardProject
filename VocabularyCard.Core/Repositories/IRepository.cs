@@ -12,6 +12,7 @@ namespace VocabularyCard.Core.Repositories
     {
 
         T Create(T entity);
+        T[] CreateMany(T[] entities);
         T Update(T entity);
         IList<T> GetAll();
         T Read(Expression<Func<T, bool>> predicate);

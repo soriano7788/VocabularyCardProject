@@ -26,6 +26,11 @@ namespace VocabularyCard.Core.EF
             return _entitySet.Add(entity);
         }
 
+        public TEntity[] CreateMany(TEntity[] entities)
+        {
+            return (_entitySet as DbSet<TEntity>).AddRange(entities).ToArray();
+        }
+
         public IList<TEntity> GetAll()
         {
             return _entitySet.ToList();
