@@ -69,7 +69,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: white;
-  height: 100vh;
+  min-height: 100vh;
   bottom: 0;
   padding-left: 0px;
   padding-right: 0px;
