@@ -103,9 +103,12 @@ namespace VocabularyCard.Services.Impl
             // commit 後再轉回 dto return
             // 就算轉換過程 exception 也還不是大問題
 
-            if(originalCard.Vocabulary.Trim() != originalCardDto.Vocabulary.Trim())
+            if(modifiedCardDto.Vocabulary.Trim() != originalCardDto.Vocabulary.Trim())
             {
-                originalCard.Vocabulary = originalCardDto.Vocabulary.Trim();
+                LogUtility.DebugLog("update card vocabulary");
+                originalCard.Vocabulary = modifiedCardDto.Vocabulary.Trim();
+                originalCard.Modifier = user.UserId;
+                originalCard.ModifiedDateTime = DateTime.UtcNow;
                 _cardRepository.Update(originalCard);
             }
 
@@ -160,9 +163,10 @@ namespace VocabularyCard.Services.Impl
             LogUtility.DebugLog(sb.ToString());
             #endregion
 
-            //UnitOfWork.Save();
+            UnitOfWork.Save();
 
-            return modifiedCardDto;
+            Card card = _cardRepository.GetByCardId(modifiedCardDto.Id);
+            return _cardConverter.ToDataTransferObject(card);
         }
 
         public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)

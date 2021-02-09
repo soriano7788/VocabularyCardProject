@@ -192,7 +192,7 @@ namespace VocabularyCard.Web
             builder.RegisterType(typeof(TransactionInterceptor))
                 .WithProperty("TransactionMethodsPrefix", new string[] { "Create", "Update", "Delete" })
                 .WithProperty("TransactionMethods", new string[] { "ValidateUser" })
-                .WithProperty("IgnoreTransactionMethods", new string[] { "CreateCard" });
+                .WithProperty("IgnoreTransactionMethods", new string[] { "CreateCard", "UpdateCard" });
 
             // authentication 相關
             builder.RegisterType<ApiRefreshTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();

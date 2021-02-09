@@ -8,11 +8,13 @@
       ></button>
     </div>
     <div class="row mb-3">
-      <label for="part-of-speech" class="form-label col-sm-2">詞性</label>
-      <div id="part-of-speech" class="col-sm-10">
+      <label :for="'part-of-speech-' + interpret.Id" class="form-label col-sm-2"
+        >詞性</label
+      >
+      <div :id="'part-of-speech-' + interpret.Id" class="col-sm-10">
         <select
           name=""
-          id="part-of-speech"
+          :id="'part-of-speech-' + interpret.Id"
           class="form-select"
           v-model="interpret.PartOfSpeech"
         >
@@ -28,47 +30,59 @@
       </div>
     </div>
     <div class="row mb-3">
-      <label for="phonetic-symbol" class="form-label col-sm-2">音標</label>
+      <label
+        :for="'phonetic-symbol-' + interpret.Id"
+        class="form-label col-sm-2"
+        >音標</label
+      >
       <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
-          id="phonetic-symbol"
+          :id="'phonetic-symbol-' + interpret.Id"
           v-model="interpret.PhoneticSymbol"
         />
       </div>
     </div>
     <div class="row mb-3">
-      <label for="interpret" class="form-label col-sm-2">解釋</label>
+      <label :for="'interpret-' + interpret.Id" class="form-label col-sm-2"
+        >解釋</label
+      >
       <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
-          id="interpret"
+          :id="'interpret-' + interpret.Id"
           v-model="interpret.Interpretation"
         />
       </div>
     </div>
     <div class="row mb-3">
-      <label for="" class="form-label col-sm-2">例句</label>
+      <label
+        :for="'example-sentence-' + interpret.Id"
+        class="form-label col-sm-2"
+        >例句</label
+      >
       <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
-          id="example-sentence"
+          :id="'example-sentence-' + interpret.Id"
           v-model="interpret.ExampleSentence"
         />
       </div>
     </div>
     <div class="row mb-3">
-      <label for="example-sentence-explanation" class="col-form-label col-sm-2"
+      <label
+        :for="'example-sentence-explanation-' + interpret.Id"
+        class="col-form-label col-sm-2"
         >例句說明</label
       >
       <div class="col-sm-10">
         <input
           type="text"
           class="form-control"
-          id="example-sentence-explanation"
+          :id="'example-sentence-explanation-' + interpret.Id"
           v-model="interpret.ExampleSentenceExplanation"
         />
       </div>

@@ -12,10 +12,12 @@ namespace VocabularyCard.Repositories.EF
 {
     public class EFCardRepository : EFBaseRepository<Card>, ICardRepository
     {
+        private IDbContext _context;
         private IDbSet<Card> _cards;
 
         public EFCardRepository(IDbContext context) : base(context)
         {
+            _context = context;
             _cards = context.Set<Card>();
         }
         public Card GetByCardId(int cardId)
@@ -80,6 +82,13 @@ namespace VocabularyCard.Repositories.EF
 
 
             //return query.ToList();
+        }
+
+        public override Card Update(Card card)
+        {
+            Card entity = _cards.Find(card.CardId);
+            _context.Entry(entity).CurrentValues.SetValues(card);
+            return card;
         }
     }
 }
