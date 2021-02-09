@@ -122,17 +122,15 @@ namespace VocabularyCard.Services.Impl
 
             #region modified interprets
             CardInterpretationDto[] modifiedInterprets = FilterModifiedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
-            foreach (CardInterpretationDto interpret in modifiedInterprets)
-            {
-            }
+            CardInterpretation[] cardInterpretEntities = _cardInterpretationConverter.ToEntities(modifiedInterprets);
+            _cardInterpretationRepository.UpdateMany(cardInterpretEntities);
             #endregion
 
             #region remove interprets
             CardInterpretationDto[] removedInterprets = FilterRemovedInterpretations(originalCardDto.Interpretations, modifiedCardDto.Interpretations);
-            foreach (CardInterpretationDto interpret in removedInterprets)
-            {
-                interpret.State = CardInterpretationState.Removed;
-            }
+            int[] removedIds = removedInterprets.Select(i => i.Id).ToArray();
+
+            _cardInterpretationRepository.RemoveMany(removedIds);
             #endregion
 
             #region [Debug]
@@ -210,7 +208,10 @@ namespace VocabularyCard.Services.Impl
             // modified id is 0
             return modifiedInterpretations.Where(i => i.Id == 0).ToArray();
         }
-        private CardInterpretationDto[] FilterModifiedInterpretations(CardInterpretationDto[] originalInterpretations, CardInterpretationDto[] modifiedInterpretations)
+
+        private CardInterpretationDto[] FilterModifiedInterpretations(
+            CardInterpretationDto[] originalInterpretations, 
+            CardInterpretationDto[] modifiedInterpretations)
         {
             // both origin and modified exist
             // 其實也不用先過濾出同 ID 的
@@ -224,7 +225,7 @@ namespace VocabularyCard.Services.Impl
                 {
                     if(modified.Id == origin.Id)
                     {
-                        if(IsEqualInterpretation(modified,origin))
+                        if(!IsEqualInterpretation(modified, origin))
                         {
                             modifiedList.Add(modified);
                         }
@@ -234,6 +235,7 @@ namespace VocabularyCard.Services.Impl
             }
             return modifiedList.ToArray();
         }
+
         private CardInterpretationDto[] FilterRemovedInterpretations(CardInterpretationDto[] originalInterpretations, CardInterpretationDto[] modifiedInterpretations)
         {
             // origin not exist, but modified exist

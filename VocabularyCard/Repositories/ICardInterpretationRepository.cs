@@ -15,5 +15,7 @@ namespace VocabularyCard.Repositories
         void CreateInterpretations(CardInterpretation[] interpretations);
 
         void UpdateMany(CardInterpretation[] interpretations);
+
+        void RemoveMany(int[] interpretationIds);
     }
 }
