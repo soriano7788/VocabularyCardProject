@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.0",
     "vue": "^2.5.11",
+    "vue-i18n": "^8.22.4",
     "vue-router": "^3.4.9",
     "vuex": "^3.6.0"
   },

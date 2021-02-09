@@ -31,7 +31,9 @@
             tag="li"
             v-if="isAuth"
           >
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="#">
+              {{ $t("COMMON.HOME") }}
+            </a>
           </router-link>
           <router-link
             to="/CardSets"
@@ -40,7 +42,9 @@
             tag="li"
             v-if="isAuth"
           >
-            <a class="nav-link active" aria-current="page" href="#">CardSets</a>
+            <a class="nav-link active" aria-current="page" href="#">{{
+              $t("COMMON.CARD_SETS")
+            }}</a>
           </router-link>
           <router-link
             to="/Register"
@@ -49,7 +53,9 @@
             tag="li"
             v-if="!isAuth"
           >
-            <a class="nav-link active" aria-current="page" href="#">Register</a>
+            <a class="nav-link active" aria-current="page" href="#">{{
+              $t("AUTH.REGISTER")
+            }}</a>
           </router-link>
           <router-link
             to="/SignIn"
@@ -58,7 +64,9 @@
             tag="li"
             v-if="!isAuth"
           >
-            <a class="nav-link active" aria-current="page" href="#">Sign in</a>
+            <a class="nav-link active" aria-current="page" href="#">{{
+              $t("AUTH.SIGN_IN")
+            }}</a>
           </router-link>
 
           <!-- <router-link
@@ -78,7 +86,7 @@
               class="nav-link active"
               aria-current="page"
               href="#"
-              >Sign out</a
+              >{{ $t("AUTH.SIGN_OUT") }}</a
             >
           </li>
           <li class="nav-item dropdown">

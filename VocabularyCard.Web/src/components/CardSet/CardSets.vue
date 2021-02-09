@@ -1,7 +1,7 @@
 <template>
   <div class="row justify-content-center">
     <!-- 這是 單字集 清單 -->
-    <h1 class="text-light">CardSets List</h1>
+    <h1 class="text-light">{{ $t("COMMON.CARD_SETS") }}</h1>
     <div class="d-grid gap-2 d-md-block">
       <button
         type="button"

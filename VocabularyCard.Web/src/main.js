@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueI18n from 'vue-i18n'
 import App from './App'
 import router from "./routes.js"
 import axios from 'axios';
 import axiosAuth from './axios-auth.js';
 import store from "./store/store.js";
 
+import { locale as en } from "./common/lang/en.js";
+import { locale as tw } from "./common/lang/tw.js";
 
 axios.defaults.baseURL = 'https://127.0.0.1/vocabulary/api';
 axios.defaults.headers.get["Accepts"] = "application/json";
@@ -120,6 +123,14 @@ const resInterceptor = axios.interceptors.response.use(function (res) {
 Vue.config.productionTip = false
 
 Vue.use(VueRouter);
+Vue.use(VueI18n);
+// 取得預設語系
+const locale = localStorage.getItem('locale') || 'tw'
+const i18n = new VueI18n({
+  locale,
+  messages: { en, tw }
+})
+
 
 // const router = new VueRouter({
 //   mode: "history",
@@ -131,5 +142,6 @@ new Vue({
   el: '#app',
   router: router,
   store: store,
+  i18n: i18n,
   render: h => h(App)
 })

@@ -5,7 +5,9 @@
         class="mt-5 pt-3 pb-3 col-md-5 col-sm-10 shadow bg-gradient text-secondary rounded bg-main text-light"
       >
         <div class="mb-3 row justify-content-center">
-          <label for="loginId" class="col-md-4 col-form-label">Account</label>
+          <label for="loginId" class="col-md-4 col-form-label">
+            {{ $t("AUTH.ACCOUNT") }}
+          </label>
           <div class="col-md-6">
             <input
               type="text"
@@ -16,7 +18,9 @@
           </div>
         </div>
         <div class="mb-3 row justify-content-center">
-          <label for="password" class="col-md-4 col-form-label">Password</label>
+          <label for="password" class="col-md-4 col-form-label">{{
+            $t("AUTH.PASSWORD")
+          }}</label>
           <div class="col-md-6">
             <input
               type="password"
@@ -27,7 +31,7 @@
           </div>
         </div>
         <button @click.prevent="login" type="submit" class="btn btn-secondary">
-          Sign in
+          {{ $t("AUTH.SIGN_IN") }}
         </button>
       </form>
     </div>
