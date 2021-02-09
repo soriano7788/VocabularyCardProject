@@ -1,5 +1,8 @@
 <template>
-  <nav class="navbar navbar-dark bg-header navbar-expand-lg">
+  <nav
+    id="nav-header"
+    class="navbar navbar-dark bg-header navbar-expand-lg position-fixed z-index-5000"
+  >
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Logo icon</a>
       <button
@@ -145,5 +148,8 @@ export default {
 <style scoped>
 .bg-header {
   background-color: #38444f;
+}
+#nav-header {
+  min-width: 100vw;
 }
 </style>

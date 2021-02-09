@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container-fluid bg-root">
     <app-header></app-header>
-    <div class="container-fluid">
+    <div class="container-fluid pt-5">
       <div id="content" class="row p-5">
         <router-view></router-view>
       </div>
