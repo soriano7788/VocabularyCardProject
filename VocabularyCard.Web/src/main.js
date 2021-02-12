@@ -22,8 +22,8 @@ const reqInterceptor = axios.interceptors.request.use(config => {
   // 就算有下面設定也一樣....
 
   // 有需要用 common 嗎?  是不是被初始化一次後，就沒辦法改了????
-  delete config.headers.common['authorization'];
-  config.headers.common['authorization'] = "bearer " + token.accessToken;
+  delete config.headers.common['Authorization'];
+  config.headers.common['Authorization'] = "Bearer " + token.accessToken;
   // alert(config.headers.common['authorization']);
   // 上面 alert 看起來有重設，但是 browser 送出去的 request，authorization 還是舊的 access token
 

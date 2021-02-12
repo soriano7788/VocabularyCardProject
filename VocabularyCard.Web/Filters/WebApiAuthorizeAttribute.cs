@@ -34,46 +34,22 @@ namespace VocabularyCard.Web.Filters
                 return;
             }
 
-            HttpRequestHeaders headers = actionContext.Request.Headers;
-            string AUTH_LEY = "authorization";
-
-            if (headers.Contains(AUTH_LEY))
+            AuthenticationHeaderValue authorization = actionContext.Request.Headers.Authorization;
+            if(authorization != null && authorization.Scheme == "Bearer")
             {
-                // 注意: header name 不存在的話，會直接 噴 exception
-                var authValues = headers.GetValues(AUTH_LEY);
-                string value = authValues.First();
-
-                string accessToken = string.Empty;
-                if(value.StartsWith("bearer "))
+                string token = authorization.Parameter;
+                var result = VAuthenticator.ValidateAccessToken(token);
+                if(result.IsAuthenticated)
                 {
-                    accessToken = value.Split(' ')[1];
-                }
-
-                Global.Log.Error("extract authorization value: " + accessToken);
-
-                // 驗證 token
-                AccessTokenValidatedResult result = VAuthenticator.ValidateAccessToken(accessToken);
-                if (!result.IsAuthenticated)
-                {
-                    Global.Log.Error("ValidateAccessToken fail");
-                    // 驗證不通過，注意 ! CreateResponse 是 System.Net.Http 命名空間的擴充方法
-                    //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-
-                    ThrowUnauthorizedException();
+                    SetCurrentUser(result.UserInfo);
                 }
                 else
                 {
-                    Global.Log.Error("ValidateAccessToken success");
-                    SetCurrentUser(result.UserInfo);
+                    ThrowUnauthorizedException();
                 }
             }
             else
             {
-                Global.Log.Error("headers not contain authorization");
-                // 驗證不通過，注意 ! CreateResponse 是 System.Net.Http 命名空間的擴充方法
-                //actionContext.Response = actionContext.Request.CreateResponse(HttpStatusCode.Unauthorized);
-
-                // 未授權改這樣是否比較好??? 可以讓 ApiExceptionAttribute 再去進一步處理
                 ThrowUnauthorizedException();
             }
         }

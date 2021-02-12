@@ -12,6 +12,8 @@ using VocabularyCard.AccountManager.DTO;
 using System.Security.Cryptography;
 using VocabularyCard.Core;
 using VocabularyCard.Core.Services;
+using VocabularyCard.Util;
+using System.Security.Claims;
 
 namespace VocabularyCard.Services.Impl
 {
@@ -20,6 +22,7 @@ namespace VocabularyCard.Services.Impl
         private IAccountManager _accountProvider;
         private IApiRefreshTokenRepository _refreshTokenRepository;
         private IApiAccessTokenRepository _accessTokenRepository;
+        private JwtHelper _jwtHelper;
 
         private readonly ApiTokenConverter<ApiRefreshToken, ApiRefreshTokenDto> _refreshTokenConverter;
         private readonly ApiTokenConverter<ApiAccessToken, ApiAccessTokenDto> _accessTokenConverter;
@@ -46,11 +49,13 @@ namespace VocabularyCard.Services.Impl
             IUnitOfWork unitOfWork,
             IAccountManager accountProvider, 
             IApiRefreshTokenRepository refreshTokenRepository, 
-            IApiAccessTokenRepository accessTokenRepository) : base(unitOfWork)
+            IApiAccessTokenRepository accessTokenRepository, 
+            JwtHelper jwtHelper) : base(unitOfWork)
         {
             _accountProvider = accountProvider;
             _refreshTokenRepository = refreshTokenRepository;
             _accessTokenRepository = accessTokenRepository;
+            _jwtHelper = jwtHelper;
             _refreshTokenConverter = new ApiTokenConverter<ApiRefreshToken, ApiRefreshTokenDto>();
             _accessTokenConverter = new ApiTokenConverter<ApiAccessToken, ApiAccessTokenDto>();
         }
@@ -76,17 +81,18 @@ namespace VocabularyCard.Services.Impl
             #endregion
 
             // 產生 access_token，參考一下 KM 的 oauth 看看(KM 還有一個 simple_nonce table，只為了記錄 nonce?)
-            string accessToken = GenerateNewToken(apiRefreshToken.UserId);
+            //string accessToken = GenerateNewToken(apiRefreshToken.UserId);
+            string accessToken = GenerateJwtToken(apiRefreshToken.UserId);
 
             ApiAccessToken apiAccessToken = new ApiAccessToken
             {
                 Token = accessToken,
                 UserId = apiRefreshToken.UserId,
                 CreatedDateTime = DateTime.UtcNow,
-                ExpiredDateTime = DateTime.UtcNow.AddSeconds(_accessTokenLifeTime)
+                ExpiredDateTime = DateTime.UtcNow.AddMinutes(_accessTokenLifeTime)
             };
-            ApiAccessToken result = _accessTokenRepository.Create(apiAccessToken);
-            ApiAccessTokenDto dto = _accessTokenConverter.ToDataTransferObject(result);
+            //ApiAccessToken result = _accessTokenRepository.Create(apiAccessToken);
+            ApiAccessTokenDto dto = _accessTokenConverter.ToDataTransferObject(apiAccessToken);
 
             // todo: 現在的 dto 和 entity 沒啥差異，但是前端要的資訊是 幾秒內過期
             // 所以格式要轉換一下
@@ -115,22 +121,36 @@ namespace VocabularyCard.Services.Impl
 
         public AccessTokenValidatedResult ValidateAccessToken(string token)
         {
-            ApiAccessToken accessToken = _accessTokenRepository.GetByToken(token);
-            // 此 AccessToken 不存在
-            if (accessToken == null)
+            JwtValidatedResult validatedResult = ValidateJwtToken(token);
+            if (validatedResult.IsAuthenticated)
             {
-                return new AccessTokenValidatedResult { IsAuthenticated = false };
+                // 這樣不行，要解出 jwt token，取出 uid，此欄位存放了 userId
+
+                return new AccessTokenValidatedResult
+                {
+                    IsAuthenticated = true,
+                    UserInfo = new UserInfo { UserId = validatedResult.UserId }
+                };
             }
-            // 此 AccessToken 已過期
-            if (accessToken.ExpiredDateTime < DateTime.UtcNow)
-            {
-                return new AccessTokenValidatedResult { IsAuthenticated = false };
-            }
-            return new AccessTokenValidatedResult
-            {
-                IsAuthenticated = true,
-                UserInfo = new UserInfo { UserId = accessToken.UserId }
-            };
+
+            return new AccessTokenValidatedResult { IsAuthenticated = false };
+
+            //ApiAccessToken accessToken = _accessTokenRepository.GetByToken(token);
+            //// 此 AccessToken 不存在
+            //if (accessToken == null)
+            //{
+            //    return new AccessTokenValidatedResult { IsAuthenticated = false };
+            //}
+            //// 此 AccessToken 已過期
+            //if (accessToken.ExpiredDateTime < DateTime.UtcNow)
+            //{
+            //    return new AccessTokenValidatedResult { IsAuthenticated = false };
+            //}
+            //return new AccessTokenValidatedResult
+            //{
+            //    IsAuthenticated = true,
+            //    UserInfo = new UserInfo { UserId = accessToken.UserId }
+            //};
         }
 
         // 使用的情境??
@@ -176,50 +196,20 @@ namespace VocabularyCard.Services.Impl
             }
 
             #region 建立新的  access token
-            string accessTokenText = GenerateNewToken(userInfo.UserId);
+            // GenerateJwtToken(userInfo.UserId);
+            //string accessTokenText = GenerateNewToken(userInfo.UserId);
+            string accessTokenText = GenerateJwtToken(userInfo.UserId);
 
             ApiAccessToken apiAccessToken = new ApiAccessToken
             {
                 Token = accessTokenText,
                 UserId = userInfo.UserId,
                 CreatedDateTime = DateTime.UtcNow,
-                ExpiredDateTime = DateTime.UtcNow.AddSeconds(_accessTokenLifeTime)
+                ExpiredDateTime = DateTime.UtcNow.AddMinutes(_accessTokenLifeTime)
             };
-            ApiAccessToken accessToken = _accessTokenRepository.Create(apiAccessToken);
+            //ApiAccessToken accessToken = _accessTokenRepository.Create(apiAccessToken);
             #endregion
 
-            #region (X)
-            //// accessToken 因為時效短，就不嘗試找現有有效的，直接建新的
-            //ApiAccessTokenDto accessTokenDto = CreateNewAccessToken(refreshTokenDto.Token);
-
-            //// refresh_token 剩幾秒過期
-            //TimeSpan r = refreshTokenDto.ExpiredDateTime - DateTime.UtcNow;
-            //double rSec = r.TotalSeconds;
-
-            //// access_token 剩幾秒過期
-            //TimeSpan a = accessTokenDto.ExpiredDateTime - DateTime.UtcNow;
-            //double aSec = a.TotalSeconds;
-
-
-            //StringBuilder sb = new StringBuilder();
-            //sb.AppendFormat("DateTimeUtcNow: {0}{1}", DateTime.UtcNow, Environment.NewLine);
-            //sb.AppendFormat("refreshTokenInfo.ExpiredDateTime: {0}{1}", refreshTokenInfo.ExpiredDateTime, Environment.NewLine);
-            //sb.AppendFormat("accessTokenInfo.ExpiredDateTime: {0}{1}", accessTokenInfo.ExpiredDateTime, Environment.NewLine);
-            //sb.AppendFormat("rSec: {0}{1}", rSec, Environment.NewLine);
-            //sb.AppendFormat("aSec: {0}{1}", aSec, Environment.NewLine);
-            //LogUtility.ErrorLog(sb.ToString());
-            #endregion
-
-            //return new AuthenticationResult
-            //{
-            //    IsAuthenticated = true,
-            //    UserInfo = userInfo,
-            //    Message = "OK",
-            //    RefreshToken = refreshTokenDto.Token,
-            //    RefreshTokenExpiredDateTime = CalculateExpiredSeconds(DateTime.UtcNow, refreshTokenDto.ExpiredDateTime),
-            //    AccessToken = accessToken.Token,
-            //    AccessTokenExpiredDateTime = CalculateExpiredSeconds(DateTime.UtcNow, accessToken.ExpiredDateTime)
-            //};
             return new AuthenticationResult
             {
                 IsAuthenticated = true,
@@ -227,8 +217,8 @@ namespace VocabularyCard.Services.Impl
                 Message = "OK",
                 RefreshToken = refreshTokenDto.Token,
                 RefreshTokenExpiredDateTime = refreshTokenDto.ExpiredDateTime,
-                AccessToken = accessToken.Token,
-                AccessTokenExpiredDateTime = accessToken.ExpiredDateTime
+                AccessToken = apiAccessToken.Token,
+                AccessTokenExpiredDateTime = apiAccessToken.ExpiredDateTime
             };
         }
 
@@ -269,7 +259,7 @@ namespace VocabularyCard.Services.Impl
                 Token = refreshToken,
                 UserId = userId,
                 CreatedDateTime = DateTime.UtcNow,
-                ExpiredDateTime = DateTime.UtcNow.AddSeconds(_refreshTokenLifeTime)
+                ExpiredDateTime = DateTime.UtcNow.AddMinutes(_refreshTokenLifeTime)
             };
             ApiRefreshToken result = _refreshTokenRepository.Create(apiRefreshToken);
             ApiRefreshTokenDto dto = _refreshTokenConverter.ToDataTransferObject(result);
@@ -284,6 +274,33 @@ namespace VocabularyCard.Services.Impl
             }
             return _refreshTokenConverter.ToDataTransferObject(refreshTokens.Last());
         }
+
+        private string GenerateJwtToken(string userId)
+        {
+            return _jwtHelper.GetToken(userId, _accessTokenLifeTime);
+        }
+        private JwtValidatedResult ValidateJwtToken(string token)
+        {
+            ClaimsPrincipal principal;
+            bool result = _jwtHelper.ValidateToken(token, out principal);
+
+            if(result)
+            {
+                Claim uidClaim = principal.Claims.Where(claim => claim.Type == "uid").First();
+                return new JwtValidatedResult
+                {
+                    IsAuthenticated = true,
+                    UserId = uidClaim.Value
+                };
+            }
+
+            return new JwtValidatedResult
+            {
+                IsAuthenticated = false,
+                UserId = string.Empty
+            };
+        }
+
 
         private string GetNewGuid()
         {
@@ -312,6 +329,12 @@ namespace VocabularyCard.Services.Impl
 
             TimeSpan t = expiredDateTime - now;
             return (int)t.TotalSeconds;
+        }
+
+        class JwtValidatedResult
+        {
+            public bool IsAuthenticated { get; set; }
+            public string UserId { get; set; }
         }
     }
 }

@@ -25,6 +25,7 @@ using VocabularyCard.Core.EF;
 using VocabularyCard.Core.Repositories;
 using VocabularyCard.Core.Services;
 using VocabularyCard.Core.Interceptors;
+using VocabularyCard.Util;
 using Autofac.Extras.DynamicProxy;
 using VocabularyCard.Core.Utils;
 
@@ -195,6 +196,9 @@ namespace VocabularyCard.Web
                 .WithProperty("IgnoreTransactionMethods", new string[] { "CreateCard", "UpdateCard" });
 
             // authentication 相關
+            string jwtIssuer = ConfigurationManager.AppSettings["JwtIssuer"];
+            string jwtSecret = ConfigurationManager.AppSettings["JwtSecret"];
+            builder.Register(c => new JwtHelper(jwtIssuer, jwtSecret)).AsSelf().SingleInstance();
             builder.RegisterType<ApiRefreshTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();
             builder.RegisterType<ApiAccessTokenMap>().As<IEntityTypeConfiguration>().SingleInstance();
 
@@ -202,11 +206,13 @@ namespace VocabularyCard.Web
             builder.RegisterType(typeof(EFApiRefreshTokenRepository)).As(typeof(IApiRefreshTokenRepository)).InstancePerLifetimeScope();
             builder.RegisterType(typeof(EFApiAccessTokenRepository)).As(typeof(IApiAccessTokenRepository)).InstancePerLifetimeScope();
 
+            string refreshTokenLifeTime = ConfigurationManager.AppSettings["RefreshTokenLifeTime"];
+            string accessTokenLifeTime = ConfigurationManager.AppSettings["AccessTokenLifeTime"];
             builder.RegisterType<AuthenticationService>()
                 .As<IAuthenticationService>()
                 .InstancePerLifetimeScope()
-                .WithProperty("RefreshTokenLifeTime", 3600)  // 單位秒
-                .WithProperty("AccessTokenLifeTime", 1800)  // 單位秒
+                .WithProperty("RefreshTokenLifeTime", Convert.ToInt32(refreshTokenLifeTime))  // 單位分鐘
+                .WithProperty("AccessTokenLifeTime", Convert.ToInt32(accessTokenLifeTime))  // 單位分鐘
                 .EnableInterfaceInterceptors()
                 .InterceptedBy(typeof(TransactionInterceptor));
 
