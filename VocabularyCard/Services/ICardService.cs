@@ -17,6 +17,8 @@ namespace VocabularyCard.Services
         CardDto CreateCard(UserInfo user, int cardSetId, CardDto cardDto);
         CardDto UpdateCard(UserInfo user, CardDto cardDto);
 
+        void DeleteCardById(UserInfo user, int cardId);
+
         CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId);
     }
 }

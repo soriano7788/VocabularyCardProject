@@ -24,13 +24,23 @@ const mutations = {
             return item.CardId == card.CardId;
         });
 
-        console.log("target: ", target);
-
         if (target == undefined || target == null) {
             state.cards.push(card);
         } else {
             Object.assign(target, card);
             // target = card;
+        }
+    },
+    deleteCard: (state, cardId) => {
+        const target = state.cards.find(function (item) {
+            return item.Id == cardId;
+        });
+
+        if (target != undefined && target != null) {
+            const index = state.cards.indexOf(target);
+            if (index != -1) {
+                state.cards.splice(index, 1);
+            }
         }
     }
 };
@@ -72,10 +82,23 @@ const actions = {
                 if (result.statusCode == statusCode.SUCCESS) {
                     // 還需要更新目前 state 裡面的 Card 資料
                     commit("updateCard", card);
-                    Promise.resolve();
                 }
-
+                Promise.resolve();
             }).catch(error => {
+                Promise.reject();
+            });
+    },
+    deleteCard: ({ commit }, cardId) => {
+        return axios.delete("card/delete/" + cardId)
+            .then(res => {
+                const result = res.data;
+                if (result.statusCode == statusCode.SUCCESS) {
+                    commit("deleteCard", cardId);
+                }
+                Promise.resolve();
+            })
+            .catch(error => {
+                console.log("ajax deleteCard error", error);
                 Promise.reject();
             });
     }

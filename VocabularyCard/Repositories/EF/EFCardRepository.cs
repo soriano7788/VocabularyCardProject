@@ -90,5 +90,11 @@ namespace VocabularyCard.Repositories.EF
             _context.Entry(entity).CurrentValues.SetValues(card);
             return card;
         }
+
+        public void RemoveCardById(int cardId)
+        {
+            Card card = _cards.Find(cardId);
+            card.State = CardState.Removed;
+        }
     }
 }

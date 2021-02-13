@@ -168,6 +168,11 @@ namespace VocabularyCard.Services.Impl
             Card card = _cardRepository.GetByCardId(modifiedCardDto.Id);
             return _cardConverter.ToDataTransferObject(card);
         }
+        public void DeleteCardById(UserInfo user, int cardId)
+        {
+            _cardRepository.RemoveCardById(cardId);
+        }
+
 
         public CardDto[] GetCardsByCardSetId(UserInfo userInfo, int cardSetId)
         {
@@ -206,6 +211,7 @@ namespace VocabularyCard.Services.Impl
             //return _cardConverter.ToDataTransferObjects(cards.ToArray());
         }
 
+        #region private methods
 
         private CardInterpretationDto[] FilterNewInterpretations(CardInterpretationDto[] modifiedInterpretations)
         {
@@ -279,7 +285,7 @@ namespace VocabularyCard.Services.Impl
             return true;
         }
 
-
+        #endregion
 
     }
 }

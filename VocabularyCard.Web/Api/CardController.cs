@@ -56,6 +56,14 @@ namespace VocabularyCard.Web.Api
             return _cardService.GetCardInterpretations(cardId);
         }
 
+        [Route("api/card/delete/{cardId}")]
+        [HttpDelete]
+        public void Delete(int cardId)
+        {
+            UserInfo user = Util.WebUtility.GetCurrentUser();
+            _cardService.DeleteCardById(user, cardId);
+        }
+
         // POST api/<controller>
         public void Post([FromBody] string value)
         {
@@ -67,8 +75,8 @@ namespace VocabularyCard.Web.Api
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
+        //public void Delete(int id)
+        //{
+        //}
     }
 }

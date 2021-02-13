@@ -12,5 +12,7 @@ namespace VocabularyCard.Repositories
     {
         Card GetByCardId(int cardId);
         IList<Card> GetByCardSetId(int cardSetId);
+
+        void RemoveCardById(int cardId);
     }
 }

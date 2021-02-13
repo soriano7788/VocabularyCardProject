@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row bg-card">
     <h1 class="card-title display-3">
       {{ card.Vocabulary }}
     </h1>

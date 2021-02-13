@@ -2,11 +2,12 @@
   <div>
     <div
       @click="flipCard"
-      class="card text-center shadow bg-card text-white"
+      class=" text-center shadow  text-white"
       style="cursor:pointer;"
     >
-      <div class="card-body">
-        <i @click.stop="editCard" class="bi bi-pencil edit-icon"></i>
+      <div class=" ">
+        <i @click.stop="editCard" class="bi bi-pencil operand-icon"></i>
+        <i @click.stop="deleteCard" class="bi bi-trash operand-icon"></i>
         <transition name="flip" mode="out-in">
           <card-front v-if="face == 'front'" :card="card"></card-front>
           <card-back v-else>
@@ -41,6 +42,12 @@ export default {
     editCard() {
       this.$emit("showEditCard", this.card);
     },
+    deleteCard() {
+      if (confirm("確定刪除此單字卡嗎?")) {
+        const promise = this.$store.dispatch("deleteCard", this.card.Id);
+        promise.then(() => {}).catch(() => {});
+      }
+    },
     flipCard() {
       this.face = this.face == "front" ? "back" : "front";
     },
@@ -53,7 +60,7 @@ export default {
 .bg-card {
   background-color: #38444f;
 }
-.edit-icon {
+.operand-icon {
   float: right;
 }
 .flip-enter {
