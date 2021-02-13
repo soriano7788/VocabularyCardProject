@@ -1,22 +1,22 @@
 <template>
-  <div>
+  <div class="mt-3">
+    <div class="operand-group text-end">
+      <i @click.stop="editCard" class="bi bi-pencil operand-icon"></i>
+      <i @click.stop="deleteCard" class="bi bi-trash operand-icon"></i>
+    </div>
     <div
       @click="flipCard"
-      class=" text-center shadow  text-white"
+      class=" text-center shadow text-white"
       style="cursor:pointer;"
     >
-      <div class=" ">
-        <i @click.stop="editCard" class="bi bi-pencil operand-icon"></i>
-        <i @click.stop="deleteCard" class="bi bi-trash operand-icon"></i>
-        <transition name="flip" mode="out-in">
-          <card-front v-if="face == 'front'" :card="card"></card-front>
-          <card-back v-else>
-            <card-interpretations
-              v-bind:interpretations="card.Interpretations"
-            ></card-interpretations>
-          </card-back>
-        </transition>
-      </div>
+      <transition name="flip" mode="out-in">
+        <card-front v-if="face == 'front'" :card="card"></card-front>
+        <card-back v-else>
+          <card-interpretations
+            v-bind:interpretations="card.Interpretations"
+          ></card-interpretations>
+        </card-back>
+      </transition>
     </div>
   </div>
 </template>
@@ -60,8 +60,11 @@ export default {
 .bg-card {
   background-color: #38444f;
 }
+.operand-group {
+}
 .operand-icon {
-  float: right;
+  margin-left: 10px;
+  cursor: pointer;
 }
 .flip-enter {
   /* transform: rotate(0deg); */

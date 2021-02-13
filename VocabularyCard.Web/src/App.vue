@@ -2,7 +2,7 @@
   <div id="app" class="container-fluid bg-root">
     <app-header></app-header>
     <div class="container-fluid pt-5">
-      <div id="content" class="row p-5">
+      <div id="content" class="row pt-5">
         <router-view></router-view>
       </div>
       <div v-if="showLoading" class="full-screem">

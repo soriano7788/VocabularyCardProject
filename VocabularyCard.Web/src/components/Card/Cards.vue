@@ -1,25 +1,30 @@
 <template>
   <div class="row">
     <div class="d-grid gap-2 d-md-block">
-      <h1>{{ cardSetName }}</h1>
-      <button
+      <span class="fs-1">{{ cardSetName }}</span>
+      <i
+        id="create-card-btn"
+        @click="createCard"
+        class="bi bi-plus-circle-fill position-fixed"
+        title="新增單字卡"
+      ></i>
+      <!-- <button
+        id="create-card-btn"
         class="btn btn-primary btn-sm position-fixed"
         @click="createCard"
-        style="right:10px; top:50%;"
       >
         新增單字卡
-      </button>
+      </button> -->
       <button
-        class="btn btn-danger btn-sm position-absolute"
+        class="btn btn-secondary btn-sm position-absolute"
         @click="removeCardSet"
         style="right:10px;"
       >
         刪除單字集
       </button>
     </div>
-    <div
-      class="row row-cols-1 row-cols-md-2 g-3 gx-5 px-5 justify-content-center"
-    >
+    <!-- <div class="row row-cols-1 row-cols-md-2 g-3 gx-5 px-5"> -->
+    <div class="row row-cols-1 row-cols-md-2 gx-5 px-5">
       <card
         v-for="card in cards"
         v-bind:key="card.Id"
@@ -112,3 +117,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+#create-card-btn {
+  font-size: 350%;
+  right: 10px;
+  bottom: 10%;
+  cursor: pointer;
+}
+</style>

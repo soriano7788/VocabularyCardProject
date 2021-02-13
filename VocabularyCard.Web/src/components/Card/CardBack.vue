@@ -1,5 +1,5 @@
 <template>
-  <div class="row bg-card">
+  <div class="row bg-card p-4 rounded">
     <slot></slot>
   </div>
 </template>
