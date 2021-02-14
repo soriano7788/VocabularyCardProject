@@ -1,5 +1,5 @@
 <template>
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="d-grid gap-2 d-md-block">
       <span class="fs-1">{{ cardSetName }}</span>
       <i
@@ -24,7 +24,7 @@
       </button>
     </div>
     <!-- <div class="row row-cols-1 row-cols-md-2 g-3 gx-5 px-5"> -->
-    <div class="row row-cols-1 row-cols-md-2 gx-5 px-5">
+    <div class="row row-cols-1 row-cols-md-2 gx-5">
       <card
         v-for="card in cards"
         v-bind:key="card.Id"
@@ -32,13 +32,11 @@
         @showEditCard="editCard($event)"
       ></card>
     </div>
-    <div v-if="showCreateCardForm" class="mt-3 row justify-content-center">
-      <div class="col-md-5">
-        <create-card
-          :cardSetId="currentCardSetId"
-          @closePanel="showCreateCardForm = false"
-        ></create-card>
-      </div>
+    <div v-if="showCreateCardForm" class="row justify-content-center">
+      <create-card
+        :cardSetId="currentCardSetId"
+        @closePanel="showCreateCardForm = false"
+      ></create-card>
     </div>
     <div v-if="showEditCardForm" class="mt-3 row justify-content-center">
       <edit-card

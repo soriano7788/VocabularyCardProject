@@ -10,7 +10,7 @@
         @click="closePanel"
       ></button>
     </div>
-    <div class="mb-3 row">
+    <div class="mb-3 row justify-content-center">
       <label for="vocabulary" class="form-label col-sm-2">詞彙</label>
       <div class="col-sm-10">
         <input
@@ -20,7 +20,7 @@
           v-model="card.Vocabulary"
         />
       </div>
-      <div class="row">
+      <div class="row jusify-content-center">
         <edit-card-interpret
           v-for="interpret in card.Interpretations"
           :interpret="interpret"
@@ -106,21 +106,8 @@ export default {
 
 <style scoped>
 #edit-panel {
-  top: 10%;
-  height: 80%;
-  width: 80%;
-}
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgb(5, 0, 0);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  -webkit-box-shadow: inset 0 0 6px rgb(255, 255, 255);
+  top: 15%;
+  max-height: 80%;
+  max-width: 80%;
 }
 </style>

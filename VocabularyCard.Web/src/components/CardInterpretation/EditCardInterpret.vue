@@ -1,5 +1,5 @@
 <template>
-  <div class="row bg-create-panel pt-3 mt-3 mb-3">
+  <div class="row bg-create-panel pt-3 px-0 mt-3 mb-3 mx-0">
     <div class="row justify-content-end pb-3">
       <button
         type="button"

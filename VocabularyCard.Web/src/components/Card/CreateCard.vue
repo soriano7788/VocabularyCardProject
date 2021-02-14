@@ -1,26 +1,38 @@
 <template>
-  <div class="card border p-3 mb-3 create-card-panel bg-dark">
-    <div class="row">
-      <label for="vocabulary" class="col-form-label col-md-4">詞彙</label>
-      <div class="col-md-8">
-        <input
-          type="text"
-          v-model="vocabulary"
-          class="form-control"
-          id="vocabulary"
-        />
+  <div
+    id="create-card-panel"
+    class="row justify-content-center overflow-auto border bg-dark rounded"
+  >
+    <div class="p-3">
+      <div class="row justify-content-end pb-3">
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          @click="closePanel"
+        ></button>
       </div>
-    </div>
-    <div
-      class="row"
-      v-for="(interpret, index) in interpretations"
-      v-bind:key="index"
-    >
-      <create-interpretation v-bind:interpret="interpret">
-      </create-interpretation>
-    </div>
-    <div class="row">
-      <button class="btn btn-secondary" @click="submitNewCard">送出</button>
+      <div class="row">
+        <label for="vocabulary" class="col-form-label col-md-4">詞彙</label>
+        <div class="col-md-8">
+          <input
+            type="text"
+            v-model="vocabulary"
+            class="form-control"
+            id="vocabulary"
+          />
+        </div>
+      </div>
+      <div
+        class="row"
+        v-for="(interpret, index) in interpretations"
+        v-bind:key="index"
+      >
+        <create-interpretation v-bind:interpret="interpret">
+        </create-interpretation>
+      </div>
+      <div class="row">
+        <button class="btn btn-secondary" @click="submitNewCard">送出</button>
+      </div>
     </div>
   </div>
 </template>
@@ -40,6 +52,9 @@ export default {
     };
   },
   methods: {
+    closePanel() {
+      this.$emit("closePanel");
+    },
     generateInterpretForm: function() {
       // todo: 使用像 esp 那樣的 acquire new document draft 之類的方式，就不用在這邊自己 init 空格式
       const interpretation = {
@@ -95,10 +110,10 @@ export default {
 </script>
 
 <style scoped>
-.create-card-panel {
+#create-card-panel {
   position: fixed;
-  top: 10%;
-  width: 50%;
-  /* padding: 50px; */
+  top: 15%;
+  max-height: 80%;
+  max-width: 80%;
 }
 </style>
