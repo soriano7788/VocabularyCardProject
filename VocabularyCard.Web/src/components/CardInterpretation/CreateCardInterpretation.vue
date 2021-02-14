@@ -1,7 +1,9 @@
 <template>
   <div class="bg-dark pt-3 mt-3">
     <div class="row mb-3">
-      <label for="part-of-speech" class="col-form-label col-md-4">詞性</label>
+      <label for="part-of-speech" class="col-form-label col-md-4">{{
+        $t("INTERPRET.PART_OF_SPEECH")
+      }}</label>
       <div class="col-md-8">
         <select
           name=""
@@ -22,7 +24,9 @@
     </div>
 
     <div class="row mb-3">
-      <label for="phonetic-symbol" class="col-form-label col-md-4">音標</label>
+      <label for="phonetic-symbol" class="col-form-label col-md-4">{{
+        $t("INTERPRET.PHONETIC_SYMBOL")
+      }}</label>
       <div class="col-md-8">
         <input
           type="text"
@@ -34,7 +38,9 @@
     </div>
 
     <div class="row mb-3">
-      <label for="interpret" class="col-form-label col-md-4">解釋</label>
+      <label for="interpret" class="col-form-label col-md-4">{{
+        $t("INTERPRET.INTERPRETATION")
+      }}</label>
       <div class="col-md-8">
         <input
           type="text"
@@ -46,7 +52,9 @@
     </div>
 
     <div class="row mb-3">
-      <label for="example-sentence" class="col-form-label col-md-4">例句</label>
+      <label for="example-sentence" class="col-form-label col-md-4">{{
+        $t("INTERPRET.EXAMPLE_SENTENCE")
+      }}</label>
       <div class="col-md-8">
         <input
           type="text"
@@ -58,8 +66,10 @@
     </div>
 
     <div class="row mb-3">
-      <label for="example-sentence-explanation" class="col-form-label col-md-4"
-        >例句說明</label
+      <label
+        for="example-sentence-explanation"
+        class="col-form-label col-md-4"
+        >{{ $t("INTERPRET.EXAMPLE_SENTENCE_EXPLANATION") }}</label
       >
       <div class="col-md-8">
         <input

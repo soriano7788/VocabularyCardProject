@@ -8,7 +8,7 @@
         class="btn btn-secondary btn-lg"
         @click="showCreatedForm = !showCreatedForm"
       >
-        新增單字集
+        {{ $t("CARD_SET.ADD_CARD_SET") }}
       </button>
     </div>
 

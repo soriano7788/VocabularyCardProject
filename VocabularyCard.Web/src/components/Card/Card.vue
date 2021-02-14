@@ -1,8 +1,16 @@
 <template>
   <div class="mt-3">
     <div class="operand-group text-end">
-      <i @click.stop="editCard" class="bi bi-pencil operand-icon"></i>
-      <i @click.stop="deleteCard" class="bi bi-trash operand-icon"></i>
+      <i
+        :title="$t('COMMON.EDIT')"
+        @click.stop="editCard"
+        class="bi bi-pencil operand-icon"
+      ></i>
+      <i
+        :title="$t('COMMON.DELETE')"
+        @click.stop="deleteCard"
+        class="bi bi-trash operand-icon"
+      ></i>
     </div>
     <div
       @click="flipCard"

@@ -6,21 +6,14 @@
         id="create-card-btn"
         @click="createCard"
         class="bi bi-plus-circle-fill position-fixed"
-        title="新增單字卡"
+        :title="$t('CARD.ADD_CARD')"
       ></i>
-      <!-- <button
-        id="create-card-btn"
-        class="btn btn-primary btn-sm position-fixed"
-        @click="createCard"
-      >
-        新增單字卡
-      </button> -->
       <button
         class="btn btn-secondary btn-sm position-absolute"
         @click="removeCardSet"
         style="right:10px;"
       >
-        刪除單字集
+        {{ $t("CARD_SET.DELETE_CARD_SET") }}
       </button>
     </div>
     <!-- <div class="row row-cols-1 row-cols-md-2 g-3 gx-5 px-5"> -->

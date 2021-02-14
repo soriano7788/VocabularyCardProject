@@ -11,7 +11,9 @@
       ></button>
     </div>
     <div class="mb-3 row justify-content-center">
-      <label for="vocabulary" class="form-label col-sm-2">詞彙</label>
+      <label for="vocabulary" class="form-label col-sm-2">
+        {{ $t("CARD.VOCABULARY") }}
+      </label>
       <div class="col-sm-10">
         <input
           type="text"
@@ -31,12 +33,12 @@
     </div>
     <div class="row mb-3">
       <button class="btn btn-secondary" @click="addNewInterpret">
-        New interpretation
+        {{ $t("INTERPRET.ADD_INTERPRETATION") }}
       </button>
     </div>
     <div class="row">
       <button class="btn btn-secondary" @click="submitModifiedCard">
-        送出
+        {{ $t("COMMON.SUBMIT") }}
       </button>
     </div>
   </div>

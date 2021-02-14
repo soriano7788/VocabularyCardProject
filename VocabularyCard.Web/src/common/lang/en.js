@@ -7,15 +7,26 @@ export const locale = {
         VOCABULARY: 'Vocabulary',
         HOME: 'Home',
         SUBMIT: 'Submit',
-        CLOSE: 'Close'
+        CLOSE: 'Close',
+        EDIT: 'Edit',
+        DELETE: 'Delete'
     },
     CARD_SET: {
         ADD_CARD_SET: 'Add card set',
         DELETE_CARD_SET: 'Delete card set'
     },
     CARD: {
-        ADD_CARD_SET: 'Add card',
-        DELETE_CARD_SET: 'Delete card'
+        ADD_CARD: 'Add card',
+        DELETE_CARD: 'Delete card',
+        VOCABULARY: 'Vocabulary'
+    },
+    INTERPRET: {
+        PART_OF_SPEECH: 'Part of speech',
+        PHONETIC_SYMBOL: 'Phonetic symbol',
+        INTERPRETATION: 'Interpretation',
+        EXAMPLE_SENTENCE: 'Example setence',
+        EXAMPLE_SENTENCE_EXPLANATION: 'Example setence explanation',
+        ADD_INTERPRETATION: 'Add interpretation'
     },
     AUTH: {
         REGISTER: 'Register',
